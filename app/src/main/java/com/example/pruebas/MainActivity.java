@@ -1,0 +1,93 @@
+package com.example.pruebas;
+
+import android.os.Bundle;
+import android.content.Intent;
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
+import android.view.View;
+import android.widget.*;
+
+
+import com.example.pruebas.databinding.ActivityInvoiceListBinding;
+import com.example.pruebas.databinding.ActivityMainBinding;
+
+public class MainActivity extends AppCompatActivity {
+
+    private ActivityMainBinding binding;
+
+
+    // Para calcular el cuadrado
+    private EditText etAlcuadrado;
+    private Button btAlcuadrado;
+    private TextView tvAlCuadrado;
+    private AlCuadradoViewModel viewModel;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        //Asignar el binding a la actividad
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        configView();
+
+        Button btIrListaFacturas = findViewById(R.id.btIrListaFacturas);
+
+        // Configurar un listener para el botón
+        btIrListaFacturas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Crear un intent para iniciar la nueva actividad
+                Intent intent = new Intent(MainActivity.this, InvoiceListActivity.class);
+                startActivity(intent); // Iniciar la nueva actividad
+            }
+        });
+
+    }
+
+    private void configView(){
+
+        viewModel = new ViewModelProvider(this).get(AlCuadradoViewModel.class);
+
+        tvAlCuadrado = binding.tvAlCuadrado;
+        etAlcuadrado = binding.edAlCuadrado;
+        btAlcuadrado= binding.btCalcular;
+
+        btAlcuadrado.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                viewModel.alCuadrado(etAlcuadrado.getText().toString());
+            }
+        });
+
+        final Observer <String> observer = new Observer<String>() {
+            @Override
+            public void onChanged(String resultado) {
+                tvAlCuadrado.setText(resultado);
+            }
+        };
+
+        viewModel.getResultado().observe(this, observer);
+
+
+    }
+
+
+
+
+
+}
