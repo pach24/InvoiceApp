@@ -1,18 +1,18 @@
 package com.example.pruebas;
 
-import android.annotation.SuppressLint;
+
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.pruebas.databinding.ItemInvoiceBinding; // Asegúrate de importar el binding correcto
+import com.example.pruebas.databinding.ItemInvoiceBinding;
 import java.util.List;
 
 public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceViewHolder> {
     private List<Invoice> listaFacturas;
 
     // Metodo para actualizar la lista de facturas
-    @SuppressLint("NotifyDataSetChanged")
+
     public void setFacturas(List<Invoice> facturas) {
         this.listaFacturas = facturas;
         notifyDataSetChanged();  // Notifica a RecyclerView que los datos cambiaron
@@ -33,8 +33,13 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
 
     @Override
     public int getItemCount() {
-        return (listaFacturas != null) ? listaFacturas.size() : 0; // Devolver el tamaño de la lista
+        if (listaFacturas != null) {
+            return listaFacturas.size();
+        } else {
+            return 0;
+        }
     }
+
 
     // Clase interna que representa la vista de cada factura en la lista
     public static class InvoiceViewHolder extends RecyclerView.ViewHolder {

@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+
         //Asignar el binding a la actividad
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
@@ -43,38 +44,33 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        // Crea insets para poder visualizar mejor la pantalla
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            binding.main.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
 
         configView();
 
         Button btIrListaFacturas = findViewById(R.id.btIrListaFacturas);
         Button toggleRetromock = findViewById(R.id.toggleButton);
 
-        toggleRetromock.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Alternar el estado de useMock
-                useMock = !useMock;
+        toggleRetromock.setOnClickListener(v -> {
+            // Alternar el estado de useMock
+            useMock = !useMock;
 
-                // Mostrar el Toast con el estado actual de useMock
-                String mensaje = "Estado de RetroMock: " + useMock;
-                Toast.makeText(MainActivity.this, mensaje, Toast.LENGTH_SHORT).show();
-            }
+            // Mostrar el Toast con el estado actual de useMock
+            String mensaje = "Estado de RetroMock: " + useMock;
+            Toast.makeText(MainActivity.this, mensaje, Toast.LENGTH_SHORT).show();
         });
         // Configurar un listener para el botón
-        btIrListaFacturas.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Crear un intent para iniciar la nueva actividad
-                Intent intent = new Intent(MainActivity.this, InvoiceListActivity.class);
-                intent.putExtra("USE_RETROMOCK", useMock); // Pasa el valor de useMock
-                startActivity(intent); // Iniciar la nueva actividad
-            }
+        btIrListaFacturas.setOnClickListener(v -> {
+            // Crear un intent para iniciar la nueva actividad
+            Intent intent = new Intent(MainActivity.this, InvoiceListActivity.class);
+            intent.putExtra("USE_RETROMOCK", useMock); // Pasa el valor de useMock
+            startActivity(intent); // Iniciar la nueva actividad
         });
 
         invoiceViewModel = new InvoiceViewModel(useMock, MainActivity.this);
@@ -92,19 +88,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        btAlcuadrado.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                viewModel.alCuadrado(etAlcuadrado.getText().toString());
-            }
-        });
+        btAlcuadrado.setOnClickListener(v -> viewModel.alCuadrado(etAlcuadrado.getText().toString()));
 
-        final Observer <String> observer = new Observer<String>() {
-            @Override
-            public void onChanged(String resultado) {
-                tvAlCuadrado.setText(resultado);
-            }
-        };
+        final Observer <String> observer = resultado -> tvAlCuadrado.setText(resultado);
 
         viewModel.getResultado().observe(this, observer);
 

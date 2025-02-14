@@ -59,7 +59,7 @@
         android:id="@+id/btIrListaFacturas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ir a otra página"
+        android:text="Ir a lista de facturas"
         tools:layout_editor_absoluteX="234dp"
         tools:layout_editor_absoluteY="98dp" />
 
