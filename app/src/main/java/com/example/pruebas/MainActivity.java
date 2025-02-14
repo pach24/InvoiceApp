@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.*;
 
 
-import com.example.pruebas.databinding.ActivityInvoiceListBinding;
+
 import com.example.pruebas.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
     private Button btAlcuadrado;
     private TextView tvAlCuadrado;
     private AlCuadradoViewModel viewModel;
+    private InvoiceViewModel invoiceViewModel; // Declarar el InvoiceViewModel
+
+
+    private boolean useMock = false; // Variable para alternar entre Retrofit y Retromock
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+
+
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -46,16 +53,31 @@ public class MainActivity extends AppCompatActivity {
         configView();
 
         Button btIrListaFacturas = findViewById(R.id.btIrListaFacturas);
+        Button toggleRetromock = findViewById(R.id.toggleButton);
 
+        toggleRetromock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Alternar el estado de useMock
+                useMock = !useMock;
+
+                // Mostrar el Toast con el estado actual de useMock
+                String mensaje = "Estado de RetroMock: " + useMock;
+                Toast.makeText(MainActivity.this, mensaje, Toast.LENGTH_SHORT).show();
+            }
+        });
         // Configurar un listener para el botón
         btIrListaFacturas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Crear un intent para iniciar la nueva actividad
                 Intent intent = new Intent(MainActivity.this, InvoiceListActivity.class);
+                intent.putExtra("USE_RETROMOCK", useMock); // Pasa el valor de useMock
                 startActivity(intent); // Iniciar la nueva actividad
             }
         });
+
+        invoiceViewModel = new InvoiceViewModel(useMock, MainActivity.this);
 
     }
 
@@ -66,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
         tvAlCuadrado = binding.tvAlCuadrado;
         etAlcuadrado = binding.edAlCuadrado;
         btAlcuadrado= binding.btCalcular;
+
+
+
 
         btAlcuadrado.setOnClickListener(new View.OnClickListener(){
             @Override

@@ -57,7 +57,8 @@ dependencies {
 
     // Saved state ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleversion")
-
+    //Conversor de datos a nuestro modelo
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     // Annotation processor
     annotationProcessor("androidx.lifecycle:lifecycle-compiler:$lifecycleversion")
     // Alternativamente - si usas Java 8, usa lo siguiente en lugar de lifecycle-compiler
@@ -71,5 +72,12 @@ dependencies {
     testImplementation("org.mockito:mockito-core:4.0.0")
 
     // Retromock para pruebas
-    testImplementation("com.github.chaosseeker:retromock:2.0.0")
+
+    implementation ("co.infinum:retromock:1.1.0")
+
+    implementation("androidx.recyclerview:recyclerview:1.4.0")
+    // For control over item selection of both touch and mouse driven selection
+    implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
+
+
 }

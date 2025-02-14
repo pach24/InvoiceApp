@@ -1,48 +1,61 @@
 package com.example.pruebas;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
+import android.content.Intent;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pruebas.databinding.ActivityInvoiceListBinding;
-import com.example.pruebas.databinding.ActivityMainBinding;
 
-import java.util.ArrayList;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class InvoiceListActivity extends AppCompatActivity {
 
     private ActivityInvoiceListBinding bindingInvoiceList;
 
+    private InvoiceAdapter adapter;
+    private InvoiceViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        bindingInvoiceList = bindingInvoiceList.inflate(getLayoutInflater());
-        View view = bindingInvoiceList.getRoot();
-        setContentView(view);
+        // Configuración de ViewBinding
+        bindingInvoiceList = ActivityInvoiceListBinding.inflate(getLayoutInflater());
+        setContentView(bindingInvoiceList.getRoot());
 
-        ListView listViewNumbers = findViewById(R.id.listViewNumbers);
-        Button btIrMain = findViewById(R.id.btIrMain);
+        // Configurar RecyclerView
+        adapter = new InvoiceAdapter();
+        bindingInvoiceList.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        bindingInvoiceList.recyclerView.setAdapter(adapter);
 
-        ArrayList<String> numbers = new ArrayList<>();
-        numbers.add("Número 1");
-        numbers.add("Número 2");
-        numbers.add("Número 3");
-
-        // Configura el adaptador para el ListView
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, numbers);
-        listViewNumbers.setAdapter(adapter);
-
-        // Configura el botón para regresar a la actividad anterior
-        btIrMain.setOnClickListener(new View.OnClickListener() {
+        // Configurar ViewModel
+        boolean useMock = getIntent().getBooleanExtra("USE_RETROMOCK", false);
+        viewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
+            @NonNull
             @Override
-            public void onClick(View v) {
-                finish(); // Cierra esta actividad y vuelve a la anterior
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new InvoiceViewModel(useMock, InvoiceListActivity.this);
+            }
+        }).get(InvoiceViewModel.class);
+        viewModel.getFacturas().observe(this, facturas -> {
+            if (facturas != null) {
+                adapter.setFacturas(facturas);
             }
         });
+
+        // Cargar datos desde la API o Retromock
+        viewModel.cargarFacturas();
+
+
+        bindingInvoiceList.btnVolver.setOnClickListener(v -> {
+            Intent intent = new Intent(InvoiceListActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish(); // Cierra esta actividad
+        });
+
     }
 }
