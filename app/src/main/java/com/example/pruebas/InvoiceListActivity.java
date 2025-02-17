@@ -21,6 +21,7 @@ public class InvoiceListActivity extends AppCompatActivity {
 
     private InvoiceAdapter adapter;
     private InvoiceViewModel viewModel;
+    private InvoiceViewModel invoiceViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,8 @@ public class InvoiceListActivity extends AppCompatActivity {
         bindingInvoiceList.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         bindingInvoiceList.recyclerView.setAdapter(adapter);
 
+
+
         // Configurar ViewModel
 
         // Obtiene el valor booleano de la intención que inició esta actividad
@@ -49,7 +52,7 @@ public class InvoiceListActivity extends AppCompatActivity {
 
         boolean useMock = getIntent().getBooleanExtra("USE_RETROMOCK", false);
 
-
+        invoiceViewModel = new InvoiceViewModel(useMock, this);
         // Crea una instancia del ViewModel usando ViewModelProvider
         viewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
 

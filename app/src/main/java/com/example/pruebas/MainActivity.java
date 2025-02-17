@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btAlcuadrado;
     private TextView tvAlCuadrado;
     private AlCuadradoViewModel viewModel;
-    private InvoiceViewModel invoiceViewModel; // Declarar el InvoiceViewModel
+
 
 
     private boolean useMock = false; // Variable para alternar entre Retrofit y Retromock
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent); // Iniciar la nueva actividad
         });
 
-        invoiceViewModel = new InvoiceViewModel(useMock, MainActivity.this);
+
 
     }
 
@@ -84,9 +84,6 @@ public class MainActivity extends AppCompatActivity {
         tvAlCuadrado = binding.tvAlCuadrado;
         etAlcuadrado = binding.edAlCuadrado;
         btAlcuadrado= binding.btCalcular;
-
-
-
 
         btAlcuadrado.setOnClickListener(v -> viewModel.alCuadrado(etAlcuadrado.getText().toString()));
 
