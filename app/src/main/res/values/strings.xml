@@ -1,3 +1,32 @@
 <resources>
-    <string name="app_name">Pruebas</string>
+    <string name="app_name">PracticaViewnext</string>
+    <string name="back_button">Consumo</string>
+    <string name="facturas">Facturas</string>
+    <string name="cambiar_a_retromock">Cambiar a Retromock</string>
+    <string name="fecha">Fecha</string>
+    <string name="estado">Estado</string>
+    <string name="importe">Importe</string>
+    <string name="icono_de_flecha_para_item_factura">Icono de flecha para item factura</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="filtros">Filtros</string>
+    <string name="aplicar_filtros">Aplicar Filtros</string>
+    <string name="cerrar">Cerrar</string>
+    <string name="filtrar_facturas">Filtrar facturas</string>
+    <string name="con_fecha_de_emision">Con fecha de emisión</string>
+    <string name="desde">Desde:</string>
+    <string name="seleccionar_fecha">Seleccionar Fecha</string>
+    <string name="dia_mes_ano">día/mes/año</string>
+    <string name="hasta">Hasta:</string>
+    <string name="por_un_importe">Por un importe</string>
+    <string name="separation">-</string>
+    <string name="_0">0</string>
+    <string name="_0eur">0 €</string>
+    <string name="por_estado">Por estado</string>
+    <string name="pagadas">Pagadas</string>
+    <string name="anuladas">Anuladas</string>
+    <string name="cuota_fija">Cuota Fija</string>
+    <string name="pendientes_de_pago">Pendientes de pago</string>
+    <string name="plan_de_pago">Plan de pago</string>
+    <string name="borrar_filtros">Borrar filtros</string>
 </resources>

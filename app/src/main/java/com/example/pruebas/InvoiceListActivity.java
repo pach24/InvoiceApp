@@ -18,10 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 public class InvoiceListActivity extends AppCompatActivity {
 
     private ActivityInvoiceListBinding bindingInvoiceList;
-
     private InvoiceAdapter adapter;
     private InvoiceViewModel viewModel;
-    private InvoiceViewModel invoiceViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,59 +29,37 @@ public class InvoiceListActivity extends AppCompatActivity {
         bindingInvoiceList = ActivityInvoiceListBinding.inflate(getLayoutInflater());
         setContentView(bindingInvoiceList.getRoot());
 
-        // Crea insets para poder visualizar mejor la pantalla
-        ViewCompat.setOnApplyWindowInsetsListener(bindingInvoiceList.InvoiceList, (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            bindingInvoiceList.InvoiceList.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
         // Configurar RecyclerView
         adapter = new InvoiceAdapter();
         bindingInvoiceList.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         bindingInvoiceList.recyclerView.setAdapter(adapter);
 
-
-
-        // Configurar ViewModel
-
-        // Obtiene el valor booleano de la intención que inició esta actividad
-        // Se verifica si se debe usar Retromock (simulación de datos) o no
-
+        // Obtener el valor de USE_RETROMOCK desde la intención
         boolean useMock = getIntent().getBooleanExtra("USE_RETROMOCK", false);
 
-        invoiceViewModel = new InvoiceViewModel(useMock, this);
-        // Crea una instancia del ViewModel usando ViewModelProvider
+        // Configurar ViewModel usando ViewModelProvider.Factory
         viewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
-
             @Override
-            //Crea y devuelve una instancia de ViewModel
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-
-                // Crea un nuevo InvoiceViewModel, pasando el valor de useMock
-                // y el contexto de la actividad
                 return (T) new InvoiceViewModel(useMock, InvoiceListActivity.this);
             }
-
         }).get(InvoiceViewModel.class);
 
-        // Establece un observador en la lista de facturas del ViewModel
+        // Observar los datos de facturas y actualizar la UI
         viewModel.getFacturas().observe(this, facturas -> {
-
             if (facturas != null) {
                 adapter.setFacturas(facturas);
             }
         });
 
-        // Cargar datos desde la API o Retromock
+        // Cargar datos desde el ViewModel
         viewModel.cargarFacturas();
 
         // Botón para volver a la actividad principal
         bindingInvoiceList.btnVolver.setOnClickListener(v -> {
             Intent intent = new Intent(InvoiceListActivity.this, MainActivity.class);
             startActivity(intent);
-            finish(); // Cierra esta actividad
+            finish(); // Cierra esta actividad para evitar volver con el botón atrás
         });
-
     }
 }

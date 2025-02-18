@@ -7,69 +7,33 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- Centrar el TextView -->
-
-    <!-- LinearLayout centrado dentro del ConstraintLayout -->
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Prueba 1"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.755" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="245dp"
-        android:layout_height="249dp"
-        android:layout_marginBottom="156dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPrueba1">
-
-        <EditText
-            android:id="@+id/edAlCuadrado"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Introduce Numero" />
-
-        <Button
-            android:id="@+id/btCalcular"
-            android:layout_width="115dp"
-            android:layout_height="64dp"
-            android:text="Calcular" />
-
-        <TextView
-            android:id="@+id/tvAlCuadrado"
-            android:layout_width="184dp"
-            android:layout_height="54dp"
-            android:textSize="16sp"
-            android:text="Esperando Resultado" />
-
-    </LinearLayout>
-
     <Button
         android:id="@+id/btIrListaFacturas"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Ir a lista de facturas"
-        tools:layout_editor_absoluteX="234dp"
-        tools:layout_editor_absoluteY="98dp" />
+        android:backgroundTint="@android:color/holo_green_light"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/toggleButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="16dp"
+        android:minHeight="60dp" />
 
     <Button
         android:id="@+id/toggleButton"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Toggle API/Mock"
+        android:backgroundTint="@android:color/holo_green_light"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/btIrListaFacturas"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:minHeight="60dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
