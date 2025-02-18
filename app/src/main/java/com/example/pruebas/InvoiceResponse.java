@@ -12,4 +12,18 @@ public class InvoiceResponse {
     public int getNumFacturas() { return numFacturas; }
     public List<Invoice> getFacturas() { return facturas; }
 
+    public double getMaxImporte() {
+        double maxImporte = Double.MIN_VALUE; // Inicializamos con el valor más bajo posible
+
+        // Verificamos si la lista de facturas no es null ni vacía
+        if (facturas != null && !facturas.isEmpty()) {
+            for (Invoice invoice : facturas) {
+                if (invoice.getImporteOrdenacion() > maxImporte) {
+                    maxImporte = invoice.getImporteOrdenacion(); // Actualizamos el máximo
+                }
+            }
+        }
+
+        return maxImporte; // Devolvemos el importe máximo encontrado
+    }
 }

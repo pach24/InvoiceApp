@@ -29,4 +29,5 @@
     <string name="pendientes_de_pago">Pendientes de pago</string>
     <string name="plan_de_pago">Plan de pago</string>
     <string name="borrar_filtros">Borrar filtros</string>
+    <string name="rango_importe">Rango de Importe</string>
 </resources>

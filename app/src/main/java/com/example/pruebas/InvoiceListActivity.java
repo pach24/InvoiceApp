@@ -6,7 +6,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
@@ -62,7 +61,7 @@ public class InvoiceListActivity extends AppCompatActivity {
     // Inflar el menú
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.fragment_filter, menu);
+        getMenuInflater().inflate(R.menu.menu_filter, menu);
         return true;
     }
 
