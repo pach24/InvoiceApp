@@ -6,59 +6,67 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="0dp"
-    tools:context="com.viewnext.energyapp.presentation.ui.factura.FacturaActivity">
+    android:background="@android:color/white"
+    tools:context="com.example.pruebas.InvoiceListActivity">
 
-<androidx.appcompat.widget.Toolbar
-android:id="@+id/toolbar"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:padding="8dp"
-    android:layout_marginEnd="0dp">
+    <!-- Toolbar que será utilizada como ActionBar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorOnPrimary"
+        android:elevation="4dp">
 
-<LinearLayout
-android:orientation="vertical"
-android:layout_width="match_parent"
-android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
 
-<com.google.android.material.button.MaterialButton
-    android:id="@+id/btnVolver"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackgroundBorderless"
-    android:text="@string/back_button"
-    android:textColor="@android:color/holo_green_light"
-    android:textAllCaps="false"
-    android:textSize="20sp"
-    app:icon="@drawable/baseline_arrow_back_ios_24"
-    app:iconTint="@color/holo_green_light"
-    app:iconGravity="textStart"
-    app:iconPadding="0dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnVolver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:text="@string/back_button"
+                android:textColor="@android:color/holo_green_light"
+                android:textAllCaps="false"
+                android:textSize="20sp"
+                app:icon="@drawable/baseline_arrow_back_ios_24"
+                app:iconTint="@color/holo_green_light"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp" />
 
-<TextView
-    android:id="@+id/toolbarTitle"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/facturas"
-    android:textColor="@android:color/black"
-    android:textSize="40sp"
-    android:textStyle="bold" />
-</LinearLayout>
+            <TextView
+                android:id="@+id/toolbarTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/facturas"
+                android:textColor="@android:color/black"
+                android:textSize="40sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"/>
+        </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 
-<androidx.recyclerview.widget.RecyclerView
-android:id="@+id/recyclerView"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:layout_below="@id/toolbar"
-android:padding="4dp"/> <!-- Eliminamos el padding en el RecyclerView -->
+    <!-- RecyclerView para mostrar la lista de facturas -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:padding="4dp"/>
 
-<FrameLayout
-android:id="@+id/fragment_container"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:elevation="4dp"
-android:visibility="gone"
-android:background="@color/white"
-android:clickable="true"
-android:focusable="true"/>
-    </RelativeLayout>
+    <!-- Contenedor para mostrar fragmentos (por si fuera necesario) -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="4dp"
+        android:visibility="gone"
+        android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true"/>
+</RelativeLayout>

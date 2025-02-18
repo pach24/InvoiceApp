@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private boolean useMock = false; // Variable para alternar entre Retrofit y Retromock
+    private boolean useMock = true; // Variable para alternar entre Retrofit y Retromock
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

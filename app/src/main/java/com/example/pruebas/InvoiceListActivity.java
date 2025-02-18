@@ -1,19 +1,15 @@
 package com.example.pruebas;
 
-import android.os.Bundle;
 import android.content.Intent;
-
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.pruebas.databinding.ActivityInvoiceListBinding;
-
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import com.example.pruebas.databinding.ActivityInvoiceListBinding;
 
 public class InvoiceListActivity extends AppCompatActivity {
 
@@ -61,5 +57,24 @@ public class InvoiceListActivity extends AppCompatActivity {
             startActivity(intent);
             finish(); // Cierra esta actividad para evitar volver con el botón atrás
         });
+
+        // Configuración de la Toolbar
+        setSupportActionBar(bindingInvoiceList.toolbar);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflar el menú desde el archivo XML
+        getMenuInflater().inflate(R.menu.fragment_filter, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_filters) {
+            // Actualmente no hace nada, pero aquí manejarías la acción del menú
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
