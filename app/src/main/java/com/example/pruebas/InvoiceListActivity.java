@@ -1,14 +1,17 @@
 package com.example.pruebas;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModel;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.example.pruebas.databinding.ActivityInvoiceListBinding;
 
 public class InvoiceListActivity extends AppCompatActivity {
@@ -33,48 +36,70 @@ public class InvoiceListActivity extends AppCompatActivity {
         // Obtener el valor de USE_RETROMOCK desde la intención
         boolean useMock = getIntent().getBooleanExtra("USE_RETROMOCK", false);
 
-        // Configurar ViewModel usando ViewModelProvider.Factory
-        viewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
-            @Override
-            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new InvoiceViewModel(useMock, InvoiceListActivity.this);
-            }
-        }).get(InvoiceViewModel.class);
+        // Configurar ViewModel usando la Factory
+        InvoiceViewModelFactory factory = new InvoiceViewModelFactory(useMock, this);
+        viewModel = new ViewModelProvider(this, factory).get(InvoiceViewModel.class);
+
+        // Cargar facturas
+        viewModel.cargarFacturas();
 
         // Observar los datos de facturas y actualizar la UI
         viewModel.getFacturas().observe(this, facturas -> {
             if (facturas != null) {
                 adapter.setFacturas(facturas);
+            } else {
+                Toast.makeText(InvoiceListActivity.this, "No se encontraron facturas", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Cargar datos desde el ViewModel
-        viewModel.cargarFacturas();
-
         // Botón para volver a la actividad principal
-        bindingInvoiceList.btnVolver.setOnClickListener(v -> {
-            Intent intent = new Intent(InvoiceListActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish(); // Cierra esta actividad para evitar volver con el botón atrás
-        });
+        bindingInvoiceList.btnVolver.setOnClickListener(v -> finish());
 
         // Configuración de la Toolbar
         setSupportActionBar(bindingInvoiceList.toolbar);
     }
 
+    // Inflar el menú
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflar el menú desde el archivo XML
         getMenuInflater().inflate(R.menu.fragment_filter, menu);
         return true;
     }
 
+    // Gestionar la acción de seleccionar el ítem del menú
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_filters) {
-            // Actualmente no hace nada, pero aquí manejarías la acción del menú
+            mostrarFiltroFragment();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    // Mostrar el fragmento de filtro
+    private void mostrarFiltroFragment() {
+        bindingInvoiceList.fragmentContainer.setVisibility(View.VISIBLE);
+        FilterFragment filterFragment = new FilterFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, filterFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    // Restaurar la vista principal
+    public void restoreMainView() {
+        bindingInvoiceList.toolbar.setVisibility(View.VISIBLE);
+        bindingInvoiceList.recyclerView.setVisibility(View.VISIBLE);
+        bindingInvoiceList.fragmentContainer.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) != null) {
+            restoreMainView();
+            getSupportFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

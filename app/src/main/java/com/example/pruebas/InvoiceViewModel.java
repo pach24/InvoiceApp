@@ -1,17 +1,15 @@
 package com.example.pruebas;
+
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import com.example.pruebas.Invoice;
-import com.example.pruebas.InvoiceRepository;
-import com.example.pruebas.GetInvoicesUseCase;
+import android.util.Log;
+import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import java.util.List;
-import android.util.Log;
 
 public class InvoiceViewModel extends ViewModel {
     private final MutableLiveData<List<Invoice>> facturas = new MutableLiveData<>();
@@ -49,10 +47,3 @@ public class InvoiceViewModel extends ViewModel {
         });
     }
 }
-
-
-
-
-
-
-
