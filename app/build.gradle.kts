@@ -79,5 +79,6 @@ dependencies {
     // For control over item selection of both touch and mouse driven selection
     implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
 
+    implementation("com.google.android.material:material:1.6.0")
 
 }
