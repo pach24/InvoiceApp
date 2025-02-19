@@ -46,4 +46,17 @@ public class InvoiceViewModel extends ViewModel {
             }
         });
     }
+    public float getMaxImporte() {
+        if (facturas.getValue() == null || facturas.getValue().isEmpty()) {
+            return 0f;
+        }
+
+        float maxImporte = 0f;
+        for (Invoice factura : facturas.getValue()) {
+            if (factura.getImporteOrdenacion() > maxImporte) {
+                maxImporte = (float) factura.getImporteOrdenacion();
+            }
+        }
+        return maxImporte;
+    }
 }
