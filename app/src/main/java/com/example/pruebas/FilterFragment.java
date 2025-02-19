@@ -109,6 +109,7 @@ public class FilterFragment extends Fragment {
             InvoiceListActivity activity = (InvoiceListActivity) getActivity();
             if (activity != null) {
                 activity.aplicarFiltros(bundle); // Llama al método para aplicar los filtros
+                activity.restoreMainView();
             }
 
             // Cerrar el fragmento
