@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.google.android.material.slider.RangeSlider;
+
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,7 +44,7 @@ public class FilterFragment extends Fragment {
 
         // Pasar el ViewModel de Factura
         viewModel = new ViewModelProvider(requireActivity()).get(InvoiceViewModel.class);
-
+        binding.rangeSlider.setValues(10f, 90f);
         // Valores por defecto de las fechas
         @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String fechaDefault = dateFormat.format(Calendar.getInstance().getTime());
@@ -118,7 +121,7 @@ public class FilterFragment extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             float maxImporte = bundle.getFloat("MAX_IMPORTE", 0f);
-
+            maxImporte= 100;
             if (maxImporte > 0) {
                 binding.rangeSlider.setValueFrom(0f);
                 binding.rangeSlider.setValueTo(maxImporte);
@@ -202,8 +205,7 @@ public class FilterFragment extends Fragment {
             binding.btnSelectDate.setText(fechaDefault);
             binding.btnSelectDateUntil.setText(fechaDefault);
 
-            //todo
-            // acceder al importe maximo desde INVOICE RESPONSE
+
 
             //binding.rangeSlider.setValues(0f, InvoiceResponse.getMaxImporte());
 

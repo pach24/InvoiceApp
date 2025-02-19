@@ -184,6 +184,7 @@
                     android:gravity="end"/>
             </LinearLayout>
             <com.google.android.material.slider.RangeSlider
+
                 android:contentDescription="@string/rango_importe"
                 android:id="@+id/rangeSlider"
                 android:layout_width="match_parent"
@@ -195,6 +196,8 @@
                 app:thumbRadius="15dp"
                 app:thumbColor="@color/holo_green_light"
                 app:height="1dp"/>
+
+
 
             <View
                 android:layout_width="match_parent"
