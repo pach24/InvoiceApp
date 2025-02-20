@@ -142,12 +142,15 @@ public class FilterFragment extends Fragment {
     }
 
     private void openDatePicker(View button) {
+
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(requireActivity(),
+        int themeResId = android.R.style.Theme_Material_Light_Dialog;
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), themeResId,
                 (view, year1, monthOfYear, dayOfMonth1) -> {
                     Calendar selectedDate = Calendar.getInstance();
                     selectedDate.set(year1, monthOfYear, dayOfMonth1);

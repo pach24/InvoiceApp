@@ -1,8 +1,7 @@
 package com.example.pruebas;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,17 +18,20 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
     private List<Invoice> listaFacturas;
 
     // Método para actualizar la lista de facturas
+    @SuppressLint("NotifyDataSetChanged")
     public void setFacturas(List<Invoice> facturas) {
         this.listaFacturas = facturas;
         notifyDataSetChanged();  // Notifica a RecyclerView que los datos cambiaron
     }
 
+    @NonNull
     @Override
     public InvoiceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ItemInvoiceBinding binding = ItemInvoiceBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new InvoiceViewHolder(binding);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull InvoiceViewHolder holder, int position) {
         Invoice factura = listaFacturas.get(position);
@@ -84,6 +86,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
 
 
     // Metodo para mostrar un popup nativo
+    // TODO Se configura con el tema que use el dispositivo (puede usar tema oscuro) Manejar esto.
     private void showPopup(View view) {
         new androidx.appcompat.app.AlertDialog.Builder(view.getContext())
                 .setTitle("Información")
@@ -126,9 +129,5 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
             this.binding = binding; // Asignar el binding a la instancia
         }
 
-        public void bind(Invoice factura) {
-            binding.txtImporte.setText("€ " + factura.getImporteOrdenacion());
-            binding.txtEstado.setText(factura.getDescEstado());
-        }
     }
 }
