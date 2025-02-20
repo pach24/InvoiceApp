@@ -17,7 +17,7 @@ public class InvoiceViewModel extends ViewModel {
     private final GetInvoicesUseCase getInvoicesUseCase;
     private final boolean useMock;
 
-    public InvoiceViewModel(boolean useMock, Context context) {
+    public InvoiceViewModel(boolean useMock, Context context) {     //ViewModel custom con useMock y context gracias a Factory
         this.useMock = useMock;
         InvoiceRepository repository = new InvoiceRepository(useMock, context);
         this.getInvoicesUseCase = new GetInvoicesUseCase(repository);
@@ -27,27 +27,29 @@ public class InvoiceViewModel extends ViewModel {
         return facturas;
     }
 
+    /*
+    Metodo que llama al caso de uso para cargar facturas desde el repository
+     */
     public void cargarFacturas() {
         getInvoicesUseCase.execute(useMock, new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<List<Invoice>> call, @NonNull Response<List<Invoice>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     facturas.setValue(response.body());
-                    Log.d("InvoiceViewModel", "Facturas recibidas: " + response.body().size());
                 } else {
                     facturas.setValue(null);
-                    Log.e("InvoiceViewModel", "Error al obtener las facturas.");
                 }
             }
-
             @Override
             public void onFailure(@NonNull Call<List<Invoice>> call, @NonNull Throwable t) {
                 facturas.setValue(null);
-                Log.e("InvoiceViewModel", "Error en la API: " + t.getMessage());
             }
         });
     }
 
+    /*
+    Metodo que devuelve el importe máximo de la lista de facturas
+     */
     public float getMaxImporte() {
         if (facturas.getValue() == null || facturas.getValue().isEmpty()) {
             return 0f;
@@ -123,7 +125,7 @@ public class InvoiceViewModel extends ViewModel {
             return day1 < day2;
 
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            Log.e("TAG", "Error al convertir el número ");
             return false;
         }
     }

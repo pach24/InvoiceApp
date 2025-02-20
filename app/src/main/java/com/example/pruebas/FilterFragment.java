@@ -7,18 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.pruebas.databinding.FragmentFilterBinding;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-
 import java.util.List;
 import java.util.Locale;
 
@@ -29,26 +25,29 @@ public class FilterFragment extends Fragment {
     String fechaInicio;
     String fechaDefault;
 
-    public FilterFragment() { // Constructor vacío
-    }
+
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         binding = FragmentFilterBinding.inflate(inflater, container, false);
+        Bundle bundle = getArguments();
 
         // Obtener el ViewModel de Factura
+
         viewModel = new ViewModelProvider(requireActivity()).get(InvoiceViewModel.class);
         binding.rangeSlider.setValues(10f, 90f);
         binding.checkPendientesPago.setChecked(true);
         binding.checkPagadas.setChecked(true);
+
         // Valores por defecto de las fechas
+
         @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         fechaDefault = dateFormat.format(Calendar.getInstance().getTime());
         fechaInicio = getArguments() != null ? getArguments().getString("OLDEST_DATE", fechaDefault) : fechaDefault;
         binding.btnSelectDate.setText(fechaInicio);
-
         binding.btnSelectDate.setText(fechaInicio);
         binding.btnSelectDateUntil.setText(fechaDefault);
 
@@ -59,7 +58,7 @@ public class FilterFragment extends Fragment {
         binding.btnSelectDateUntil.setOnClickListener(v -> openDatePicker(binding.btnSelectDateUntil));
 
         // Recuperar el Bundle con maxImporte
-        Bundle bundle = getArguments();
+
         if (bundle != null) {
             float maxImporte = bundle.getFloat("MAX_IMPORTE", 0f);
             if (maxImporte > 0) {
@@ -115,7 +114,7 @@ public class FilterFragment extends Fragment {
             // Pasar los datos a la actividad
             InvoiceListActivity activity = (InvoiceListActivity) getActivity();
             if (activity != null) {
-                activity.aplicarFiltros(bundle); // Llama al método para aplicar los filtros
+                activity.aplicarFiltros(bundle); // Llama al metodo para aplicar los filtros
                 activity.restoreMainView();
             }
 
