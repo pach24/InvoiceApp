@@ -55,8 +55,26 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
                 holder.binding.txtEstado.setVisibility(View.GONE); // Ocultar si está pagada
                 break;
 
+            case "Anulada":
+                holder.binding.txtEstado.setText("Anulada");
+                holder.binding.txtEstado.setTextColor(Color.RED); // Cambiar el texto a rojo
+                holder.binding.txtEstado.setVisibility(View.VISIBLE);
+                break;
+
+            case "Cuota fija":
+                holder.binding.txtEstado.setText("Cuota fija");
+                holder.binding.txtEstado.setTextColor(Color.BLACK);
+                holder.binding.txtEstado.setVisibility(View.VISIBLE);
+                break;
+
+            case "Plan de pago":
+                holder.binding.txtEstado.setText("Plan de pago");
+                holder.binding.txtEstado.setTextColor(Color.BLACK); // Verde claro
+                holder.binding.txtEstado.setVisibility(View.VISIBLE);
+                break;
+
             default:
-                holder.binding.txtEstado.setVisibility(View.GONE); // Ocultar en otros casos
+                holder.binding.txtEstado.setVisibility(View.VISIBLE); // Ocultar en otros casos
                 break;
         }
 

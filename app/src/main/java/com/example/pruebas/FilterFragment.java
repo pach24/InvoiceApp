@@ -181,15 +181,16 @@ public class FilterFragment extends Fragment {
         if (binding.checkPendientesPago.isChecked()) {
             estados.add("Pendiente de pago");
         }
+        if (binding.checkAnuladas.isChecked()) {
+            estados.add("Anulada");
+        }
         if (binding.checkCuotaFija.isChecked()) {
-            estados.add("Cuota Fija");
+            estados.add("Cuota fija");
         }
         if (binding.checkPlanPago.isChecked()) {
             estados.add("Plan de pago");
         }
-        if (binding.checkAnuladas.isChecked()) {
-            estados.add("Anulada");
-        }
+
         return estados;
     }
 

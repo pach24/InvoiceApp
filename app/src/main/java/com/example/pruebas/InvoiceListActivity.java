@@ -2,6 +2,7 @@ package com.example.pruebas;
 
 import static com.example.pruebas.Invoice.stringToDate;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,6 +51,9 @@ public class InvoiceListActivity extends AppCompatActivity {
             if (facturas != null) {
                 invoiceAdapter.setFacturas(facturas);
 
+                for (Invoice factura : facturas) {
+                    Log.d("InvoiceListActivity", "Factura recibida - Estado: " + factura.getDescEstado());
+                }
 
             } else {
                 Toast.makeText(InvoiceListActivity.this, "No se encontraron facturas", Toast.LENGTH_SHORT).show();
@@ -162,8 +166,13 @@ public class InvoiceListActivity extends AppCompatActivity {
         Double importeMin = bundle.getDouble("IMPORTE_MIN");
         Double importeMax = bundle.getDouble("IMPORTE_MAX");
 
+
         // Filtrar las facturas
         List<Invoice> facturasFiltradas = filtrarFacturas(estadosSeleccionados, fechaInicio, fechaFin, importeMin, importeMax);
+        Log.d("InvoiceListActivity", "Facturas filtradas: " + facturasFiltradas.size());
+        for (Invoice factura : facturasFiltradas) {
+            Log.d("InvoiceListActivity", "Estado de factura: " + factura.getDescEstado());
+        }
 
         // Mostrar las facturas filtradas si se encontró algún resultado
         if (facturasFiltradas != null && !facturasFiltradas.isEmpty()) {
