@@ -65,7 +65,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
     }
 
 
-    // Método para mostrar un popup nativo
+    // Metodo para mostrar un popup nativo
     private void showPopup(View view) {
         new androidx.appcompat.app.AlertDialog.Builder(view.getContext())
                 .setTitle("Información")
@@ -74,11 +74,10 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
                 .show();
     }
 
-    // Método para formatear la fecha
+    // Metodo para formatear la fecha
     private String formatFecha(String fecha) {
         try {
             // Formato de la fecha original
-            Log.d("entréeeeeeeeeeeee", "entréeeeeeeeeeeeeeeeeeee");
             SimpleDateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
             // Nuevo formato
@@ -102,7 +101,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
 
     // Clase interna que representa la vista de cada factura en la lista
     public static class InvoiceViewHolder extends RecyclerView.ViewHolder {
-        private final ItemInvoiceBinding binding; // Agregar una instancia de ItemInvoiceBinding
+        private final ItemInvoiceBinding binding;
 
         public InvoiceViewHolder(ItemInvoiceBinding binding) {
             super(binding.getRoot());

@@ -18,7 +18,7 @@ import com.example.pruebas.databinding.ActivityInvoiceListBinding;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
+
 
 public class InvoiceListActivity extends AppCompatActivity {
 
@@ -39,7 +39,7 @@ public class InvoiceListActivity extends AppCompatActivity {
         bindingInvoiceList.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         bindingInvoiceList.recyclerView.setAdapter(adapter);
 
-        // Obtener el valor de USE_RETROMOCK desde la intención
+        // Obtener el valor de USE_RETROMOCK desde el intent
         boolean useMock = getIntent().getBooleanExtra("USE_RETROMOCK", false);
 
         // Configurar ViewModel usando la Factory
@@ -49,10 +49,15 @@ public class InvoiceListActivity extends AppCompatActivity {
         // Cargar facturas
         viewModel.cargarFacturas();
 
+
+
+
         // Observar los datos de facturas y actualizar la UI
         viewModel.getFacturas().observe(this, facturas -> {
             if (facturas != null) {
                 adapter.setFacturas(facturas);
+
+
             } else {
                 Toast.makeText(InvoiceListActivity.this, "No se encontraron facturas", Toast.LENGTH_SHORT).show();
             }
@@ -76,21 +81,22 @@ public class InvoiceListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_filters) {
-            mostrarFiltroFragment(item);
+            mostrarFiltroFragment();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     // Mostrar el fragmento de filtro
-    private void mostrarFiltroFragment(MenuItem item) {
+    private void mostrarFiltroFragment() {
         // Obtener el importe máximo de las facturas
         float maxImporte = viewModel.getMaxImporte();
+        String oldestDate = viewModel.getOldestDate();
 
         // Crear el Bundle para pasar al fragmento
         Bundle bundle = new Bundle();
         bundle.putFloat("MAX_IMPORTE", maxImporte);
-
+        bundle.putString("OLDEST_DATE", oldestDate); // Pasarla al fragmento
         // Mostrar el fragmento en toda la pantalla
         FilterFragment filterFragment = new FilterFragment();
         filterFragment.setArguments(bundle);
@@ -111,15 +117,7 @@ public class InvoiceListActivity extends AppCompatActivity {
         bindingInvoiceList.fragmentContainer.setVisibility(View.GONE);
     }
 
-    @Override
-    public void onBackPressed() {
-        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) != null) {
-            restoreMainView();
-            getSupportFragmentManager().popBackStack();
-        } else {
-            super.onBackPressed();
-        }
-    }
+
 
     public void aplicarFiltros(Bundle bundle) {
         // Recuperar los filtros desde el Bundle
@@ -150,23 +148,24 @@ public class InvoiceListActivity extends AppCompatActivity {
             return facturasFiltradas;  // Si no hay facturas, retornamos una lista vacía
         }
 
-        // Convertir las fechas de String a Date para poder compararlas
+        // Convertir las fechas de String a Date una sola vez
         Date fechaInicio = stringToDate(fechaInicioString);
         Date fechaFin = stringToDate(fechaFinString);
 
-        // Filtrar por estado
+        // Filtrar por estado, fecha e importe
         for (Invoice factura : facturas) {
             boolean cumpleEstado = (estadosSeleccionados == null || estadosSeleccionados.contains(factura.getDescEstado()));
 
             // Filtrar por fecha
             boolean cumpleFecha = true;
+            Date fechaFactura = stringToDate(factura.getFecha());
 
-            if (fechaInicio != null && factura.getFecha() != null) {
-                cumpleFecha &= Objects.requireNonNull(stringToDate(factura.getFecha())).compareTo(fechaInicio) >= 0;  // Verificar si la factura es posterior o igual a la fecha de inicio
+            if (fechaInicio != null && fechaFactura != null) {
+                cumpleFecha &= fechaFactura.compareTo(fechaInicio) >= 0;  // Verificar si la factura es posterior o igual a la fecha de inicio
             }
 
-            if (fechaFin != null && factura.getFecha() != null) {
-                cumpleFecha &= Objects.requireNonNull(stringToDate(factura.getFecha())).compareTo(fechaFin) <= 0;  // Verificar si la factura es anterior o igual a la fecha de fin
+            if (fechaFin != null && fechaFactura != null) {
+                cumpleFecha &= fechaFactura.compareTo(fechaFin) <= 0;  // Verificar si la factura es anterior o igual a la fecha de fin
             }
 
             // Filtrar por importe

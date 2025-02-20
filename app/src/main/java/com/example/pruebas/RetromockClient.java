@@ -12,7 +12,7 @@ public class RetromockClient {
     public static Retromock getClient(Context context) {
         if (retromock == null) {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("https://mockapi.com/")
+                    .baseUrl("https://viewnextandroid.wiremockapi.cloud/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
