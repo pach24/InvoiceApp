@@ -8,17 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.google.android.material.slider.RangeSlider;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.pruebas.databinding.FragmentFilterBinding;
-import java.text.ParseException;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -26,10 +26,13 @@ public class FilterFragment extends Fragment {
     private FragmentFilterBinding binding;
     private InvoiceViewModel viewModel;
 
+    String fechaInicio;
+    String fechaDefault;
+
     public FilterFragment() { // Constructor vacío
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,11 +41,15 @@ public class FilterFragment extends Fragment {
         // Obtener el ViewModel de Factura
         viewModel = new ViewModelProvider(requireActivity()).get(InvoiceViewModel.class);
         binding.rangeSlider.setValues(10f, 90f);
-
+        binding.checkPendientesPago.setChecked(true);
+        binding.checkPagadas.setChecked(true);
         // Valores por defecto de las fechas
         @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String fechaDefault = dateFormat.format(Calendar.getInstance().getTime());
-        binding.btnSelectDate.setText(fechaDefault);
+        fechaDefault = dateFormat.format(Calendar.getInstance().getTime());
+        fechaInicio = getArguments() != null ? getArguments().getString("OLDEST_DATE", fechaDefault) : fechaDefault;
+        binding.btnSelectDate.setText(fechaInicio);
+
+        binding.btnSelectDate.setText(fechaInicio);
         binding.btnSelectDateUntil.setText(fechaDefault);
 
         // Configurar el DatePickerDialog para fecha desde
@@ -109,6 +116,7 @@ public class FilterFragment extends Fragment {
             InvoiceListActivity activity = (InvoiceListActivity) getActivity();
             if (activity != null) {
                 activity.aplicarFiltros(bundle); // Llama al método para aplicar los filtros
+                activity.restoreMainView();
             }
 
             // Cerrar el fragmento
@@ -125,9 +133,7 @@ public class FilterFragment extends Fragment {
         });
 
         // Botón borrar filtros
-        binding.btnBorrar.setOnClickListener(v -> {
-            resetFilters();
-        });
+        binding.btnBorrar.setOnClickListener(v -> resetFilters());
     }
 
     private void openDatePicker(View button) {
@@ -151,7 +157,7 @@ public class FilterFragment extends Fragment {
     private void resetFilters() {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String fechaDefault = dateFormat.format(Calendar.getInstance().getTime());
-        binding.btnSelectDate.setText(fechaDefault);
+        binding.btnSelectDate.setText(fechaInicio);
         binding.btnSelectDateUntil.setText(fechaDefault);
         binding.rangeSlider.setValues(0f, viewModel.getMaxImporte()); // Si tienes esta función en InvoiceResponse
         binding.checkPagadas.setChecked(false);
@@ -185,6 +191,15 @@ public class FilterFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        // Restaurar la vista principal cuando el fragmento se destruye
+        if (getActivity() != null) {
+            InvoiceListActivity activity = (InvoiceListActivity) getActivity();
+            activity.restoreMainView();
+        }
+
         binding = null;
     }
+
+
+
 }
