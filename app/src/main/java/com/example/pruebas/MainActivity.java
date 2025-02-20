@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import android.widget.*;
+import android.widget.Toast;
 import com.example.pruebas.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,8 +20,7 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this); // Habilitar EdgeToEdge para pantallas completas
 
         // Inflar el layout usando ViewBinding
-        // ViewBinding para acceder a las vistas
-        com.example.pruebas.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         // Configurar insets para manejar la barra de sistema
@@ -31,21 +30,18 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-
-
         // Configurar el botón para ir a la lista de facturas
-        binding.goToInvoiceListButton.setOnClickListener(v -> {
+        binding.btFacturas.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, InvoiceListActivity.class);
             intent.putExtra("USE_RETROMOCK", useMock); // Pasar el estado de useMock
             startActivity(intent); // Iniciar la actividad
         });
 
         // Configurar el botón para alternar el estado de useMock
-        binding.toggleButton.setOnClickListener(v -> {
+        binding.btToggleApi.setOnClickListener(v -> {
             useMock = !useMock;
             String message = "RetroMock state: " + useMock;
             Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
         });
     }
-
 }

@@ -30,4 +30,6 @@
     <string name="plan_de_pago">Plan de pago</string>
     <string name="borrar_filtros">Borrar filtros</string>
     <string name="rango_importe">Rango de Importe</string>
+    <string name="usuario">usuario</string>
+    <string name="hola_usuario">hola usuario</string>
 </resources>

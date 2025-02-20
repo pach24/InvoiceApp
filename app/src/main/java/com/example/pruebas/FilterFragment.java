@@ -38,7 +38,13 @@ public class FilterFragment extends Fragment {
         // Obtener el ViewModel de Factura
 
         viewModel = new ViewModelProvider(requireActivity()).get(InvoiceViewModel.class);
+
+        //Ajusta unos valores por defecto al rangeslider
         binding.rangeSlider.setValues(10f, 90f);
+
+        /* Configuro por defecto las checkboxes para mayor comodidad (debería estudiarse cuáles son las más repetidas para
+        configurarlas por defecto a true, para una mejor experiencia de usuario
+        */
         binding.checkPendientesPago.setChecked(true);
         binding.checkPagadas.setChecked(true);
 
