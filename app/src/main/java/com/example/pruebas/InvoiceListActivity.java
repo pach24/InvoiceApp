@@ -166,7 +166,7 @@ public class InvoiceListActivity extends AppCompatActivity {
 
 
     // Recupera los datos aplicados en filtros
-    public void aplicarFiltros(Bundle bundle) {
+    public boolean aplicarFiltros(Bundle bundle) {
 
         List<String> estadosSeleccionados = bundle.getStringArrayList("ESTADOS");
         String fechaInicio = bundle.getString("FECHA_INICIO");
@@ -185,8 +185,11 @@ public class InvoiceListActivity extends AppCompatActivity {
         // Mostrar las facturas filtradas si se encontró algún resultado
         if (!facturasFiltradas.isEmpty()) {
             runOnUiThread(() -> invoiceAdapter.setFacturas(facturasFiltradas));
+            return true;
         } else {
-            Toast.makeText(InvoiceListActivity.this, "No se encontraron resultados", Toast.LENGTH_SHORT).show();
+
+            //Toast.makeText(InvoiceListActivity.this, "No se encontraron resultados", Toast.LENGTH_SHORT).show();
+            return false;
         }
     }
 

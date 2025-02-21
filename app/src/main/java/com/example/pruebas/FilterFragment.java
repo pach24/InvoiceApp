@@ -129,13 +129,18 @@ public class FilterFragment extends Fragment {
             // Pasar los datos a la actividad
             InvoiceListActivity activity = (InvoiceListActivity) getActivity();
             if (activity != null) {
-                activity.aplicarFiltros(bundle); // Llama al metodo para aplicar los filtros
+                boolean hayResultados = activity.aplicarFiltros(bundle);
+                if (!hayResultados) {
+                    Toast.makeText(requireContext(), "No se encontraron resultados para los filtros seleccionados.", Toast.LENGTH_SHORT).show();
+                    return; // No cerrar el fragmento si no hay resultados
+                }
                 activity.restoreMainView();
             }
 
-            // Cerrar el fragmento
+            // Cerrar el fragmento solo si hay resultados
             getParentFragmentManager().popBackStack();
         });
+
 
         // Botón cerrar fragmento filtros
         binding.btnCerrar.setOnClickListener(v -> {
@@ -214,14 +219,12 @@ public class FilterFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        // Restaurar la vista principal cuando el fragmento se destruye
-        if (getActivity() != null) {
-            InvoiceListActivity activity = (InvoiceListActivity) getActivity();
-            activity.restoreMainView();
+        if (getActivity() instanceof InvoiceListActivity) {
+            ((InvoiceListActivity) getActivity()).restoreMainView();
         }
-
-        binding = null;
+        binding = null; // Asegurar que la vista no se accede después de destruirse
     }
+
 
     private boolean validarFechas(Context context, String fechaInicioStr, String fechaFinStr) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
