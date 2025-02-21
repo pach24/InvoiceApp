@@ -48,14 +48,18 @@ public class InvoiceListActivity extends AppCompatActivity {
         // Cargar facturas desde el viewmodel
         invoiceViewModel.cargarFacturas();
 
+        // ---------------------- Observador para cuando las facturas se carguen ----------------------
+        invoiceViewModel.getFacturas().observe(this, facturas -> {
+            if (facturas != null && !facturas.isEmpty()) {
+
+                invalidateOptionsMenu();  // Actualiza el menú
+            }
+        });
+
         // Observar los datos de facturas y actualizar la UI
         invoiceViewModel.getFacturas().observe(this, facturas -> {
             if (facturas != null) {
                 invoiceAdapter.setFacturas(facturas);
-
-                for (Invoice factura : facturas) {
-                    Log.d("InvoiceListActivity", "Factura recibida - Estado: " + factura.getDescEstado());
-                }
 
             } else {
                 Toast.makeText(InvoiceListActivity.this, "No se encontraron facturas", Toast.LENGTH_SHORT).show();
@@ -69,10 +73,18 @@ public class InvoiceListActivity extends AppCompatActivity {
         setSupportActionBar(bindingInvoiceList.toolbar);
     }
 
-    // Inflar el menú
+    // Inflar el menú y controlar la visibilidad del ítem de filtro
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_filter, menu);
+        // Deshabilitar el ítem de filtro inicialmente
+
+        MenuItem filtroItem = menu.findItem(R.id.action_filters);
+        if (invoiceViewModel.getFacturas().getValue() == null || invoiceViewModel.getFacturas().getValue().isEmpty()) {
+            filtroItem.setEnabled(false);  // Deshabilitar si las facturas no están cargadas
+        } else {
+            filtroItem.setEnabled(true);  // Habilitar si las facturas están cargadas
+        }
         return true;
     }
 
@@ -80,7 +92,13 @@ public class InvoiceListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_filters) {
-            mostrarFiltroFragment();
+            // Verificamos si las facturas ya están cargadas
+            if (invoiceViewModel.getFacturas().getValue() != null && !invoiceViewModel.getFacturas().getValue().isEmpty()) {
+                mostrarFiltroFragment();
+            } else {
+                // Las facturas aún no están cargadas
+                Toast.makeText(this, "Las facturas aún no están cargadas.", Toast.LENGTH_SHORT).show();
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -111,7 +129,6 @@ public class InvoiceListActivity extends AppCompatActivity {
         // Pasamos el importe máximo y la fecha más antigua
         bundle.putFloat("MAX_IMPORTE", maxImporte);
         bundle.putString("OLDEST_DATE", oldestDate);
-
 
         // Mostrar el fragmento en toda la pantalla
         FilterFragment filterFragment = new FilterFragment();
@@ -162,9 +179,6 @@ public class InvoiceListActivity extends AppCompatActivity {
         return facturasFiltradas;
     }
 
-
-
-
     // Recupera los datos aplicados en filtros
     public boolean aplicarFiltros(Bundle bundle) {
 
@@ -173,7 +187,6 @@ public class InvoiceListActivity extends AppCompatActivity {
         String fechaFin = bundle.getString("FECHA_FIN");
         Double importeMin = bundle.getDouble("IMPORTE_MIN");
         Double importeMax = bundle.getDouble("IMPORTE_MAX");
-
 
         // Filtrar las facturas
         List<Invoice> facturasFiltradas = filtrarFacturas(estadosSeleccionados, fechaInicio, fechaFin, importeMin, importeMax);
@@ -187,8 +200,6 @@ public class InvoiceListActivity extends AppCompatActivity {
             runOnUiThread(() -> invoiceAdapter.setFacturas(facturasFiltradas));
             return true;
         } else {
-
-            //Toast.makeText(InvoiceListActivity.this, "No se encontraron resultados", Toast.LENGTH_SHORT).show();
             return false;
         }
     }
@@ -199,6 +210,4 @@ public class InvoiceListActivity extends AppCompatActivity {
         bindingInvoiceList.recyclerView.setVisibility(View.VISIBLE);
         bindingInvoiceList.fragmentContainer.setVisibility(View.GONE);
     }
-
-
 }
