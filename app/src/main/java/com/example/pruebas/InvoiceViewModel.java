@@ -14,6 +14,7 @@ import retrofit2.Response;
 
 public class InvoiceViewModel extends ViewModel {
     private final MutableLiveData<List<Invoice>> facturas = new MutableLiveData<>();
+    
     private final GetInvoicesUseCase getInvoicesUseCase;
     private final boolean useMock;
 

@@ -2,10 +2,6 @@ package com.example.pruebas;
 
 
 import android.content.Context;
-import com.example.pruebas.ApiService;
-import com.example.pruebas.RetromockClient;
-import com.example.pruebas.RetroFitClient;
-import com.example.pruebas.InvoiceResponse;
 import retrofit2.Call;
 
 public class InvoiceRepository {

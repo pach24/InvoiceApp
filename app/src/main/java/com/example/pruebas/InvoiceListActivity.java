@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
@@ -87,6 +89,19 @@ public class InvoiceListActivity extends AppCompatActivity {
     // Mostrar el fragmento de filtro
     private void mostrarFiltroFragment() {
         // Obtener el importe máximo de las facturas
+        FilterFragment filterFragment = getFilterFragment();
+
+        bindingInvoiceList.fragmentContainer.setVisibility(View.VISIBLE);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+        transaction.replace(R.id.fragment_container, filterFragment, "FILTRO_FRAGMENT");
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    @NonNull
+    private FilterFragment getFilterFragment() {
         float maxImporte = invoiceViewModel.getMaxImporte();
         String oldestDate = invoiceViewModel.getOldestDate();
 
@@ -101,14 +116,7 @@ public class InvoiceListActivity extends AppCompatActivity {
         // Mostrar el fragmento en toda la pantalla
         FilterFragment filterFragment = new FilterFragment();
         filterFragment.setArguments(bundle);
-
-        bindingInvoiceList.fragmentContainer.setVisibility(View.VISIBLE);
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-        transaction.replace(R.id.fragment_container, filterFragment, "FILTRO_FRAGMENT");
-        transaction.addToBackStack(null);
-        transaction.commit();
+        return filterFragment;
     }
 
     public List<Invoice> filtrarFacturas(List<String> estadosSeleccionados, String fechaInicioString, String fechaFinString, Double importeMin, Double importeMax) {
@@ -175,7 +183,7 @@ public class InvoiceListActivity extends AppCompatActivity {
         }
 
         // Mostrar las facturas filtradas si se encontró algún resultado
-        if (facturasFiltradas != null && !facturasFiltradas.isEmpty()) {
+        if (!facturasFiltradas.isEmpty()) {
             runOnUiThread(() -> invoiceAdapter.setFacturas(facturasFiltradas));
         } else {
             Toast.makeText(InvoiceListActivity.this, "No se encontraron resultados", Toast.LENGTH_SHORT).show();

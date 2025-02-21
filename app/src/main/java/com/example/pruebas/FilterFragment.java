@@ -2,16 +2,21 @@ package com.example.pruebas;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.pruebas.databinding.FragmentFilterBinding;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -105,6 +110,10 @@ public class FilterFragment extends Fragment {
             String fechaInicio = binding.btnSelectDate.getText().toString();
             String fechaFin = binding.btnSelectDateUntil.getText().toString();
 
+            if (!validarFechas(requireContext(), fechaInicio, fechaFin)) {
+                return; // Si las fechas no son válidas, no continuar con la búsqueda
+            }
+
             List<Float> valoresSlider = binding.rangeSlider.getValues();
             float importeMin = valoresSlider.get(0);
             float importeMax = valoresSlider.get(1);
@@ -148,9 +157,14 @@ public class FilterFragment extends Fragment {
         int month = calendar.get(Calendar.MONTH);
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
-        int themeResId = android.R.style.Theme_Material_Light_Dialog;
+        // int themeResId = android.R.style.Theme_Material_Light_Dialog;
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), themeResId,
+        DatePickerDialog datePickerDialog = new DatePickerDialog(requireActivity(),
+
+                /*He usado la siguiente línea, que usa una versión obsoleta,
+                 a modo de pruebas para cambiar más rápidamente la fecha
+                 */
+                android.app.AlertDialog.THEME_HOLO_LIGHT,
                 (view, year1, monthOfYear, dayOfMonth1) -> {
                     Calendar selectedDate = Calendar.getInstance();
                     selectedDate.set(year1, monthOfYear, dayOfMonth1);
@@ -207,6 +221,27 @@ public class FilterFragment extends Fragment {
         }
 
         binding = null;
+    }
+
+    private boolean validarFechas(Context context, String fechaInicioStr, String fechaFinStr) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
+        try {
+            Calendar fechaInicio = Calendar.getInstance();
+            fechaInicio.setTime(sdf.parse(fechaInicioStr));
+
+            Calendar fechaFin = Calendar.getInstance();
+            fechaFin.setTime(sdf.parse(fechaFinStr));
+
+            if (fechaInicio.after(fechaFin)) {
+                Toast.makeText(context, "Rango de fechas inválido: la fecha de inicio no puede ser posterior a la final.", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
 

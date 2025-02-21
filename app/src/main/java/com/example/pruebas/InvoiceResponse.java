@@ -6,24 +6,17 @@ import java.util.List;
 
 public class InvoiceResponse {
 
-    private int numFacturas;
-    private List<Invoice> facturas;
+    private final int numFacturas;
+    private final List<Invoice> facturas;
 
+    public InvoiceResponse(int numFacturas, List<Invoice> facturas) {
+        this.numFacturas = numFacturas;
+        this.facturas = facturas;
+    }
+
+    //No he llegado a usar el número de facturas de momento
     public int getNumFacturas() { return numFacturas; }
     public List<Invoice> getFacturas() { return facturas; }
 
-    public float getMaxImporte() {
-        float maxImporte = Float.MIN_VALUE; // Inicializamos con el valor más bajo posible
 
-        // Verificamos si la lista de facturas no es null ni vacía
-        if (facturas != null && !facturas.isEmpty()) {
-            for (Invoice invoice : facturas) {
-                if (invoice.getImporteOrdenacion() > maxImporte) {
-                    maxImporte = invoice.getImporteOrdenacion(); // Actualizamos el máximo
-                }
-            }
-        }
-
-        return maxImporte; // Devolvemos el importe máximo encontrado
-    }
 }

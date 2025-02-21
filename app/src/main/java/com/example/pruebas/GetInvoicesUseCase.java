@@ -1,9 +1,9 @@
 package com.example.pruebas;
 
 
-import com.example.pruebas.Invoice;
-import com.example.pruebas.InvoiceRepository;
-import com.example.pruebas.InvoiceResponse;
+
+import androidx.annotation.NonNull;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -17,9 +17,9 @@ public class GetInvoicesUseCase {
     }
 
     public void execute(boolean useMock, Callback<List<Invoice>> callback) {
-        repository.getFacturas(useMock).enqueue(new Callback<InvoiceResponse>() {
+        repository.getFacturas(useMock).enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<InvoiceResponse> call, Response<InvoiceResponse> response) {
+            public void onResponse(@NonNull Call<InvoiceResponse> call, @NonNull Response<InvoiceResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     callback.onResponse(null, Response.success(response.body().getFacturas()));
                 } else {
@@ -28,7 +28,7 @@ public class GetInvoicesUseCase {
             }
 
             @Override
-            public void onFailure(Call<InvoiceResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<InvoiceResponse> call, @NonNull Throwable t) {
                 callback.onFailure(null, t);
             }
         });
