@@ -83,8 +83,8 @@ public class FilterFragment extends Fragment {
                 binding.rangeSlider.setValueTo(maxImporte);
                 binding.rangeSlider.setValues(0f, maxImporte);
                 binding.tvMinValue.setText("0 €");
-                binding.tvMaxValue.setText(maxImporte + " €");
-                binding.tvMaxImporte.setText(maxImporte + " €");
+                binding.tvMaxValue.setText(String.format("%.02f €", maxImporte));
+                binding.tvMaxImporte.setText(String.format("%.02f €", maxImporte));
             } else {
                 binding.tvMinValue.setText("0 €");
                 binding.tvMaxValue.setText("0 €");
@@ -101,8 +101,6 @@ public class FilterFragment extends Fragment {
 
                 binding.tvMinValue.setText(String.format("%.0f €", minValue));
 
-                Log.d(TAG, "maxValue: " + maxValue + ", maxImporte: " + maxImporte);
-                Log.d(TAG, "Diferencia: " + Math.abs(maxValue - maxImporte));
 
                 // Use the maxImporte variable from the enclosing scope
                 if (maxValue >= maxImporte - EPSILON) {
