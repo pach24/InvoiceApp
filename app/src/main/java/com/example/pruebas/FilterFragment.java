@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,11 @@ public class FilterFragment extends Fragment {
 
     String fechaInicio;
     String fechaDefault;
+
+    float maxImporte;
+
+    private static final String TAG = "FilterFragment";
+
 
 
 
@@ -71,7 +77,7 @@ public class FilterFragment extends Fragment {
         // Recuperar el Bundle con maxImporte
 
         if (bundle != null) {
-            float maxImporte = bundle.getFloat("MAX_IMPORTE", 0f);
+             maxImporte = bundle.getFloat("MAX_IMPORTE", 0f);
             if (maxImporte > 0) {
                 binding.rangeSlider.setValueFrom(0f);
                 binding.rangeSlider.setValueTo(maxImporte);
@@ -86,13 +92,24 @@ public class FilterFragment extends Fragment {
         }
 
         // Listener para el RangeSlider
-        binding.rangeSlider.addOnChangeListener((slider, value, fromUser) -> {
+        binding.rangeSlider.addOnChangeListener((slider, value, fromUser) -> { // Removed maxImporte from parameters
             List<Float> values = slider.getValues();
+            final float EPSILON = 0.001f;
             if (values.size() == 2) {
                 float minValue = values.get(0);
                 float maxValue = values.get(1);
+
                 binding.tvMinValue.setText(String.format("%.0f €", minValue));
-                binding.tvMaxValue.setText(String.format("%.0f €", maxValue));
+
+                Log.d(TAG, "maxValue: " + maxValue + ", maxImporte: " + maxImporte);
+                Log.d(TAG, "Diferencia: " + Math.abs(maxValue - maxImporte));
+
+                // Use the maxImporte variable from the enclosing scope
+                if (maxValue >= maxImporte - EPSILON) {
+                    binding.tvMaxValue.setText(String.format("%.2f €", maxValue));
+                } else {
+                    binding.tvMaxValue.setText(String.format("%.0f €", maxValue));
+                }
             }
         });
 
