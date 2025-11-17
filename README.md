@@ -9,9 +9,9 @@ A native Android application focused on displaying and filtering invoice data, c
 ## Table of Contents
 
 - [Overview](#overview)
+- [Visual Showcase](#visual-showcase)
 - [Features](#features)
 - [Architecture](#architecture)
-- [Visual Showcase](#visual-showcase)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Use Case Diagram](#use-case-diagram)
@@ -26,6 +26,18 @@ A native Android application focused on displaying and filtering invoice data, c
 
 This project is a small Android app that loads a list of invoices and allows users to filter them by status, date range, and amount.  
 The main goal of the project is to demonstrate modern Android development practices (MVVM, separation of concerns, repository pattern) and a production-like structure suitable for a professional environment or portfolio.  
+
+---
+
+## Visual Showcase
+
+<img width="1402" height="852" alt="Image" src="https://github.com/user-attachments/assets/5f4f54a9-08bb-4572-b915-69a97416bda1" />
+
+The showcase highlights the core flow:
+
+1. Main screen with data source selection (Retrofit vs Retromock).  
+2. Invoice list screen with loaded data.  
+3. Filter panel with statuses, date range, and amount range.  
 
 ---
 
@@ -73,18 +85,6 @@ The project follows a layered design with a focus on clarity, testability, and m
   - Provides mocked responses for local development, demos, or offline use.  
 
 This structure helps keep the code decoupled, easier to evolve, and prepared for unit testing.
-
----
-
-## Visual Showcase
-
-<img width="1402" height="852" alt="Image" src="https://github.com/user-attachments/assets/5f4f54a9-08bb-4572-b915-69a97416bda1" />
-
-The showcase highlights the core flow:
-
-1. Main screen with data source selection (Retrofit vs Retromock).  
-2. Invoice list screen with loaded data.  
-3. Filter panel with statuses, date range, and amount range.  
 
 ---
 
@@ -183,8 +183,6 @@ cd <your-repo>
 If you want a UML version, you can generate a diagram from a textual spec (for example, with PlantUML) based on this table.
 
 ---
-
-## Tech Stack
 
 ## Tech Stack
 
