@@ -1,180 +1,223 @@
 # InvoiceApp
 
-Android application that displays a list of invoices and allows the user to filter them by status, date range, and amount.
+A native Android application focused on displaying and filtering invoice data, created to showcase clean architecture, MVVM-based presentation logic, and good development practices rather than complex business functionality.
+
+> **Last Updated:** November 2025  
 
 ---
 
 ## Table of Contents
 
+- [Overview](#overview)
 - [Features](#features)
 - [Architecture](#architecture)
-- [Technologies Used](#technologies-used)
-- [Main Components](#main-components)
-  - [MainActivity](#mainactivity)
-  - [InvoiceListActivity](#invoicelistactivity)
-  - [FilterFragment](#filterfragment)
-  - [InvoiceViewModel](#invoiceviewmodel)
-  - [GetInvoicesUseCase](#getinvoicesusecase)
-- [Networking](#networking)
-- [Filtering Logic](#filtering-logic)
-- [How to Run](#how-to-run)
-- [Possible Improvements](#possible-improvements)
+- [Visual Showcase](#visual-showcase)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Use Case Diagram](#use-case-diagram)
+- [Tech Stack](#tech-stack)
+- [Lessons Learned](#lessons-learned)
+- [Roadmap](#roadmap)
+- [License](#license)
+
+---
+
+## Overview
+
+This project is a small Android app that loads a list of invoices and allows users to filter them by status, date range, and amount.  
+The main goal of the project is to demonstrate modern Android development practices (MVVM, separation of concerns, repository pattern) and a production-like structure suitable for a professional environment or portfolio.  
 
 ---
 
 ## Features
 
-- Display a list of invoices using a `RecyclerView` and a custom `InvoiceAdapter`.
+- Display a list of invoices using `RecyclerView` and a custom `InvoiceAdapter`.  
 - Filter invoices by:
-  - Status (paid, pending payment, cancelled, fixed fee, payment plan).
-  - Date range (from oldest date to a selected end date).
-  - Amount range using a `RangeSlider`.
-- Toggle between real API data (Retrofit) and mocked data (Retromock) from the main screen.
-- Use of `ViewModel`, `LiveData`, and a simple clean architecture approach with Use Case and Repository.
-- Full-screen UI using Edge-to-Edge with proper window insets handling.
+  - Status (paid, pending payment, cancelled, fixed fee, payment plan, etc.).  
+  - Date range using date pickers in `dd/MM/yyyy` format.  
+  - Amount range using a `RangeSlider` with a dynamic maximum value based on the data.  
+- Toggle between **real API data (Retrofit)** and **mocked data (Retromock)** from the main screen.  
+- Edge-to-edge layout with proper handling of system bars.  
 
 ---
 
 ## Architecture
 
-The app follows a simple layered structure:
+The project follows a layered design with a focus on clarity, testability, and maintainability.
 
-- **UI Layer**
-  - `MainActivity`: Entry point, navigation to the invoice list and toggle between Retrofit and Retromock.
-  - `InvoiceListActivity`: Displays the invoice list and opens the filter fragment.
-  - `FilterFragment`: UI for selecting filter criteria (status, dates, amount).
+### Presentation Layer (UI + ViewModel)
 
-- **Presentation Layer**
-  - `InvoiceViewModel`: Holds and manages UI-related invoice data using `LiveData`.
-  - `InvoiceViewModelFactory`: Creates `InvoiceViewModel` with custom parameters (`useMock`, `Context`).
+- Pattern: **MVVM (Model–View–ViewModel)**.  
+- Responsibilities:
+  - UI logic and state management.  
+  - Observing `LiveData` and updating views.  
+- Main components:
+  - `MainActivity`: entry point, navigation to the invoice list, and toggle between Retrofit and Retromock.  
+  - `InvoiceListActivity`: displays the invoice list, observes `LiveData<List<Invoice>>`, and integrates filtering.  
+  - `FilterFragment`: panel to select filter criteria (status, dates, amount).  
 
-- **Domain Layer**
-  - `GetInvoicesUseCase`: Encapsulates the logic for fetching invoices from the repository.
+### Domain Layer (Use Case)
 
-- **Data Layer**
-  - `InvoiceRepository`: Provides invoice data, either from Retrofit or Retromock.
-  - `ApiService`: Retrofit interface for API endpoints.
-  - `RetroFitClient` / `RetromockClient`: Clients that create Retrofit/Retromock instances.
+- `GetInvoicesUseCase`:
+  - Encapsulates the logic to request invoices from the repository.  
+  - Hides the details of whether data comes from a real API or mocked responses.  
 
-- **Model**
-  - `Invoice`: Data model representing an invoice (date, amount for sorting, status, etc.).
+### Data Layer (Repository + API Clients)
 
----
+- `InvoiceRepository`:
+  - Implements the Repository pattern to abstract data sources.  
+  - Decides whether to use Retrofit or Retromock based on a flag (`useMock`).  
+- `ApiService` + `RetroFitClient`:
+  - Handle real HTTP requests to the remote API.  
+- `RetromockClient`:
+  - Provides mocked responses for local development, demos, or offline use.  
 
-## Technologies Used
-
-> You can replace the text labels below with icons (Shields badges or SVG logos), for example:
-> `![Android](https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white)`
-
-- ![Android](https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white)
-- ![Java](https://img.shields.io/badge/Java-007396?logo=java&logoColor=white)
-- ![Android Studio](https://img.shields.io/badge/Android_Studio-3DDC84?logo=android-studio&logoColor=white)
-- ![Retrofit](https://img.shields.io/badge/Retrofit-2E7D32?logo=square&logoColor=white)
-- ![MVVM](https://img.shields.io/badge/Architecture-MVVM-blue)
-- ![Material Design](https://img.shields.io/badge/Material_Design-757575?logo=material-design&logoColor=white)
-
-(Adjust, add or remove badges depending on what you actually use: LiveData, ViewModel, Retromock, etc.)
+This structure helps keep the code decoupled, easier to evolve, and prepared for unit testing.
 
 ---
 
-## Main Components
+## Visual Showcase
 
-### MainActivity
+<img width="1402" height="852" alt="Image" src="https://github.com/user-attachments/assets/5f4f54a9-08bb-4572-b915-69a97416bda1" />
 
-- Manages the `useMock` flag to switch between real API calls and mocked responses.
-- Navigates to `InvoiceListActivity`, passing `USERETROMOCK` in the `Intent`.
-- Uses Edge-to-Edge mode and adjusts paddings with `WindowInsetsCompat`.
+The showcase highlights the core flow:
 
-### InvoiceListActivity
-
-- Uses `ActivityInvoiceListBinding` for layout binding.
-- Sets up a `RecyclerView` with `InvoiceAdapter` and `LinearLayoutManager`.
-- Receives the `useMock` flag from `MainActivity`.
-- Creates an `InvoiceViewModel` using `InvoiceViewModelFactory` and calls `cargarFacturas()` to load invoices.
-- Observes `LiveData<List<Invoice>>` to update the list and enable/disable the filter menu item.
-- Opens `FilterFragment` passing:
-  - Maximum invoice amount.
-  - Oldest invoice date.
-- Applies filters using:
-  - Selected statuses.
-  - Date range (start and end).
-  - Minimum and maximum amount.
-- Provides `aplicarFiltros(Bundle)` to filter data and `restoreMainView()` to restore the main list view after closing the fragment.
-
-### FilterFragment
-
-- Uses `FragmentFilterBinding` for the filter UI.
-- Shares `InvoiceViewModel` with the activity via `ViewModelProvider(requireActivity())`.
-- Initializes:
-  - Default checkboxes for frequently used statuses.
-  - Default dates (oldest invoice date as start, current date as end).
-  - `RangeSlider` configured with the maximum invoice amount.
-- Opens a `DatePickerDialog` to pick start and end dates in `dd/MM/yyyy` format.
-- Validates that the start date is not after the end date.
-- Builds a `Bundle` with:
-  - Selected statuses.
-  - Start and end dates.
-  - Min and max amounts from the slider.
-- Calls `InvoiceListActivity.aplicarFiltros(bundle)` and only closes the fragment if results are found.
-- Offers a reset button to clear filters and restore default values.
-
-### InvoiceViewModel
-
-- Holds `MutableLiveData<List<Invoice>> facturas`.
-- Uses `GetInvoicesUseCase` to load invoices from the repository depending on `useMock`.
-- Exposes `LiveData<List<Invoice>> getFacturas()` for the UI.
-- Helper methods:
-  - `getMaxImporte()`: Returns the maximum invoice amount.
-  - `getOldestDate()`: Returns the earliest invoice date as a string, comparing `dd/MM/yyyy` values.
-
-### GetInvoicesUseCase
-
-- Depends on `InvoiceRepository`.
-- Provides `execute(boolean useMock, Callback<List<Invoice>> callback)` to asynchronously fetch invoices.
-- Handles success and failure and forwards the result to the caller.
+1. Main screen with data source selection (Retrofit vs Retromock).  
+2. Invoice list screen with loaded data.  
+3. Filter panel with statuses, date range, and amount range.  
 
 ---
 
-## Networking
+## Installation
 
-- Uses **Retrofit** as the HTTP client for real API calls.
-- Uses **Retromock** as a mocking layer to simulate responses without a real backend.
-- `ApiService` defines endpoints to retrieve invoices.
-- `RetroFitClient` and `RetromockClient` configure and expose Retrofit/Retromock instances.
+### Prerequisites
 
----
+- Android Studio (Giraffe or newer recommended).  
+- JDK 8 or higher (managed by Android Studio).  
+- Android device or emulator with a recent Android version.  
 
-## Filtering Logic
+### Steps
 
-Filtering is implemented in `InvoiceListActivity`:
+1. **Clone the repository:**
 
-- Receives selected filter values from `FilterFragment` via `Bundle`.
-- Retrieves the current invoice list from `InvoiceViewModel`.
-- Converts date strings to `Date` objects once to optimize performance.
-- Applies filters:
-  - Status: invoice status must be contained in the selected list.
-  - Date range: invoice date must be between start and end dates (inclusive).
-  - Amount: invoice amount must be between `importeMin` and `importeMax`.
-- Updates `InvoiceAdapter` with the filtered list if there are results.
+```
+git clone https://github.com/<your-username>/<your-repo>.git
+cd <your-repo>
+```
 
----
+2. **Open the project in Android Studio:**
 
-## How to Run
+- Choose “Open an Existing Project”.  
+- Select the project folder.  
 
-1. Clone this repository into Android Studio.
-2. Sync Gradle to download all required dependencies.
-3. Run the app on an emulator or a physical device with a recent Android version.
-4. In the main screen:
-   - Use the toggle button to switch between Retrofit and Retromock.
-   - Open the invoice list.
-   - Use the filter icon in the toolbar to open the filter fragment and apply filters.
+3. **Sync Gradle and build:**
+
+- Android Studio will automatically download dependencies.  
+- Wait until the sync and initial build finishes.  
+
+4. **Run the app:**
+
+- Select a device or emulator.  
+- Click **Run** ▶️ in Android Studio.  
 
 ---
 
-## Possible Improvements
+## Usage
 
-- Replace string-based date comparison with `LocalDate` or `java.time` API.
-- Add pagination or lazy loading for large invoice lists.
-- Improve error handling and user feedback for network failures.
-- Extract filtering logic into a separate use case or helper class to improve testability.
-- Add unit tests for `InvoiceViewModel`, `GetInvoicesUseCase`, and filtering logic.
+### Basic Flow
+
+1. **Launch the app** to open `MainActivity`.  
+2. **Toggle data source**:
+- Use the toggle button to switch between **Retrofit (real API)** and **Retromock (mock data)**.  
+- The current mode is passed to the next screen via an intent extra (`USERETROMOCK`).  
+3. **Open the invoice list**:
+- Tap the button to navigate to `InvoiceListActivity`.  
+- The app loads invoices through `InvoiceViewModel` → `GetInvoicesUseCase` → `InvoiceRepository`.  
+
+### Filtering Invoices
+
+1. In the invoice list, open the filter panel from the toolbar/menu.  
+2. In `FilterFragment`, configure:
+- **Status** checkboxes (paid, pending payment, cancelled, fixed fee, payment plan…).  
+- **Date range** using the “from” and “until” buttons (date pickers).  
+- **Amount range** using the `RangeSlider` (min and max).  
+3. Tap **Apply**:
+- The fragment sends the filter data back to `InvoiceListActivity` via a `Bundle`.  
+- The activity applies the filters and updates the list if there are results.  
+4. Optionally, tap **Reset** in the filter panel to restore default values (status, dates, and slider).  
+
+---
+
+## Use Case Diagram
+
+### Conceptual Use Cases
+
+- Open app.  
+- Select data source (Retrofit / Retromock).  
+- View invoice list.  
+- Refresh invoices.  
+- Open filter panel.  
+- Filter invoices by status.  
+- Filter invoices by date range.  
+- Filter invoices by amount range.  
+- Apply filters.  
+- Reset filters.  
+- View filtered results.  
+
+### Use Case Summary
+
+| Use Case                     | Description                                                                 |
+|-----------------------------|-----------------------------------------------------------------------------|
+| Open app                    | The user launches the app and reaches the main screen.                     |
+| Select data source          | The user chooses between real API (Retrofit) or mock data (Retromock).     |
+| View invoice list           | The user sees the loaded invoices in a `RecyclerView`.                     |
+| Refresh invoices            | The user triggers a reload of invoices from the repository.                |
+| Open filter panel           | The user opens the `FilterFragment` from the toolbar/menu.                 |
+| Filter by status            | The user selects one or more invoice statuses.                             |
+| Filter by date range        | The user sets start and end dates via date pickers.                        |
+| Filter by amount range      | The user adjusts the amount range using a `RangeSlider`.                   |
+| Apply filters               | The user applies all selected filter criteria.                             |
+| Reset filters               | The user clears filters and restores default values.                       |
+| View filtered results       | The user sees only invoices matching the chosen criteria.                  |
+
+If you want a UML version, you can generate a diagram from a textual spec (for example, with PlantUML) based on this table.
+
+---
+
+## Tech Stack
+
+## Tech Stack
+
+![Java](https://img.shields.io/badge/Java-007396?logo=openjdk&logoColor=white)
+![Android](https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white)
+![Android%20Studio](https://img.shields.io/badge/Android_Studio-3DDC84?logo=android-studio&logoColor=white)
+![MVVM](https://img.shields.io/badge/Architecture-MVVM-2962FF)
+![Retrofit](https://img.shields.io/badge/Retrofit-2E7D32)
+![Retromock](https://img.shields.io/badge/Retromock-8E24AA)
+![Material%20Design](https://img.shields.io/badge/Material_Design_Components-757575?logo=material-design&logoColor=white)
+![ViewModel](https://img.shields.io/badge/Android%20ViewModel-4285F4)
+![LiveData](https://img.shields.io/badge/LiveData-FF6F00)
+
+---
+
+## Lessons Learned
+
+- The benefits of **decoupled architecture**: separating UI, domain, and data layers simplifies reasoning and refactoring.  
+- Robust **UI state management** using `ViewModel` and `LiveData` improves resilience to configuration changes.  
+- Designing for **multiple data sources** (Retrofit vs Retromock) encourages clean abstractions and easier testing.  
+- Structuring code with future testing in mind makes it easier to gradually introduce unit tests for ViewModels and use cases.  
+
+## License
+
+This project is currently for educational and portfolio purposes.  
+
+
+
+
+
+
+
+
+
+
+
