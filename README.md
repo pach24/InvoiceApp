@@ -8,28 +8,27 @@ A native Android application focused on displaying and filtering invoice data, c
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Visual Showcase](#visual-showcase)
-- [Features](#features)
-- [Architecture](#architecture)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Use Case Diagram](#use-case-diagram)
-- [Tech Stack](#tech-stack)
-- [Lessons Learned](#lessons-learned)
-- [Roadmap](#roadmap)
-- [License](#license)
+- 📄 [Overview](#overview)
+- 🖼️ [Visual Showcase](#visual-showcase)
+- 💡 [Features](#features)
+- 🏛️ [Architecture](#architecture)
+- 💾 [Installation](#installation)
+- 🚀 [Usage](#usage)
+- 📊 [Use Case Diagram](#use-case-diagram)
+- 🛠️ [Tech Stack](#tech-stack)
+- 📚 [Lessons Learned](#lessons-learned)
+- ⚖️ [License](#license)
 
 ---
 
-## Overview
+## 📄 Overview
 
 This project is a small Android app that loads a list of invoices and allows users to filter them by status, date range, and amount.  
 The main goal of the project is to demonstrate modern Android development practices (MVVM, separation of concerns, repository pattern) and a production-like structure suitable for a professional environment or portfolio.  
 
 ---
 
-## Visual Showcase
+## 🖼️ Visual Showcase
 
 <img width="1402" height="852" alt="Image" src="https://github.com/user-attachments/assets/5f4f54a9-08bb-4572-b915-69a97416bda1" />
 
@@ -41,7 +40,7 @@ The showcase highlights the core flow:
 
 ---
 
-## Features
+## 💡 Features
 
 - Display a list of invoices using `RecyclerView` and a custom `InvoiceAdapter`.  
 - Filter invoices by:
@@ -53,7 +52,7 @@ The showcase highlights the core flow:
 
 ---
 
-## Architecture
+## 🏛️ Architecture
 
 The project follows a layered design with a focus on clarity, testability, and maintainability.
 
@@ -88,7 +87,7 @@ This structure helps keep the code decoupled, easier to evolve, and prepared for
 
 ---
 
-## Installation
+## 💾 Installation
 
 ### Prerequisites
 
@@ -122,7 +121,7 @@ cd <your-repo>
 
 ---
 
-## Usage
+## 🚀 Usage
 
 ### Basic Flow
 
@@ -148,7 +147,7 @@ cd <your-repo>
 
 ---
 
-## Use Case Diagram
+## 📊 Use Case Diagram
 
 ### Conceptual Use Cases
 
@@ -180,13 +179,12 @@ cd <your-repo>
 | Reset filters               | The user clears filters and restores default values.                       |
 | View filtered results       | The user sees only invoices matching the chosen criteria.                  |
 
-If you want a UML version, you can generate a diagram from a textual spec (for example, with PlantUML) based on this table.
 
 ---
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-![Java](https://img.shields.io/badge/Java-007396?logo=openjdk&logoColor=white)
+![Java](https://img.shields.io/badge/Java-ED8B00?style=flat&logo=java&logoColor=white)
 ![Android](https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white)
 ![Android%20Studio](https://img.shields.io/badge/Android_Studio-3DDC84?logo=android-studio&logoColor=white)
 ![MVVM](https://img.shields.io/badge/Architecture-MVVM-2962FF)
@@ -198,14 +196,14 @@ If you want a UML version, you can generate a diagram from a textual spec (for e
 
 ---
 
-## Lessons Learned
+## 📚 Lessons Learned
 
 - The benefits of **decoupled architecture**: separating UI, domain, and data layers simplifies reasoning and refactoring.  
 - Robust **UI state management** using `ViewModel` and `LiveData` improves resilience to configuration changes.  
 - Designing for **multiple data sources** (Retrofit vs Retromock) encourages clean abstractions and easier testing.  
 - Structuring code with future testing in mind makes it easier to gradually introduce unit tests for ViewModels and use cases.  
 
-## License
+## ⚖️ License
 
 This project is currently for educational and portfolio purposes.  
 
