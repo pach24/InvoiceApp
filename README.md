@@ -1,5 +1,7 @@
 # InvoiceApp
 
+
+
 A native Android application focused on displaying and filtering invoice data, created to showcase clean architecture, MVVM-based presentation logic, and good development practices rather than complex business functionality.
 
 > **Last Updated:** November 2025  
@@ -118,6 +120,17 @@ cd <your-repo>
 
 - Select a device or emulator.  
 - Click **Run** ▶️ in Android Studio.  
+
+---
+
+## 💾 Download / Release
+
+You can download the latest APK of **InvoiceApp** from the releases section:
+
+- **Version:** v1.0.0 – Initial Demo Release  
+- **Download:** [app-release.apk](https://github.com/pach24/InvoiceApp/releases/download/v1.0.0/app-release.apk)
+
+> ⚠️ Make sure to allow installation from **unknown sources** on your Android device before installing.
 
 ---
 
