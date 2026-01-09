@@ -13,6 +13,10 @@ public class Invoice {
     private float importeOrdenacion;
     private LocalDate fecha;
 
+    public InvoiceState getEstadoEnum() {
+        return InvoiceState.fromTextoServidor(this.descEstado);
+    }
+
     public String getDescEstado() {
         return descEstado;
     }

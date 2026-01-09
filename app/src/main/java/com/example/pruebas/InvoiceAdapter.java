@@ -19,7 +19,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
     private List<Invoice> listaFacturas;
 
     // Formateador reutilizable para convertir LocalDate a String (Ej: 25 Ene 2024)
-    private final DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.getDefault());
+    private final DateTimeFormatter outputFormatter = DateTimeFormatter.ofLocalizedDate(java.time.format.FormatStyle.MEDIUM);
 
     @SuppressLint("NotifyDataSetChanged")
     public void setFacturas(List<Invoice> facturas) {

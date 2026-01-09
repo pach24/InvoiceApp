@@ -11,4 +11,7 @@
     <color name="inactiveThumbColor">#BDBDBD</color>
     <color name="holo_green_light">#ff99cc00</color>
     <color name="holo_green_dark">#ff669900</color>
+
+    <color name="texto_alerta">#D32F2F</color> <!-- Rojo para Pendiente/Anulada -->
+    <color name="texto_normal">#000000</color> <!-- Negro para el resto de estados de facturas -->
 </resources>

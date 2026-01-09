@@ -32,7 +32,7 @@ public class FilterFragment extends Fragment {
     private Long fechaFinMillis = null;
 
     // Para visualizar fechas en los botones
-    private final DateTimeFormatter buttonFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private final DateTimeFormatter buttonFormatter = DateTimeFormatter.ofLocalizedDate(java.time.format.FormatStyle.SHORT);
 
     private float maxImporte;
 
