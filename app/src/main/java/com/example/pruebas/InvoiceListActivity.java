@@ -35,6 +35,7 @@ public class InvoiceListActivity extends AppCompatActivity {
         // Configuración de ViewBinding
         bindingInvoiceList = ActivityInvoiceListBinding.inflate(getLayoutInflater());
         setContentView(bindingInvoiceList.getRoot());
+        bindingInvoiceList.shimmerViewContainer.startShimmer();
 
         // Configuración de la Toolbar
         setSupportActionBar(bindingInvoiceList.toolbar);
@@ -56,6 +57,10 @@ public class InvoiceListActivity extends AppCompatActivity {
 
         // --- OBSERVER PRINCIPAL ---
         invoiceViewModel.getFacturas().observe(this, facturas -> {
+
+            bindingInvoiceList.shimmerViewContainer.stopShimmer();
+            bindingInvoiceList.shimmerViewContainer.setVisibility(View.GONE);
+
             invalidateOptionsMenu(); // Actualiza estado del menú de filtros
 
             if (facturas != null) {

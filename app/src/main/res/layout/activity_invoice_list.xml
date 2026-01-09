@@ -9,7 +9,7 @@
     android:background="@android:color/white"
     tools:context=".InvoiceListActivity">
 
-    <!-- 1. TOOLBAR (Sin cambios) -->
+    <!-- 1. TOOLBAR -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -51,26 +51,42 @@
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- 2. RECYCLERVIEW (Lista de datos) -->
+    <!-- 2. RECYCLERVIEW (Oculto al inicio) -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        android:padding="4dp"/>
+        android:padding="4dp"
+        android:visibility="gone"/>
 
-    <!-- 3. LOADING (Nuevo: Barra de progreso) -->
-    <!-- Se muestra mientras cargan los datos -->
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        tools:visibility="visible" />
+    <!-- 3. LOADING SKELETON (Nuevo) -->
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerViewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:visibility="visible">
 
-    <!-- 4. ERROR STATE (Nuevo: Botón Reintentar) -->
-    <!-- Se muestra si falla la red. Usa tus strings nuevos. -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- Añadimos varios items falsos para llenar la pantalla -->
+            <include layout="@layout/item_invoice_skeleton" />
+            <include layout="@layout/item_invoice_skeleton" />
+            <include layout="@layout/item_invoice_skeleton" />
+            <include layout="@layout/item_invoice_skeleton" />
+            <include layout="@layout/item_invoice_skeleton" />
+            <include layout="@layout/item_invoice_skeleton" />
+            <include layout="@layout/item_invoice_skeleton" />
+            <include layout="@layout/item_invoice_skeleton" />
+            <include layout="@layout/item_invoice_skeleton" />
+            <include layout="@layout/item_invoice_skeleton" />
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <!-- 4. ERROR STATE -->
     <LinearLayout
         android:id="@+id/layoutError"
         android:layout_width="match_parent"
@@ -97,8 +113,7 @@
             android:text="@string/reintentar" />
     </LinearLayout>
 
-    <!-- 5. EMPTY STATE (Lista Vacía) -->
-    <!-- Se muestra si la búsqueda no da resultados -->
+    <!-- 5. EMPTY STATE -->
     <LinearLayout
         android:id="@+id/layoutEmptyState"
         android:layout_width="match_parent"
@@ -134,7 +149,7 @@
             android:layout_marginTop="8dp"/>
     </LinearLayout>
 
-    <!-- 6. FRAGMENT CONTAINER (Siempre al final para estar encima) -->
+    <!-- 6. FRAGMENT CONTAINER -->
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
