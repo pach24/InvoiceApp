@@ -103,8 +103,12 @@ public class InvoiceViewModel extends ViewModel {
             }
         }
 
-        // Actualizamos el LiveData para notificar a la Activity
-        facturas.setValue(facturasFiltradas);
+
+        if (!facturasFiltradas.isEmpty()) {
+            // Solo actualizamos la pantalla si encontramos algo
+            facturas.setValue(facturasFiltradas);
+        }
+
 
         return facturasFiltradas;
     }
@@ -170,4 +174,14 @@ public class InvoiceViewModel extends ViewModel {
             return false;
         }
     }
+
+    /**
+     * Devuelve true si ya hemos descargado facturas del servidor/mock,
+     * independientemente de si el filtro actual las oculta todas.
+     */
+    public boolean hayDatosCargados() {
+        return facturasOriginales != null && !facturasOriginales.isEmpty();
+    }
 }
+
+

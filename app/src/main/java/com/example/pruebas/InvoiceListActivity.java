@@ -79,10 +79,12 @@ public class InvoiceListActivity extends AppCompatActivity {
         MenuItem filtroItem = menu.findItem(R.id.action_filters);
 
         // Verificamos si tenemos datos (usamos la lista actual del LiveData)
-        boolean hayDatos = invoiceViewModel.getFacturas().getValue() != null &&
-                !invoiceViewModel.getFacturas().getValue().isEmpty();
+        if (invoiceViewModel.hayDatosCargados()) {
+            filtroItem.setEnabled(true);
+        } else {
+            filtroItem.setEnabled(false);
+        }
 
-        filtroItem.setEnabled(hayDatos);
 
         return true;
     }
@@ -90,8 +92,8 @@ public class InvoiceListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_filters) {
-            // Verificación extra antes de abrir
-            if (invoiceViewModel.getFacturas().getValue() != null && !invoiceViewModel.getFacturas().getValue().isEmpty()) {
+            //Verificar antes de abrir
+            if (invoiceViewModel.hayDatosCargados()) {
                 mostrarFiltroFragment();
             } else {
                 Toast.makeText(this, "Las facturas aún no están cargadas.", Toast.LENGTH_SHORT).show();
@@ -141,7 +143,7 @@ public class InvoiceListActivity extends AppCompatActivity {
         Double importeMin = bundle.getDouble("IMPORTE_MIN");
         Double importeMax = bundle.getDouble("IMPORTE_MAX");
 
-        // Delegamos TODA la lógica al ViewModel
+
         List<Invoice> facturasFiltradas = invoiceViewModel.filtrarFacturas(
                 estadosSeleccionados,
                 fechaInicio,
@@ -149,6 +151,11 @@ public class InvoiceListActivity extends AppCompatActivity {
                 importeMin,
                 importeMax
         );
+
+        if (facturasFiltradas.isEmpty()) {
+            Toast.makeText(this, "Ninguna factura cumple esos criterios. Se mantienen los datos actuales.", Toast.LENGTH_LONG).show();
+            return false; // Le dice al fragmento que no se cierre
+        }
 
         Log.d("InvoiceListActivity", "Filtros aplicados. Resultados: " + facturasFiltradas.size());
 
