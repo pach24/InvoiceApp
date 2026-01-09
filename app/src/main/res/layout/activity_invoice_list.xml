@@ -59,14 +59,53 @@
         android:layout_below="@id/toolbar"
         android:padding="4dp"/>
 
-    <!-- Contenedor para mostrar fragmentos (por si fuera necesario) -->
+    <!-- Layout de "Lista Vacía" (Empty State) -->
+    <!-- Se coloca debajo de la toolbar, ocupando todo el espacio, pero oculto por defecto -->
+    <LinearLayout
+        android:id="@+id/layoutEmptyState"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:orientation="vertical"
+        android:paddingBottom="200dp"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+
+        <ImageView
+            android:layout_width="360dp"
+            android:layout_height="360dp"
+            android:src="@drawable/ic_empty_list"
+            android:importantForAccessibility="no"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No se encontraron facturas"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#757575"
+            android:layout_marginTop="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Prueba a modificar los filtros"
+            android:textSize="16sp"
+            android:textColor="#9E9E9E"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+
+    <!-- Contenedor para mostrar fragmentos (Este siempre debe ir al final para quedar encima) -->
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="4dp"
+        android:elevation="10dp"
         android:visibility="gone"
         android:background="@color/white"
         android:clickable="true"
         android:focusable="true"/>
+
 </RelativeLayout>

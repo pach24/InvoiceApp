@@ -104,12 +104,7 @@ public class InvoiceViewModel extends ViewModel {
         }
 
 
-        if (!facturasFiltradas.isEmpty()) {
-            // Solo actualizamos la pantalla si encontramos algo
-            facturas.setValue(facturasFiltradas);
-        }
-
-
+        facturas.setValue(facturasFiltradas);
         return facturasFiltradas;
     }
 

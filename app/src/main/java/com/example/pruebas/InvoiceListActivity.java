@@ -50,19 +50,26 @@ public class InvoiceListActivity extends AppCompatActivity {
         invoiceViewModel.cargarFacturas();
 
         // --- OBSERVER PRINCIPAL ---
-        // Al actualizar el LiveData en el ViewModel (sea por carga inicial o por filtro),
-        // este observer actualizará la lista automáticamente.
         invoiceViewModel.getFacturas().observe(this, facturas -> {
             invalidateOptionsMenu(); // Actualiza estado del menú de filtros
 
             if (facturas != null) {
-                // Si la lista está vacía (puede ser resultado de un filtro muy estricto)
-                if (facturas.isEmpty()) {
-                    // Opcional: mostrar un mensaje visual en lugar de Toast si prefieres
-                    // Toast.makeText(InvoiceListActivity.this, "No hay facturas para mostrar", Toast.LENGTH_SHORT).show();
-                }
+                // Pasamos siempre la lista al adaptador, esté vacía o llena
                 invoiceAdapter.setFacturas(facturas);
+
+                // NUEVO: Lógica para mostrar/ocultar el "Empty State" (Caja vacía)
+                if (facturas.isEmpty()) {
+                    // No hay facturas: Ocultamos lista, mostramos aviso
+                    bindingInvoiceList.recyclerView.setVisibility(View.GONE);
+                    bindingInvoiceList.layoutEmptyState.setVisibility(View.VISIBLE);
+                } else {
+                    // Hay facturas: Mostramos lista, ocultamos aviso
+                    bindingInvoiceList.recyclerView.setVisibility(View.VISIBLE);
+                    bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);
+                }
+
             } else {
+                // Error de carga (null)
                 Toast.makeText(InvoiceListActivity.this, "Error al cargar datos", Toast.LENGTH_SHORT).show();
             }
         });
@@ -143,8 +150,8 @@ public class InvoiceListActivity extends AppCompatActivity {
         Double importeMin = bundle.getDouble("IMPORTE_MIN");
         Double importeMax = bundle.getDouble("IMPORTE_MAX");
 
-
-        List<Invoice> facturasFiltradas = invoiceViewModel.filtrarFacturas(
+        // Ejecutamos el filtro. Esto actualiza el LiveData y dispara el Observer en onCreate.
+        invoiceViewModel.filtrarFacturas(
                 estadosSeleccionados,
                 fechaInicio,
                 fechaFin,
@@ -152,16 +159,10 @@ public class InvoiceListActivity extends AppCompatActivity {
                 importeMax
         );
 
-        if (facturasFiltradas.isEmpty()) {
-            Toast.makeText(this, "Ninguna factura cumple esos criterios. Se mantienen los datos actuales.", Toast.LENGTH_LONG).show();
-            return false; // Le dice al fragmento que no se cierre
-        }
-
-        Log.d("InvoiceListActivity", "Filtros aplicados. Resultados: " + facturasFiltradas.size());
-
-        // El adapter se actualizará automáticamente gracias al Observer en onCreate.
-        // Solo devolvemos si hubo resultados para que el fragmento sepa qué hacer (cerrarse o mostrar aviso)
-        return !facturasFiltradas.isEmpty();
+        // CORRECCIÓN: Devolvemos SIEMPRE true.
+        // Queremos que el filtro se cierre siempre, haya resultados o no.
+        // Si no hay resultados, el Observer mostrará el layoutEmptyState.
+        return true;
     }
 
     public void restoreMainView() {
