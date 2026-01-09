@@ -215,6 +215,7 @@
                 android:textStyle="bold" />
 
             <CheckBox
+                android:buttonTint="@color/selector_checkbox"
                 android:id="@+id/checkPagadas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -222,6 +223,7 @@
                 android:text="@string/pagadas"/>
 
             <CheckBox
+                android:buttonTint="@color/selector_checkbox"
                 android:id="@+id/checkAnuladas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -229,6 +231,7 @@
                 android:text="@string/anuladas"/>
 
             <CheckBox
+                android:buttonTint="@color/selector_checkbox"
                 android:id="@+id/checkCuotaFija"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -236,6 +239,7 @@
                 android:text="@string/cuota_fija" />
 
             <CheckBox
+                android:buttonTint="@color/selector_checkbox"
                 android:id="@+id/checkPendientesPago"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -243,6 +247,7 @@
                 android:text="@string/pendientes_de_pago"/>
 
             <CheckBox
+                android:buttonTint="@color/selector_checkbox"
                 android:id="@+id/checkPlanPago"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
