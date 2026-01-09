@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.pruebas.databinding.ActivityInvoiceListBinding;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -123,24 +125,19 @@ public class InvoiceListActivity extends AppCompatActivity {
     }
 
     @NonNull
+    // Método auxiliar para obtener el fragmento
     private FilterFragment getFilterFragment() {
         float maxImporte = invoiceViewModel.getMaxImporte();
-
-        // Obtener LocalDate y convertir a String para el fragmento
         LocalDate oldestDateObj = invoiceViewModel.getOldestDate();
-        String oldestDate = "";
-
-        // Formateador seguro
-        if (oldestDateObj != null) {
-            oldestDate = oldestDateObj.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        } else {
-            // Valor por defecto si no hay fecha antigua (ej. hoy)
-            oldestDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        }
 
         Bundle bundle = new Bundle();
         bundle.putFloat("MAX_IMPORTE", maxImporte);
-        bundle.putString("OLDEST_DATE", oldestDate);
+
+        // PASO CLAVE: Convertir LocalDate a long para pasarlo al fragmento
+        if (oldestDateObj != null) {
+            long millis = oldestDateObj.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
+            bundle.putLong("OLDEST_DATE_MILLIS", millis);
+        }
 
         FilterFragment filterFragment = new FilterFragment();
         filterFragment.setArguments(bundle);
@@ -152,28 +149,24 @@ public class InvoiceListActivity extends AppCompatActivity {
      */
     public boolean aplicarFiltros(Bundle bundle) {
         List<String> estadosSeleccionados = bundle.getStringArrayList("ESTADOS");
-        String fechaInicioStr = bundle.getString("FECHA_INICIO");
-        String fechaFinStr = bundle.getString("FECHA_FIN");
         Double importeMin = bundle.getDouble("IMPORTE_MIN");
         Double importeMax = bundle.getDouble("IMPORTE_MAX");
 
-        // Convertir String -> LocalDate
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        // PASO CLAVE: Recuperar Long y convertir a LocalDate
+        // getLong devuelve 0 si no existe la key, por eso verificamos containsKey o usamos un valor centinela (-1)
         LocalDate fechaInicio = null;
-        LocalDate fechaFin = null;
-
-        try {
-            if (fechaInicioStr != null && !fechaInicioStr.isEmpty())
-                fechaInicio = LocalDate.parse(fechaInicioStr, formatter);
-
-            if (fechaFinStr != null && !fechaFinStr.isEmpty())
-                fechaFin = LocalDate.parse(fechaFinStr, formatter);
-
-        } catch (DateTimeParseException e) {
-            Log.e("InvoiceListActivity", "Error al parsear fechas de filtro", e);
+        if (bundle.containsKey("FECHA_INICIO_MILLIS")) {
+            long millis = bundle.getLong("FECHA_INICIO_MILLIS");
+            fechaInicio = Instant.ofEpochMilli(millis).atZone(ZoneOffset.UTC).toLocalDate();
         }
 
-        // Llamar al ViewModel con objetos LocalDate
+        LocalDate fechaFin = null;
+        if (bundle.containsKey("FECHA_FIN_MILLIS")) {
+            long millis = bundle.getLong("FECHA_FIN_MILLIS");
+            fechaFin = Instant.ofEpochMilli(millis).atZone(ZoneOffset.UTC).toLocalDate();
+        }
+
+        // Ya tenemos LocalDate puros, sin try-catch ni parseo de Strings
         invoiceViewModel.filtrarFacturas(
                 estadosSeleccionados,
                 fechaInicio,
@@ -182,8 +175,7 @@ public class InvoiceListActivity extends AppCompatActivity {
                 importeMax
         );
 
-        // Devolvemos true para indicar que se intentó aplicar el filtro
-        // y que el fragmento debe cerrarse
+        restoreMainView();
         return true;
     }
 
