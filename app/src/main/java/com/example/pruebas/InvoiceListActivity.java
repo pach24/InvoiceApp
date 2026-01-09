@@ -1,6 +1,5 @@
 package com.example.pruebas;
 
-import static com.example.pruebas.Invoice.stringToDate;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,11 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import com.example.pruebas.databinding.ActivityInvoiceListBinding;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
+import com.example.pruebas.databinding.ActivityInvoiceListBinding;
+
+import java.util.List;
 
 public class InvoiceListActivity extends AppCompatActivity {
 
@@ -33,6 +31,9 @@ public class InvoiceListActivity extends AppCompatActivity {
         bindingInvoiceList = ActivityInvoiceListBinding.inflate(getLayoutInflater());
         setContentView(bindingInvoiceList.getRoot());
 
+        // Configuración de la Toolbar
+        setSupportActionBar(bindingInvoiceList.toolbar);
+
         // Configurar RecyclerView
         invoiceAdapter = new InvoiceAdapter();
         bindingInvoiceList.recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -45,58 +46,54 @@ public class InvoiceListActivity extends AppCompatActivity {
         InvoiceViewModelFactory invoiceViewModelFactory = new InvoiceViewModelFactory(useMock, this);
         invoiceViewModel = new ViewModelProvider(this, invoiceViewModelFactory).get(InvoiceViewModel.class);
 
-        // Cargar facturas desde el viewmodel
+        // Cargar facturas iniciales
         invoiceViewModel.cargarFacturas();
 
-        // ---------------------- Observador para cuando las facturas se carguen ----------------------
+        // --- OBSERVER PRINCIPAL ---
+        // Al actualizar el LiveData en el ViewModel (sea por carga inicial o por filtro),
+        // este observer actualizará la lista automáticamente.
         invoiceViewModel.getFacturas().observe(this, facturas -> {
-            if (facturas != null && !facturas.isEmpty()) {
+            invalidateOptionsMenu(); // Actualiza estado del menú de filtros
 
-                invalidateOptionsMenu();  // Actualiza el menú
-            }
-        });
-
-        // Observar los datos de facturas y actualizar la UI
-        invoiceViewModel.getFacturas().observe(this, facturas -> {
             if (facturas != null) {
+                // Si la lista está vacía (puede ser resultado de un filtro muy estricto)
+                if (facturas.isEmpty()) {
+                    // Opcional: mostrar un mensaje visual en lugar de Toast si prefieres
+                    // Toast.makeText(InvoiceListActivity.this, "No hay facturas para mostrar", Toast.LENGTH_SHORT).show();
+                }
                 invoiceAdapter.setFacturas(facturas);
-
             } else {
-                Toast.makeText(InvoiceListActivity.this, "No se encontraron facturas", Toast.LENGTH_SHORT).show();
+                Toast.makeText(InvoiceListActivity.this, "Error al cargar datos", Toast.LENGTH_SHORT).show();
             }
         });
 
         // Botón para volver a la actividad principal
         bindingInvoiceList.btnVolver.setOnClickListener(v -> finish());
-
-        // Configuración de la Toolbar
-        setSupportActionBar(bindingInvoiceList.toolbar);
     }
 
-    // Inflar el menú y controlar la visibilidad del ítem de filtro
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_filter, menu);
-        // Deshabilitar el ítem de filtro inicialmente
 
+        // Deshabilitar el ítem de filtro si no hay datos cargados en el ViewModel
         MenuItem filtroItem = menu.findItem(R.id.action_filters);
-        if (invoiceViewModel.getFacturas().getValue() == null || invoiceViewModel.getFacturas().getValue().isEmpty()) {
-            filtroItem.setEnabled(false);  // Deshabilitar si las facturas no están cargadas
-        } else {
-            filtroItem.setEnabled(true);  // Habilitar si las facturas están cargadas
-        }
+
+        // Verificamos si tenemos datos (usamos la lista actual del LiveData)
+        boolean hayDatos = invoiceViewModel.getFacturas().getValue() != null &&
+                !invoiceViewModel.getFacturas().getValue().isEmpty();
+
+        filtroItem.setEnabled(hayDatos);
+
         return true;
     }
 
-    // Gestionar la acción de seleccionar el ítem del menú
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_filters) {
-            // Verificamos si las facturas ya están cargadas
+            // Verificación extra antes de abrir
             if (invoiceViewModel.getFacturas().getValue() != null && !invoiceViewModel.getFacturas().getValue().isEmpty()) {
                 mostrarFiltroFragment();
             } else {
-                // Las facturas aún no están cargadas
                 Toast.makeText(this, "Las facturas aún no están cargadas.", Toast.LENGTH_SHORT).show();
             }
             return true;
@@ -104,12 +101,13 @@ public class InvoiceListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // Mostrar el fragmento de filtro
     private void mostrarFiltroFragment() {
-        // Obtener el importe máximo de las facturas
         FilterFragment filterFragment = getFilterFragment();
 
         bindingInvoiceList.fragmentContainer.setVisibility(View.VISIBLE);
+        // Ocultar elementos principales mientras se muestra el filtro (opcional, depende de tu diseño)
+        bindingInvoiceList.toolbar.setVisibility(View.GONE);
+        bindingInvoiceList.recyclerView.setVisibility(View.GONE);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -120,91 +118,45 @@ public class InvoiceListActivity extends AppCompatActivity {
 
     @NonNull
     private FilterFragment getFilterFragment() {
+        // Obtenemos máximos y fechas de la lista original guardada en el ViewModel
         float maxImporte = invoiceViewModel.getMaxImporte();
         String oldestDate = invoiceViewModel.getOldestDate();
 
-        // Crear el Bundle para pasar al fragmento
         Bundle bundle = new Bundle();
-
-        // Pasamos el importe máximo y la fecha más antigua
         bundle.putFloat("MAX_IMPORTE", maxImporte);
         bundle.putString("OLDEST_DATE", oldestDate);
 
-        // Mostrar el fragmento en toda la pantalla
         FilterFragment filterFragment = new FilterFragment();
         filterFragment.setArguments(bundle);
         return filterFragment;
     }
 
-    public List<Invoice> filtrarFacturas(List<String> estadosSeleccionados, String fechaInicioString, String fechaFinString, Double importeMin, Double importeMax) {
-        List<Invoice> facturasFiltradas = new ArrayList<>();
-
-        // Obtener las facturas cargadas desde el ViewModel
-        List<Invoice> facturas = invoiceViewModel.getFacturas().getValue();
-
-        if (facturas == null) {
-            return facturasFiltradas;  // Si no hay facturas, retornamos una lista vacía
-        }
-
-        // Convertir las fechas de String a Date una sola vez
-        Date fechaInicio = stringToDate(fechaInicioString);
-        Date fechaFin = stringToDate(fechaFinString);
-
-        // Filtrar por estado, fecha e importe
-        for (Invoice factura : facturas) {
-            boolean cumpleEstado = (estadosSeleccionados == null || estadosSeleccionados.contains(factura.getDescEstado()));
-
-            // Filtrar por fecha
-            boolean cumpleFecha = true;
-            Date fechaFactura = stringToDate(factura.getFecha());
-
-            if (fechaInicio != null && fechaFactura != null) {
-                cumpleFecha &= fechaFactura.compareTo(fechaInicio) >= 0;  // Verificar si la factura es posterior o igual a la fecha de inicio
-            }
-
-            if (fechaFin != null && fechaFactura != null) {
-                cumpleFecha &= fechaFactura.compareTo(fechaFin) <= 0;  // Verificar si la factura es anterior o igual a la fecha de fin
-            }
-
-            // Filtrar por importe
-            boolean cumpleImporte = (importeMin == null || factura.getImporteOrdenacion() >= importeMin) &&
-                    (importeMax == null || factura.getImporteOrdenacion() <= importeMax);
-
-            // Si cumple todos los filtros, añadir la factura a la lista filtrada
-            if (cumpleEstado && cumpleFecha && cumpleImporte) {
-                facturasFiltradas.add(factura);
-            }
-        }
-
-        return facturasFiltradas;
-    }
-
-    // Recupera los datos aplicados en filtros
+    /**
+     * Método llamado desde FilterFragment para aplicar los filtros seleccionados.
+     */
     public boolean aplicarFiltros(Bundle bundle) {
-
         List<String> estadosSeleccionados = bundle.getStringArrayList("ESTADOS");
         String fechaInicio = bundle.getString("FECHA_INICIO");
         String fechaFin = bundle.getString("FECHA_FIN");
         Double importeMin = bundle.getDouble("IMPORTE_MIN");
         Double importeMax = bundle.getDouble("IMPORTE_MAX");
 
-        // Filtrar las facturas
-        List<Invoice> facturasFiltradas = filtrarFacturas(estadosSeleccionados, fechaInicio, fechaFin, importeMin, importeMax);
-        Log.d("InvoiceListActivity", "Facturas filtradas: " + facturasFiltradas.size());
-        for (Invoice factura : facturasFiltradas) {
-            Log.d("InvoiceListActivity", "Estado de factura: " + factura.getDescEstado());
-        }
+        // Delegamos TODA la lógica al ViewModel
+        List<Invoice> facturasFiltradas = invoiceViewModel.filtrarFacturas(
+                estadosSeleccionados,
+                fechaInicio,
+                fechaFin,
+                importeMin,
+                importeMax
+        );
 
-        // Mostrar las facturas filtradas si se encontró algún resultado
-        if (!facturasFiltradas.isEmpty()) {
-            runOnUiThread(() -> invoiceAdapter.setFacturas(facturasFiltradas));
-            return true;
-        } else {
-            return false;
-        }
+        Log.d("InvoiceListActivity", "Filtros aplicados. Resultados: " + facturasFiltradas.size());
+
+        // El adapter se actualizará automáticamente gracias al Observer en onCreate.
+        // Solo devolvemos si hubo resultados para que el fragmento sepa qué hacer (cerrarse o mostrar aviso)
+        return !facturasFiltradas.isEmpty();
     }
 
-    // Restaurar la vista principal
     public void restoreMainView() {
         bindingInvoiceList.toolbar.setVisibility(View.VISIBLE);
         bindingInvoiceList.recyclerView.setVisibility(View.VISIBLE);
