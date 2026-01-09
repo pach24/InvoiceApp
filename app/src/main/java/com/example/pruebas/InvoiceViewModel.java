@@ -5,10 +5,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -17,21 +15,22 @@ import retrofit2.Response;
 
 import java.time.LocalDate;
 
-import static com.example.pruebas.Invoice.stringToDate;
-
 public class InvoiceViewModel extends ViewModel {
 
-    // LiveData que la UI observa. Contiene la lista actual (filtrada o completa)
+    // LiveData que la UI observa
     private final MutableLiveData<List<Invoice>> facturas = new MutableLiveData<>();
 
-    // Lista interna para preservar TODOS los datos descargados
+    // Lista interna para preservar TODOS los datos
     private List<Invoice> facturasOriginales = new ArrayList<>();
 
     private final GetInvoicesUseCase getInvoicesUseCase;
-    private final boolean useMock;
+
+    // ELIMINADO: private final boolean useMock; (Ya no hace falta guardarlo en la clase)
 
     public InvoiceViewModel(boolean useMock, Context context) {
-        this.useMock = useMock;
+        // ELIMINADO: this.useMock = useMock;
+
+        // Usamos el booleano solo aquí para crear el repositorio correcto
         InvoiceRepository repository = new InvoiceRepository(useMock, context);
         this.getInvoicesUseCase = new GetInvoicesUseCase(repository);
     }
@@ -40,42 +39,37 @@ public class InvoiceViewModel extends ViewModel {
         return facturas;
     }
 
-    /**
-     * Carga las facturas desde el repositorio.
-     * Al recibir los datos, guardamos una copia en facturasOriginales.
-     */
     public void cargarFacturas() {
-        getInvoicesUseCase.execute(useMock, new Callback<List<Invoice>>() {
+        // Correcto: ya no pasamos parámetros aquí
+        getInvoicesUseCase.execute(new Callback<InvoiceResponse>() {
             @Override
-            public void onResponse(@NonNull Call<List<Invoice>> call, @NonNull Response<List<Invoice>> response) {
+            public void onResponse(@NonNull Call<InvoiceResponse> call, @NonNull Response<InvoiceResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    facturasOriginales = new ArrayList<>(response.body()); // Guardamos copia original
-                    facturas.setValue(facturasOriginales); // Emitimos datos iniciales
+                    facturasOriginales = new ArrayList<>(response.body().getFacturas());
+                    facturas.setValue(facturasOriginales);
                 } else {
-                    facturasOriginales = new ArrayList<>();
-                    facturas.setValue(null);
+                    manejarError();
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<Invoice>> call, @NonNull Throwable t) {
-                facturasOriginales = new ArrayList<>();
-                facturas.setValue(null);
+            public void onFailure(@NonNull Call<InvoiceResponse> call, @NonNull Throwable t) {
+                manejarError();
             }
         });
     }
 
-    /**
-     * Lógica de filtrado
-     * Filtra sobre facturasOriginales y actualiza el LiveData 'facturas'.
-     */
+    private void manejarError() {
+        facturasOriginales = new ArrayList<>();
+        facturas.setValue(null);
+    }
+
     public List<Invoice> filtrarFacturas(List<String> estadosSeleccionados,
                                          LocalDate fechaInicio,
                                          LocalDate fechaFin,
                                          Double importeMin,
                                          Double importeMax) {
 
-        // Si no hay datos originales, limpiar y retornar vacío
         if (facturasOriginales == null || facturasOriginales.isEmpty()) {
             facturas.setValue(new ArrayList<>());
             return new ArrayList<>();
@@ -88,21 +82,18 @@ public class InvoiceViewModel extends ViewModel {
             boolean cumpleEstado = (estadosSeleccionados == null ||
                     estadosSeleccionados.contains(factura.getDescEstado()));
 
-            // 2. Filtrar por fecha (Optimizado)
+            // 2. Filtrar por fecha
             boolean cumpleFecha = true;
-            LocalDate fechaFactura = factura.getFecha(); // Ya es un objeto, no hay parsing
+            LocalDate fechaFactura = factura.getFecha();
 
             if (fechaFactura != null) {
                 if (fechaInicio != null) {
-
                     cumpleFecha &= !fechaFactura.isBefore(fechaInicio);
                 }
                 if (fechaFin != null) {
-                    // Optimizado: fechaFactura no debe ser después de fechaFin
                     cumpleFecha &= !fechaFactura.isAfter(fechaFin);
                 }
             } else {
-                // Si la factura no tiene fecha y hay filtro activo, descartar
                 if (fechaInicio != null || fechaFin != null) {
                     cumpleFecha = false;
                 }
@@ -112,7 +103,6 @@ public class InvoiceViewModel extends ViewModel {
             boolean cumpleImporte = (importeMin == null || factura.getImporteOrdenacion() >= importeMin) &&
                     (importeMax == null || factura.getImporteOrdenacion() <= importeMax);
 
-            // Si cumple todos los filtros, añadir
             if (cumpleEstado && cumpleFecha && cumpleImporte) {
                 facturasFiltradas.add(factura);
             }
@@ -122,16 +112,13 @@ public class InvoiceViewModel extends ViewModel {
         return facturasFiltradas;
     }
 
-    /**
-     * Calcula el importe máximo basándose en la lista ORIGINAL completa.
-     */
     public float getMaxImporte() {
         if (facturasOriginales == null || facturasOriginales.isEmpty()) {
             return 0f;
         }
-
         float maxImporte = 0f;
         for (Invoice factura : facturasOriginales) {
+            // Protección contra null pointer si importeOrdenacion fuera objeto (aunque es float primitivo aquí)
             if (factura.getImporteOrdenacion() > maxImporte) {
                 maxImporte = factura.getImporteOrdenacion();
             }
@@ -140,32 +127,30 @@ public class InvoiceViewModel extends ViewModel {
     }
 
     /**
-     * Obtiene la fecha más antigua basándose en la lista ORIGINAL completa.
+     * CORREGIDO: Lógica más robusta para encontrar la fecha más antigua.
      */
     public LocalDate getOldestDate() {
         if (facturasOriginales == null || facturasOriginales.isEmpty()) {
             return null;
         }
 
-        LocalDate oldestDate = facturasOriginales.get(0).getFecha();
+        LocalDate oldestDate = null;
 
         for (Invoice factura : facturasOriginales) {
             LocalDate currentDate = factura.getFecha();
-            if (currentDate != null && oldestDate != null && currentDate.isBefore(oldestDate)) {
-                oldestDate = currentDate;
+
+            // Si la factura tiene fecha...
+            if (currentDate != null) {
+                // Si aún no tenemos fecha antigua guardada, o la actual es anterior a la guardada...
+                if (oldestDate == null || currentDate.isBefore(oldestDate)) {
+                    oldestDate = currentDate;
+                }
             }
         }
         return oldestDate;
     }
 
-
-    /**
-     * Devuelve true si ya hemos descargado facturas del servidor/mock,
-     * independientemente de si el filtro actual las oculta todas.
-     */
     public boolean hayDatosCargados() {
         return facturasOriginales != null && !facturasOriginales.isEmpty();
     }
 }
-
-

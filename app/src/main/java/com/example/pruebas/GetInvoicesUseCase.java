@@ -1,12 +1,9 @@
 package com.example.pruebas;
 
 import androidx.annotation.NonNull;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import java.util.List;
 
 public class GetInvoicesUseCase {
 
@@ -16,26 +13,24 @@ public class GetInvoicesUseCase {
         this.repository = repository;
     }
 
-    // Nota que el callback de vuelta a la UI espera List<Invoice>
-    public void execute(boolean useMock, final Callback<List<Invoice>> callback) {
+    // ANTES: public void execute(boolean useMock, final Callback<InvoiceResponse> callback)
+    // AHORA: Quitamos 'boolean useMock'
+    public void execute(final Callback<InvoiceResponse> callback) {
 
-        // CORRECCIÓN: Especificar <InvoiceResponse> explícitamente en lugar de <>
-        repository.getFacturas(useMock).enqueue(new Callback<InvoiceResponse>() {
-
+        // Ya no pasamos 'useMock' al repositorio tampoco
+        repository.getFacturas().enqueue(new Callback<InvoiceResponse>() {
             @Override
             public void onResponse(@NonNull Call<InvoiceResponse> call, @NonNull Response<InvoiceResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // Extraemos la lista de facturas de la respuesta (InvoiceResponse)
-                    // y se la pasamos al callback de la UI
-                    callback.onResponse(null, Response.success(response.body().getFacturas()));
+                    callback.onResponse(call, response);
                 } else {
-                    callback.onFailure(null, new Throwable("Error en la respuesta de la API"));
+                    callback.onFailure(call, new Throwable("Error en la respuesta de la API"));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<InvoiceResponse> call, @NonNull Throwable t) {
-                callback.onFailure(null, t);
+                callback.onFailure(call, t);
             }
         });
     }

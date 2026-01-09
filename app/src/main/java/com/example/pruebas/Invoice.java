@@ -27,14 +27,6 @@ public class Invoice {
         return fecha;
     }
 
-    public static Date stringToDate(String fechaString) {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");  // Ajusta el formato de acuerdo a tu fecha
-        try {
-            return formatter.parse(fechaString);  // Convierte el String a Date
-        } catch (ParseException e) {
 
-            return null;
-        }
-    }
 
 }
