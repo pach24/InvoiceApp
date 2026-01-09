@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.pruebas.databinding.ActivityInvoiceListBinding;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class InvoiceListActivity extends AppCompatActivity {
@@ -57,19 +60,16 @@ public class InvoiceListActivity extends AppCompatActivity {
                 // Pasamos siempre la lista al adaptador, esté vacía o llena
                 invoiceAdapter.setFacturas(facturas);
 
-                // NUEVO: Lógica para mostrar/ocultar el "Empty State" (Caja vacía)
+                // Lógica para mostrar/ocultar el "Empty State"
                 if (facturas.isEmpty()) {
-                    // No hay facturas: Ocultamos lista, mostramos aviso
                     bindingInvoiceList.recyclerView.setVisibility(View.GONE);
                     bindingInvoiceList.layoutEmptyState.setVisibility(View.VISIBLE);
                 } else {
-                    // Hay facturas: Mostramos lista, ocultamos aviso
                     bindingInvoiceList.recyclerView.setVisibility(View.VISIBLE);
                     bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);
                 }
 
             } else {
-                // Error de carga (null)
                 Toast.makeText(InvoiceListActivity.this, "Error al cargar datos", Toast.LENGTH_SHORT).show();
             }
         });
@@ -85,13 +85,11 @@ public class InvoiceListActivity extends AppCompatActivity {
         // Deshabilitar el ítem de filtro si no hay datos cargados en el ViewModel
         MenuItem filtroItem = menu.findItem(R.id.action_filters);
 
-        // Verificamos si tenemos datos (usamos la lista actual del LiveData)
         if (invoiceViewModel.hayDatosCargados()) {
             filtroItem.setEnabled(true);
         } else {
             filtroItem.setEnabled(false);
         }
-
 
         return true;
     }
@@ -99,7 +97,6 @@ public class InvoiceListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_filters) {
-            //Verificar antes de abrir
             if (invoiceViewModel.hayDatosCargados()) {
                 mostrarFiltroFragment();
             } else {
@@ -114,7 +111,7 @@ public class InvoiceListActivity extends AppCompatActivity {
         FilterFragment filterFragment = getFilterFragment();
 
         bindingInvoiceList.fragmentContainer.setVisibility(View.VISIBLE);
-        // Ocultar elementos principales mientras se muestra el filtro (opcional, depende de tu diseño)
+        // Ocultar elementos principales mientras se muestra el filtro
         bindingInvoiceList.toolbar.setVisibility(View.GONE);
         bindingInvoiceList.recyclerView.setVisibility(View.GONE);
 
@@ -127,9 +124,19 @@ public class InvoiceListActivity extends AppCompatActivity {
 
     @NonNull
     private FilterFragment getFilterFragment() {
-        // Obtenemos máximos y fechas de la lista original guardada en el ViewModel
         float maxImporte = invoiceViewModel.getMaxImporte();
-        String oldestDate = invoiceViewModel.getOldestDate();
+
+        // Obtener LocalDate y convertir a String para el fragmento
+        LocalDate oldestDateObj = invoiceViewModel.getOldestDate();
+        String oldestDate = "";
+
+        // Formateador seguro
+        if (oldestDateObj != null) {
+            oldestDate = oldestDateObj.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        } else {
+            // Valor por defecto si no hay fecha antigua (ej. hoy)
+            oldestDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        }
 
         Bundle bundle = new Bundle();
         bundle.putFloat("MAX_IMPORTE", maxImporte);
@@ -145,12 +152,28 @@ public class InvoiceListActivity extends AppCompatActivity {
      */
     public boolean aplicarFiltros(Bundle bundle) {
         List<String> estadosSeleccionados = bundle.getStringArrayList("ESTADOS");
-        String fechaInicio = bundle.getString("FECHA_INICIO");
-        String fechaFin = bundle.getString("FECHA_FIN");
+        String fechaInicioStr = bundle.getString("FECHA_INICIO");
+        String fechaFinStr = bundle.getString("FECHA_FIN");
         Double importeMin = bundle.getDouble("IMPORTE_MIN");
         Double importeMax = bundle.getDouble("IMPORTE_MAX");
 
-        // Ejecutamos el filtro. Esto actualiza el LiveData y dispara el Observer en onCreate.
+        // Convertir String -> LocalDate
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate fechaInicio = null;
+        LocalDate fechaFin = null;
+
+        try {
+            if (fechaInicioStr != null && !fechaInicioStr.isEmpty())
+                fechaInicio = LocalDate.parse(fechaInicioStr, formatter);
+
+            if (fechaFinStr != null && !fechaFinStr.isEmpty())
+                fechaFin = LocalDate.parse(fechaFinStr, formatter);
+
+        } catch (DateTimeParseException e) {
+            Log.e("InvoiceListActivity", "Error al parsear fechas de filtro", e);
+        }
+
+        // Llamar al ViewModel con objetos LocalDate
         invoiceViewModel.filtrarFacturas(
                 estadosSeleccionados,
                 fechaInicio,
@@ -159,9 +182,8 @@ public class InvoiceListActivity extends AppCompatActivity {
                 importeMax
         );
 
-        // CORRECCIÓN: Devolvemos SIEMPRE true.
-        // Queremos que el filtro se cierre siempre, haya resultados o no.
-        // Si no hay resultados, el Observer mostrará el layoutEmptyState.
+        // Devolvemos true para indicar que se intentó aplicar el filtro
+        // y que el fragmento debe cerrarse
         return true;
     }
 

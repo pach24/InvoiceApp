@@ -15,6 +15,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.time.LocalDate;
+
 import static com.example.pruebas.Invoice.stringToDate;
 
 public class InvoiceViewModel extends ViewModel {
@@ -67,7 +69,12 @@ public class InvoiceViewModel extends ViewModel {
      * Lógica de filtrado
      * Filtra sobre facturasOriginales y actualiza el LiveData 'facturas'.
      */
-    public List<Invoice> filtrarFacturas(List<String> estadosSeleccionados, String fechaInicioString, String fechaFinString, Double importeMin, Double importeMax) {
+    public List<Invoice> filtrarFacturas(List<String> estadosSeleccionados,
+                                         LocalDate fechaInicio,
+                                         LocalDate fechaFin,
+                                         Double importeMin,
+                                         Double importeMax) {
+
         // Si no hay datos originales, limpiar y retornar vacío
         if (facturasOriginales == null || facturasOriginales.isEmpty()) {
             facturas.setValue(new ArrayList<>());
@@ -75,25 +82,33 @@ public class InvoiceViewModel extends ViewModel {
         }
 
         List<Invoice> facturasFiltradas = new ArrayList<>();
-        Date fechaInicio = stringToDate(fechaInicioString);
-        Date fechaFin = stringToDate(fechaFinString);
 
         for (Invoice factura : facturasOriginales) {
-            // Filtrar por estado
-            boolean cumpleEstado = (estadosSeleccionados == null || estadosSeleccionados.contains(factura.getDescEstado()));
+            // 1. Filtrar por estado
+            boolean cumpleEstado = (estadosSeleccionados == null ||
+                    estadosSeleccionados.contains(factura.getDescEstado()));
 
-            // Filtrar por fecha
+            // 2. Filtrar por fecha (Optimizado)
             boolean cumpleFecha = true;
-            Date fechaFactura = stringToDate(factura.getFecha());
+            LocalDate fechaFactura = factura.getFecha(); // Ya es un objeto, no hay parsing
 
-            if (fechaInicio != null && fechaFactura != null) {
-                cumpleFecha &= fechaFactura.compareTo(fechaInicio) >= 0;
-            }
-            if (fechaFin != null && fechaFactura != null) {
-                cumpleFecha &= fechaFactura.compareTo(fechaFin) <= 0;
+            if (fechaFactura != null) {
+                if (fechaInicio != null) {
+
+                    cumpleFecha &= !fechaFactura.isBefore(fechaInicio);
+                }
+                if (fechaFin != null) {
+                    // Optimizado: fechaFactura no debe ser después de fechaFin
+                    cumpleFecha &= !fechaFactura.isAfter(fechaFin);
+                }
+            } else {
+                // Si la factura no tiene fecha y hay filtro activo, descartar
+                if (fechaInicio != null || fechaFin != null) {
+                    cumpleFecha = false;
+                }
             }
 
-            // Filtrar por importe
+            // 3. Filtrar por importe
             boolean cumpleImporte = (importeMin == null || factura.getImporteOrdenacion() >= importeMin) &&
                     (importeMax == null || factura.getImporteOrdenacion() <= importeMax);
 
@@ -102,7 +117,6 @@ public class InvoiceViewModel extends ViewModel {
                 facturasFiltradas.add(factura);
             }
         }
-
 
         facturas.setValue(facturasFiltradas);
         return facturasFiltradas;
@@ -128,47 +142,22 @@ public class InvoiceViewModel extends ViewModel {
     /**
      * Obtiene la fecha más antigua basándose en la lista ORIGINAL completa.
      */
-    public String getOldestDate() {
+    public LocalDate getOldestDate() {
         if (facturasOriginales == null || facturasOriginales.isEmpty()) {
             return null;
         }
 
-        String oldestDate = facturasOriginales.get(0).getFecha();
+        LocalDate oldestDate = facturasOriginales.get(0).getFecha();
+
         for (Invoice factura : facturasOriginales) {
-            String currentDate = factura.getFecha();
-            if (isEarlier(currentDate, oldestDate)) {
+            LocalDate currentDate = factura.getFecha();
+            if (currentDate != null && oldestDate != null && currentDate.isBefore(oldestDate)) {
                 oldestDate = currentDate;
             }
         }
         return oldestDate;
     }
 
-    private boolean isEarlier(String date1, String date2) {
-        if (date1 == null || date2 == null) return false;
-
-        String[] parts1 = date1.split("/");
-        String[] parts2 = date2.split("/");
-
-        if (parts1.length != 3 || parts2.length != 3) return false;
-
-        try {
-            int day1 = Integer.parseInt(parts1[0]);
-            int month1 = Integer.parseInt(parts1[1]);
-            int year1 = Integer.parseInt(parts1[2]);
-
-            int day2 = Integer.parseInt(parts2[0]);
-            int month2 = Integer.parseInt(parts2[1]);
-            int year2 = Integer.parseInt(parts2[2]);
-
-            if (year1 != year2) return year1 < year2;
-            if (month1 != month2) return month1 < month2;
-            return day1 < day2;
-
-        } catch (NumberFormatException e) {
-            Log.e("InvoiceViewModel", "Error al convertir fecha");
-            return false;
-        }
-    }
 
     /**
      * Devuelve true si ya hemos descargado facturas del servidor/mock,

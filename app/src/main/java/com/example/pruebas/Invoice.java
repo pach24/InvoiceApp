@@ -4,13 +4,14 @@ import android.annotation.SuppressLint;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.time.LocalDate;
 
 
 
 public class Invoice {
     private String descEstado;
     private float importeOrdenacion;
-    private String fecha;
+    private LocalDate fecha;
 
     public String getDescEstado() {
         return descEstado;
@@ -18,8 +19,9 @@ public class Invoice {
     public float getImporteOrdenacion() {
         return importeOrdenacion;
     }
-    public String getFecha() {
-        return fecha; }
+    public LocalDate getFecha() {
+        return fecha;
+    }
 
     public static Date stringToDate(String fechaString) {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");  // Ajusta el formato de acuerdo a tu fecha

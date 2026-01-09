@@ -9,19 +9,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.pruebas.databinding.ItemInvoiceBinding;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceViewHolder> {
+
     private List<Invoice> listaFacturas;
 
-    // Método para actualizar la lista de facturas
+    // Formateador reutilizable para convertir LocalDate a String (Ej: 25 Ene 2024)
+    private final DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.getDefault());
+
     @SuppressLint("NotifyDataSetChanged")
     public void setFacturas(List<Invoice> facturas) {
         this.listaFacturas = facturas;
-        notifyDataSetChanged();  // Notifica a RecyclerView que los datos cambiaron
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -36,57 +39,54 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
     public void onBindViewHolder(@NonNull InvoiceViewHolder holder, int position) {
         Invoice factura = listaFacturas.get(position);
 
-        // Formatear la fecha
-        String fechaFormateada = formatFecha(factura.getFecha());
-        holder.binding.txtFecha.setText(fechaFormateada);
+        // CORRECCIÓN: Formatear LocalDate a String antes de ponerlo en el TextView
+        LocalDate fecha = factura.getFecha();
+        if (fecha != null) {
+            holder.binding.txtFecha.setText(fecha.format(outputFormatter));
+        } else {
+            holder.binding.txtFecha.setText("Sin fecha");
+        }
 
-        // Establecer el importe con formato correcto
+        // Establecer el importe
         holder.binding.txtImporte.setText(String.format(Locale.getDefault(), "%.2f €", factura.getImporteOrdenacion()));
 
-        // Configurar el estado
+        // Configurar estado
         String estado = factura.getDescEstado();
+        if (estado == null) estado = "";
 
         switch (estado) {
             case "Pendiente de pago":
                 holder.binding.txtEstado.setText("Pendiente de pago");
-                holder.binding.txtEstado.setTextColor(Color.RED); // Cambiar el texto a rojo
+                holder.binding.txtEstado.setTextColor(Color.RED);
                 holder.binding.txtEstado.setVisibility(View.VISIBLE);
                 break;
-
             case "Pagada":
-                holder.binding.txtEstado.setVisibility(View.GONE); // Ocultar si está pagada
+                holder.binding.txtEstado.setVisibility(View.GONE);
                 break;
-
             case "Anulada":
                 holder.binding.txtEstado.setText("Anulada");
-                holder.binding.txtEstado.setTextColor(Color.RED); // Cambiar el texto a rojo
+                holder.binding.txtEstado.setTextColor(Color.RED);
                 holder.binding.txtEstado.setVisibility(View.VISIBLE);
                 break;
-
             case "Cuota fija":
                 holder.binding.txtEstado.setText("Cuota fija");
                 holder.binding.txtEstado.setTextColor(Color.BLACK);
                 holder.binding.txtEstado.setVisibility(View.VISIBLE);
                 break;
-
             case "Plan de pago":
                 holder.binding.txtEstado.setText("Plan de pago");
-                holder.binding.txtEstado.setTextColor(Color.BLACK); // Verde claro
+                holder.binding.txtEstado.setTextColor(Color.BLACK);
                 holder.binding.txtEstado.setVisibility(View.VISIBLE);
                 break;
-
             default:
-                holder.binding.txtEstado.setVisibility(View.VISIBLE); // Ocultar en otros casos
+                holder.binding.txtEstado.setText(estado);
+                holder.binding.txtEstado.setVisibility(View.VISIBLE);
                 break;
         }
 
-        // Acción al hacer clic en el ítem
         holder.itemView.setOnClickListener(this::showPopup);
     }
 
-
-    // Metodo para mostrar un popup nativo
-    // TODO Se configura con el tema que use el dispositivo (puede usar tema oscuro) Manejar esto.
     private void showPopup(View view) {
         new androidx.appcompat.app.AlertDialog.Builder(view.getContext())
                 .setTitle("Información")
@@ -95,39 +95,17 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
                 .show();
     }
 
-    // Metodo para formatear la fecha
-    private String formatFecha(String fecha) {
-        try {
-            // Formato de la fecha original
-            SimpleDateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-
-            // Nuevo formato
-            SimpleDateFormat newFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
-
-            // Parseamos la fecha original y la convertimos al nuevo formato
-            return newFormat.format(Objects.requireNonNull(originalFormat.parse(fecha)));
-        } catch (Exception e) {
-            return fecha; // Si hay un error en el formato, regresamos la fecha original
-        }
-    }
-
     @Override
     public int getItemCount() {
-        if (listaFacturas != null) {
-            return listaFacturas.size();
-        } else {
-            return 0;
-        }
+        return listaFacturas != null ? listaFacturas.size() : 0;
     }
 
-    // Clase interna que representa la vista de cada factura en la lista
     public static class InvoiceViewHolder extends RecyclerView.ViewHolder {
         private final ItemInvoiceBinding binding;
 
         public InvoiceViewHolder(ItemInvoiceBinding binding) {
             super(binding.getRoot());
-            this.binding = binding; // Asignar el binding a la instancia
+            this.binding = binding;
         }
-
     }
 }
