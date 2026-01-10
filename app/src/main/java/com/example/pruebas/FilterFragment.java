@@ -201,7 +201,7 @@ public class FilterFragment extends Fragment {
 
     private void resetFilters() {
         // Resetear fechas a Hoy / Null según prefieras
-        fechaInicioMillis = localDateToMillis(LocalDate.now());
+
         fechaFinMillis = localDateToMillis(LocalDate.now());
 
         binding.btnSelectDate.setText(millisToLocalDate(fechaInicioMillis).format(buttonFormatter));
