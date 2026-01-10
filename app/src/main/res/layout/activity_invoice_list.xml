@@ -143,7 +143,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Prueba a modificar los filtros"
+            android:text="@string/change_filters"
             android:textSize="16sp"
             android:textColor="#9E9E9E"
             android:layout_marginTop="8dp"/>

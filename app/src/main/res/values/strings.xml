@@ -68,5 +68,6 @@
     <!-- OTROS / GENERADOS -->
     <!-- ============================================================ -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="change_filters">Intenta con otros criterios de búsqueda</string>
 
 </resources>
