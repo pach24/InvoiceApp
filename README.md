@@ -1,10 +1,10 @@
-# InvoiceApp
+# NexoSolar
 
 
 
 A native Android application focused on displaying and filtering invoice data, created to showcase clean architecture, MVVM-based presentation logic, and good development practices rather than complex business functionality.
 
-> **Last Updated:** November 2025  
+> **Last Updated:** January 2026 
 
 ---
 
@@ -44,13 +44,16 @@ The showcase highlights the core flow:
 
 ## 💡 Features
 
-- Display a list of invoices using `RecyclerView` and a custom `InvoiceAdapter`.  
-- Filter invoices by:
-  - Status (paid, pending payment, cancelled, fixed fee, payment plan, etc.).  
-  - Date range using date pickers in `dd/MM/yyyy` format.  
-  - Amount range using a `RangeSlider` with a dynamic maximum value based on the data.  
-- Toggle between **real API data (Retrofit)** and **mocked data (Retromock)** from the main screen.  
-- Edge-to-edge layout with proper handling of system bars.  
+- **Smart Loading:** Skeleton shimmer animation provides immediate visual feedback during data fetching.
+- **Robust Filtering:** Filter by status, date range (using modern `MaterialDatePicker`), and amount.
+- **State Management:**
+  -  **Loading:** Shimmer effect.
+  -  **Success:** RecyclerView list.
+  -  **Empty:** Custom illustration and helpful text when no results are found.
+  -  **Error:** Retry mechanism for network failures.
+- **Dual Data Source:** Toggle between **Real API (Retrofit)** and **Mock Data (Retromock)** instantly.
+- **Modern UI:** Material Design 3 components, rounded corners, and edge-to-edge support.
+
 
 ---
 
