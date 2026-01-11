@@ -1,4 +1,4 @@
-package com.nexosolar.android;
+package com.nexosolar.android.ui;
 
 import android.content.Context;
 import androidx.annotation.NonNull;

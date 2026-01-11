@@ -1,4 +1,4 @@
-package com.nexosolar.android;
+package com.nexosolar.android.utils;
 
 import com.google.gson.*;
 import java.lang.reflect.Type;

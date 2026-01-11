@@ -1,4 +1,4 @@
-package com.nexosolar.android;
+package com.nexosolar.android.data;
 
 import android.content.Context;
 import retrofit2.Call;

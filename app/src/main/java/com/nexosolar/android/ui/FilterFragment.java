@@ -1,4 +1,4 @@
-package com.nexosolar.android;
+package com.nexosolar.android.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;

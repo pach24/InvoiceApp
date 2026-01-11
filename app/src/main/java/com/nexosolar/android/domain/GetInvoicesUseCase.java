@@ -1,6 +1,10 @@
-package com.nexosolar.android;
+package com.nexosolar.android.domain;
 
 import androidx.annotation.NonNull;
+
+import com.nexosolar.android.data.InvoiceRepository;
+import com.nexosolar.android.data.InvoiceResponse;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

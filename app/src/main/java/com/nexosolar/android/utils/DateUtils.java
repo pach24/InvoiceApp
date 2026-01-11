@@ -1,4 +1,4 @@
-package com.nexosolar.android;
+package com.nexosolar.android.utils;
 
 import java.time.Instant;
 import java.time.LocalDate;

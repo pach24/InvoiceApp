@@ -1,4 +1,4 @@
-package com.nexosolar.android;
+package com.nexosolar.android.domain;
 
 import java.time.LocalDate;
 

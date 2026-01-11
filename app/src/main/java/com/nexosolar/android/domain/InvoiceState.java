@@ -1,7 +1,9 @@
-package com.nexosolar.android;
+package com.nexosolar.android.domain;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.StringRes;
+
+import com.nexosolar.android.R;
 
 public enum InvoiceState {
     PENDIENTE("Pendiente de pago", R.string.pendientes_de_pago, R.color.texto_alerta),

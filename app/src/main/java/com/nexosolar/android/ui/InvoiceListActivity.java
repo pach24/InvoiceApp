@@ -1,4 +1,4 @@
-package com.nexosolar.android;
+package com.nexosolar.android.ui;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.nexosolar.android.R;
 import com.nexosolar.android.databinding.ActivityInvoiceListBinding;
 
 import java.time.Instant;

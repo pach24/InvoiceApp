@@ -1,4 +1,4 @@
-package com.nexosolar.android;
+package com.nexosolar.android.ui;
 
 import android.os.Bundle;
 import android.content.Intent;

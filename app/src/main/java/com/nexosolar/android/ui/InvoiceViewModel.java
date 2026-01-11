@@ -1,10 +1,15 @@
-package com.nexosolar.android;
+package com.nexosolar.android.ui;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.nexosolar.android.domain.GetInvoicesUseCase;
+import com.nexosolar.android.domain.Invoice;
+import com.nexosolar.android.data.InvoiceRepository;
+import com.nexosolar.android.data.InvoiceResponse;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,6 @@
-package com.nexosolar.android;
+package com.nexosolar.android.data;
+
+import com.nexosolar.android.domain.Invoice;
 
 import java.util.List;
 
