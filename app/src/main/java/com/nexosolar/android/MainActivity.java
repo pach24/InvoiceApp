@@ -2,46 +2,58 @@ package com.nexosolar.android;
 
 import android.os.Bundle;
 import android.content.Intent;
+import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import android.widget.Toast;
+
 import com.nexosolar.android.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
-    private boolean useMock = true; // Variable para alternar entre Retrofit y Retromock
+    // Variable para alternar entre Retrofit y Retromock
+    // Por defecto true (Mock) para desarrollo
+    private boolean useMock = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this); // Habilitar EdgeToEdge para pantallas completas
+        EdgeToEdge.enable(this);
 
         // Inflar el layout usando ViewBinding
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Configurar insets para manejar la barra de sistema
+        // Configurar insets (Importante para que no se corte el fondo verde arriba)
         ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            // Aplicamos padding solo abajo para no cortar el header verde en la status bar
+            v.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        // Configurar el botón para ir a la lista de facturas
-        binding.btFacturas.setOnClickListener(v -> {
+        // Configurar el listener en la TARJETA DE FACTURAS
+        // Usamos el ID de la vista clickable que pusimos en el XML
+        binding.btFacturasClick.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, InvoiceListActivity.class);
-            intent.putExtra("USE_RETROMOCK", useMock); // Pasar el estado de useMock
-            startActivity(intent); // Iniciar la actividad
+            intent.putExtra("USE_RETROMOCK", useMock);
+            startActivity(intent);
         });
 
-        // Configurar el botón para alternar el estado de useMock
-        binding.btToggleApi.setOnClickListener(v -> {
-            useMock = !useMock;
-            String message = "RetroMock state: " + useMock;
-            Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+        // Configurar el Switch para alternar API/Mock
+        // En el XML nuevo es un SwitchMaterial, pero funciona igual el setOnClickListener
+        // O mejor aún, setOnCheckedChangeListener para un Switch
+        binding.btToggleApi.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            useMock = isChecked; // Si está checked -> Mock, si no -> Real
+
+            String mode = useMock ? "Modo: Mock (Datos falsos)" : "Modo: Real (API)";
+            Toast.makeText(MainActivity.this, mode, Toast.LENGTH_SHORT).show();
         });
+
+        // Sincronizar estado inicial del switch con la variable
+        binding.btToggleApi.setChecked(useMock);
     }
 }

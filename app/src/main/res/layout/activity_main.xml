@@ -1,120 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/cardview_light_background"
-    style="?android:attr/buttonBarStyle"
+    android:background="#F2F2F7"
     tools:context=".MainActivity">
 
-    <!-- Encabezado con switch en la parte superior -->
-
-    <!-- Botón único de Facturas -->
-
-    <LinearLayout
+    <!-- 1. FONDO VERDE -->
+    <View
+        android:id="@+id/headerBackground"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        >
+        android:layout_height="280dp"
+        android:background="#8BC34A"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <RelativeLayout
+    <!-- 2. AVATAR -->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivAvatar"
+        android:layout_width="58dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="20dp"
+        android:padding="8dp"
+        android:src="@drawable/ic_user_outline"
+        android:background="@drawable/circle_white_bg"
+        android:elevation="0dp"
+        app:shapeAppearanceOverlay="@style/CircleImage"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="#555555" />
+
+    <!-- 3. RETROMOCK SWITCH -->
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/btToggleApi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:scaleX="1.2"
+        android:scaleY="1.2"
+        android:text="RetroMock"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:thumbTint="@color/switch_thumb_color"
+        app:trackTint="@color/selector_thumb_color"
+        app:useMaterialThemeColors="false"
+        app:layout_constraintEnd_toStartOf="@id/ivAvatar"
+        app:layout_constraintTop_toTopOf="@id/ivAvatar"
+        app:layout_constraintBottom_toBottomOf="@id/ivAvatar"/>
+
+    <!-- 4. SALUDO -->
+    <TextView
+        android:id="@+id/tvGreeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="24dp"
+        android:text="Hola, USUARIO"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:letterSpacing="-0.02"
+        app:layout_constraintTop_toBottomOf="@id/ivAvatar"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- 5. DIRECCIÓN -->
+    <TextView
+        android:id="@+id/tvAddress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="24dp"
+        android:text="Avenida de la Constitución, 45..."
+        android:textSize="15sp"
+        android:textColor="#333333"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintStart_toStartOf="@id/tvGreeting"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvGreeting" />
+
+    <!-- TÍTULO SECCIÓN -->
+    <TextView
+        android:id="@+id/tvSectionTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Mi Energía"
+        android:textStyle="bold"
+        android:textColor="#212121"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="@id/tvGreeting"
+        app:layout_constraintTop_toBottomOf="@id/tvAddress" />
+
+    <!-- 6. TARJETA FACTURAS -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardFacturas"
+        android:layout_width="160dp"
+        android:layout_height="190dp"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@color/white"
+        app:strokeColor="#F0F0F0"
+        app:strokeWidth="1dp"
+        app:layout_constraintStart_toStartOf="@id/tvSectionTitle"
+        app:layout_constraintTop_toBottomOf="@id/tvSectionTitle">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="20dp">
 
+            <!-- ICONO BOMBILLA -->
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_lightbulb_outline"
+                app:tint="#7CB342"/>
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/btToggleApi"
+            <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"/>
+
+            <!-- Texto Grande -->
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:checked="true"
-                android:text="Retromock"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:useMaterialThemeColors="false"
-                app:trackTint="@color/switch_track_color"
-                app:thumbTint="@color/switch_thumb_color"/>
+                android:text="Ver\nConsumo"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:letterSpacing="-0.02"
+                android:lines="2"/>
 
-
-
-
-            <!-- Avatar de usuario -->
-            <RelativeLayout
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true">
+                android:text="Histórico"
+                android:textSize="14sp"
+                android:textColor="#8E8E93"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
 
-                <ImageView
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:contentDescription="@string/usuario"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_launcher_foreground"
-                    app:tint="@color/white" />
+        <!-- Clickable Overlay -->
+        <View
+            android:id="@+id/btFacturasClick"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="Abrir listado de facturas"/>
 
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_centerInParent="true"
-                    android:contentDescription="@string/usuario"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_launcher" />
+    </com.google.android.material.card.MaterialCardView>
 
-            </RelativeLayout>
-        </RelativeLayout>
-
-        <!-- Información del usuario -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Hola Usuario"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="35sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Estás viendo Avenida de la Constitución, 45, 41001 Sevilla"
-            android:textColor="@color/black"
-            android:maxWidth="190dp"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:scrollHorizontally="false" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="32dp"
-        android:orientation="vertical"
-        android:gravity="center">
-
-
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btFacturas"
-            android:layout_width="180dp"
-            android:layout_height="160dp"
-            android:text="@string/facturas"
-            android:textColor="@android:color/white"
-            android:padding="24dp"
-            app:cornerRadius="20dp"
-            android:textAllCaps="false"
-            android:backgroundTint="@color/holo_green_light"
-            android:textSize="20sp"
-            app:icon="@drawable/lightbulb_50"
-            app:iconTint="@color/white"
-            app:iconSize="48dp"
-            app:iconGravity="top"
-            app:iconPadding="0dp"/>
-    </LinearLayout>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
