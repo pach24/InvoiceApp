@@ -1,9 +1,5 @@
-package com.example.pruebas;
+package com.nexosolar.android;
 
-import android.annotation.SuppressLint;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.time.LocalDate;
 
 

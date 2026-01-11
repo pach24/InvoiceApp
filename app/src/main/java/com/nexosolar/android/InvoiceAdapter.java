@@ -1,4 +1,4 @@
-package com.example.pruebas;
+package com.nexosolar.android;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.pruebas.databinding.ItemInvoiceBinding;
+import com.nexosolar.android.databinding.ItemInvoiceBinding;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

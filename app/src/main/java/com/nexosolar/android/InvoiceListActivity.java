@@ -1,7 +1,6 @@
-package com.example.pruebas;
+package com.nexosolar.android;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,13 +12,11 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.pruebas.databinding.ActivityInvoiceListBinding;
+import com.nexosolar.android.databinding.ActivityInvoiceListBinding;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class InvoiceListActivity extends AppCompatActivity {

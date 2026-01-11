@@ -1,4 +1,4 @@
-package com.example.pruebas;
+package com.nexosolar.android;
 
 import android.content.Context;
 import retrofit2.Call;

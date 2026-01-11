@@ -1,4 +1,4 @@
-package com.example.pruebas;
+package com.nexosolar.android;
 
 import android.os.Bundle;
 import android.content.Intent;
@@ -8,7 +8,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import android.widget.Toast;
-import com.example.pruebas.databinding.ActivityMainBinding;
+import com.nexosolar.android.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 

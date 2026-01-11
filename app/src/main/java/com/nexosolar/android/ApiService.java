@@ -1,4 +1,4 @@
-package com.example.pruebas;
+package com.nexosolar.android;
 
 import co.infinum.retromock.meta.Mock;
 import co.infinum.retromock.meta.MockResponse;

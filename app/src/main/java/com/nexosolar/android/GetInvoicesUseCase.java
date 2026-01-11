@@ -1,4 +1,4 @@
-package com.example.pruebas;
+package com.nexosolar.android;
 
 import androidx.annotation.NonNull;
 import retrofit2.Call;

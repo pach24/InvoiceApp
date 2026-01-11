@@ -1,7 +1,6 @@
-package com.example.pruebas;
+package com.nexosolar.android;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.pruebas.databinding.FragmentFilterBinding;
+import com.nexosolar.android.databinding.FragmentFilterBinding;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
 import java.time.Instant;
