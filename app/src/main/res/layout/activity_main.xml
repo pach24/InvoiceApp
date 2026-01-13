@@ -9,49 +9,67 @@
     android:background="#F2F2F7"
     tools:context=".ui.MainActivity">
 
-    <!-- 1. FONDO VERDE -->
-    <View
+    <!-- 1. FONDO ABSTRACTO -->
+    <ImageView
         android:id="@+id/headerBackground"
         android:layout_width="match_parent"
-        android:layout_height="280dp"
-        android:background="#8BC34A"
+        android:layout_height="420dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_header_abstract"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 2. AVATAR -->
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/ivAvatar"
-        android:layout_width="58dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="26dp"
-        android:layout_marginEnd="20dp"
-        android:padding="8dp"
-        android:src="@drawable/ic_user_outline"
-        android:background="@drawable/circle_white_bg"
-        android:elevation="0dp"
-        app:shapeAppearanceOverlay="@style/CircleImage"
+    <!-- 2. AVATAR (Estructura corregida: CardView > ImageView) -->
+    <!-- Este es el contenedor circular blanco de 58dp -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/containerAvatar"
+        android:layout_width="41dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="30dp"
+        app:cardCornerRadius="29dp"
+        app:cardElevation="10dp"
+        app:cardBackgroundColor="@color/white"
+        app:strokeWidth="0dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="#555555" />
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <!-- 3. RETROMOCK SWITCH -->
+        <!-- EL ICONO DE USUARIO -->
+        <ImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_user_outline"
+            app:tint="#555555" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- RETROMOCK SWITCH -->
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/btToggleApi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:scaleX="1.2"
-        android:scaleY="1.2"
-        android:text="RetroMock"
-        android:textColor="@color/white"
-        android:textStyle="bold"
+        android:layout_marginEnd="8dp"
         app:thumbTint="@color/switch_thumb_color"
         app:trackTint="@color/selector_thumb_color"
         app:useMaterialThemeColors="false"
-        app:layout_constraintEnd_toStartOf="@id/ivAvatar"
-        app:layout_constraintTop_toTopOf="@id/ivAvatar"
-        app:layout_constraintBottom_toBottomOf="@id/ivAvatar"/>
+        app:layout_constraintEnd_toStartOf="@id/containerAvatar"
+        app:layout_constraintTop_toTopOf="@id/containerAvatar"
+        app:layout_constraintBottom_toBottomOf="@id/containerAvatar"/>
+
+    <!-- "RetroMock" -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RetroMock"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintEnd_toStartOf="@id/btToggleApi"
+        app:layout_constraintTop_toTopOf="@id/btToggleApi"
+        app:layout_constraintBottom_toBottomOf="@id/btToggleApi"/>
+
 
     <!-- 4. SALUDO -->
     <TextView
@@ -65,7 +83,7 @@
         android:textStyle="bold"
         android:textColor="@color/black"
         android:letterSpacing="-0.02"
-        app:layout_constraintTop_toBottomOf="@id/ivAvatar"
+        app:layout_constraintTop_toBottomOf="@id/containerAvatar"
         app:layout_constraintStart_toStartOf="parent" />
 
     <!-- 5. DIRECCIÓN -->

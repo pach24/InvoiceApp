@@ -32,15 +32,26 @@ The main goal of the project is to demonstrate modern Android development practi
 
 ## 🖼️ Visual Showcase
 
-<img width="1402" height="852" alt="Image" src="https://github.com/user-attachments/assets/5f4f54a9-08bb-4572-b915-69a97416bda1" />
+<img width="1084" height="884" alt="Image" src="https://github.com/user-attachments/assets/46060c84-848a-4473-ac0d-4dd869fbb5da" />
 
-The showcase highlights the core flow:
+### App Demo
 
-1. Main screen with data source selection (Retrofit vs Retromock).  
-2. Invoice list screen with loaded data.  
-3. Filter panel with statuses, date range, and amount range.  
+<div align="center">
+<img src="https://github.com/user-attachments/assets/34b71390-8bb1-4beb-b220-61250f1019e7" width="300">
 
----
+  <p><em>Quick overview of the invoice navigation and filtering flow.</em></p>
+</div>
+
+### Gallery
+
+| Login | Main Activity | Invoice List | Skeleton Shimmer |
+|:---:|:---:|:---:|:---:|
+| <img width="200" alt="Image" src="https://github.com/user-attachments/assets/c07cf24f-d442-4def-a367-cc242f6905df" /> | <img width="200"  alt="Image" src="https://github.com/user-attachments/assets/ac727795-bdaf-48c0-9b48-725e1ef6c3ce" /> | <img width= "200" alt="Image" src="https://github.com/user-attachments/assets/1372326a-36bd-446f-8744-bb3725714f0e" />      | <img width="200" alt="Image" src="https://github.com/user-attachments/assets/74af082a-6f32-40ab-bf64-35b166329ccb" />
+ | <img width="200" alt="Image" src="https://github.com/user-attachments/assets/c27f9aea-66c5-480a-b93f-c33c014658ea" /> | <img width="200" alt="Image" src="https://github.com/user-attachments/assets/b34e1597-b4f9-481c-8212-d9e45991cc5f" /> | <img width="200" alt="Image" src="https://github.com/user-attachments/assets/63776004-d4b9-4e49-8f32-51077922fb2e" /> | <img width="200" alt="Image" src="https://github.com/user-attachments/assets/977b6e80-6056-4f90-9246-3b6f55848dc4" />
+| Filters | Date Picker Calendar | Empty State | Invoice Details View |
+
+
+
 
 ## 💡 Features
 
