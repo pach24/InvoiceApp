@@ -1,6 +1,8 @@
 package com.nexosolar.android.data;
 
 import android.content.Context;
+import android.util.Log;
+
 import com.nexosolar.android.data.local.AppDatabase;
 import com.nexosolar.android.data.local.InvoiceDao;
 import com.nexosolar.android.data.local.InvoiceEntity;
@@ -30,12 +32,16 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
     public InvoiceRepositoryImpl(boolean useMock, Context context) {
         // Inicializar API o Mock según el flag
         if (useMock) {
+            // Asegúrate de que RetromockClient esté accesible desde este módulo
             this.apiService = RetromockClient.getClient(context).create(ApiService.class);
+            Log.d("DEBUG_REPO", "Repositorio inicializado en modo MOCK");
         } else {
             this.apiService = RetroFitClient.getClient().create(ApiService.class);
+            Log.d("DEBUG_REPO", "Repositorio inicializado en modo REAL (API)");
         }
 
         // Inicializar siempre la base de datos local
+        // Asegúrate de que AppDatabase esté en com.nexosolar.android.data.local
         AppDatabase db = AppDatabase.getInstance(context);
         this.invoiceDao = db.invoiceDao();
     }
@@ -44,6 +50,7 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
     public void getFacturas(RepositoryCallback<List<Invoice>> callback) {
         executor.execute(() -> {
             try {
+                Log.d("DEBUG_REPO", "Consultando base de datos local...");
                 // 1. Obtener datos de la DB
                 List<InvoiceEntity> entities = invoiceDao.getAllList();
 
@@ -53,57 +60,74 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
                     for (InvoiceEntity entity : entities) {
                         domainList.add(entity.toDomain());
                     }
+                    Log.d("DEBUG_REPO", "Datos locales encontrados: " + entities.size());
+                } else {
+                    Log.d("DEBUG_REPO", "Base de datos local vacía (null)");
                 }
 
                 // 3. Devolver datos al callback
                 callback.onSuccess(domainList);
 
-            } catch (Throwable e) { // CAMBIO CLAVE: Usamos Throwable en vez de Exception
-                e.printStackTrace(); // Imprimir el error real en el Logcat
-                callback.onError(e); // Avisar al ViewModel para que oculte el "Loading..."
+            } catch (Throwable e) { // CAMBIO CLAVE: Throwable
+                Log.e("DEBUG_REPO", "Error leyendo DB: " + e.getMessage());
+                e.printStackTrace();
+                callback.onError(e);
             }
         });
     }
 
-
     @Override
     public void refreshFacturas(RepositoryCallback<Boolean> callback) {
+        Log.d("DEBUG_REPO", "Iniciando refreshFacturas (Llamada a API)...");
+
         apiService.getFacturas().enqueue(new Callback<InvoiceResponse>() {
             @Override
             public void onResponse(Call<InvoiceResponse> call, Response<InvoiceResponse> response) {
+                Log.d("DEBUG_REPO", "Respuesta API recibida. Code: " + response.code());
+
                 if (response.isSuccessful() && response.body() != null) {
                     List<Invoice> facturasApi = response.body().getFacturas();
+                    Log.d("DEBUG_REPO", "Facturas descargadas: " + facturasApi.size());
+
+                    // Guardar en DB en hilo secundario
                     executor.execute(() -> {
                         try {
+                            Log.d("DEBUG_REPO", "Guardando datos en Room...");
                             // Mapear Domain (API) -> Entity (BD)
                             List<InvoiceEntity> entitiesToSave = new ArrayList<>();
                             for (Invoice inv : facturasApi) {
                                 entitiesToSave.add(InvoiceEntity.fromDomain(inv));
                             }
+
                             // Reemplazar datos en BD
                             invoiceDao.deleteAll();
                             invoiceDao.insertAll(entitiesToSave);
 
+                            Log.d("DEBUG_REPO", "Datos guardados correctamente.");
+
+                            // Avisar que terminó correctamente
                             if (callback != null) callback.onSuccess(true);
 
-                        } catch (Throwable e) { // <--- ¡CAMBIO IMPORTANTE! Usar Throwable
+                        } catch (Throwable e) { // CAMBIO CLAVE: Throwable
+                            Log.e("DEBUG_REPO", "Error guardando en DB: " + e.getMessage());
                             e.printStackTrace();
                             if (callback != null) callback.onError(e);
                         }
                     });
                 } else {
+                    Log.e("DEBUG_REPO", "Error API: " + response.message());
+                    // La API respondió pero con error (ej. 404, 500)
                     if (callback != null) callback.onSuccess(false);
                 }
             }
 
             @Override
             public void onFailure(Call<InvoiceResponse> call, Throwable t) {
+                Log.e("DEBUG_REPO", "Fallo total de red: " + t.getMessage());
                 t.printStackTrace();
+                // Error de red
                 if (callback != null) callback.onError(t);
             }
         });
     }
-
-
-
 }

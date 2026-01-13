@@ -23,6 +23,9 @@ public class InvoiceViewModel extends ViewModel {
 
     private final GetInvoicesUseCase getInvoicesUseCase;
 
+    // BANDERA: Controla que la recarga automática solo ocurra una vez al inicio
+    private boolean isFirstLoad = true;
+
     public InvoiceViewModel(GetInvoicesUseCase useCase) {
         this.getInvoicesUseCase = useCase;
         // Cargar datos de la BD local al iniciar
@@ -32,16 +35,19 @@ public class InvoiceViewModel extends ViewModel {
     /**
      * Pide al dominio la lista de facturas local (BD)
      */
-    // 2. Asegúrate de que cargarFacturas llame a recarga solo si es necesario
     public void cargarFacturas() {
         getInvoicesUseCase.invoke(new RepositoryCallback<List<Invoice>>() {
             @Override
             public void onSuccess(List<Invoice> result) {
-                if (result != null && !result.isEmpty()) {
+                // 1. Mostrar caché local inmediatamente
+                if (result != null) {
                     facturasOriginales = result;
                     facturas.postValue(result);
-                } else {
-                    // Solo si la BD está vacía intentamos ir a internet
+                }
+
+                // 2. Si es la primera carga o la lista está vacía, forzar actualización de red
+                if (isFirstLoad || (result == null || result.isEmpty())) {
+                    isFirstLoad = false; // Marcamos para no repetir el bucle
                     forzarRecarga();
                 }
             }
@@ -49,7 +55,14 @@ public class InvoiceViewModel extends ViewModel {
             @Override
             public void onError(Throwable error) {
                 error.printStackTrace();
-                facturas.postValue(new ArrayList<>());
+
+                // Si falla la lectura local, intentamos red si es la primera vez
+                if (isFirstLoad) {
+                    isFirstLoad = false;
+                    forzarRecarga();
+                } else {
+                    facturas.postValue(new ArrayList<>());
+                }
             }
         });
     }
@@ -59,26 +72,28 @@ public class InvoiceViewModel extends ViewModel {
     }
 
     /**
-     * Descarga datos de internet y actualiza la BD local
+     * Descarga datos de internet (o Mock) y actualiza la BD local
      */
     public void forzarRecarga() {
         getInvoicesUseCase.refresh(new RepositoryCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {
-                cargarFacturas(); // Si sale bien, recargamos la lista local
+                // Al terminar de descargar y guardar, volvemos a leer la BD para actualizar la UI.
+                // Como 'isFirstLoad' ya es false, cargarFacturas() NO volverá a llamar a forzarRecarga().
+                cargarFacturas();
             }
 
             @Override
             public void onError(Throwable t) {
                 t.printStackTrace();
-                // Si falla la red, NO llamamos a cargarFacturas() otra vez para evitar bucles.
-                // Simplemente paramos el loading avisando que no hay datos nuevos.
+                // Si falla la red, mantenemos lo que teníamos (o lista vacía) y paramos el loading
+                // Usamos postValue por seguridad al venir de callback
                 facturas.postValue(facturasOriginales != null ? facturasOriginales : new ArrayList<>());
             }
         });
     }
 
-    // --- LÓGICA DE FILTROS (Sin cambios) ---
+    // --- LÓGICA DE FILTROS ---
 
     public void filtrarFacturas(List<String> estadosSeleccionados,
                                 LocalDate fechaInicio,
@@ -87,7 +102,7 @@ public class InvoiceViewModel extends ViewModel {
                                 Double importeMax) {
 
         if (facturasOriginales == null || facturasOriginales.isEmpty()) {
-            facturas.setValue(new ArrayList<>());
+            facturas.postValue(new ArrayList<>()); // postValue es más seguro
             return;
         }
 
@@ -120,7 +135,7 @@ public class InvoiceViewModel extends ViewModel {
                 facturasFiltradas.add(factura);
             }
         }
-        facturas.setValue(facturasFiltradas);
+        facturas.postValue(facturasFiltradas); // postValue es más seguro
     }
 
     public float getMaxImporte() {

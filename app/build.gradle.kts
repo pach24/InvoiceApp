@@ -36,6 +36,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data-retrofit"))
     implementation(project(":core"))
+    implementation(project(":data"))
 
     // --- ANDROID UI ---
     implementation(libs.appcompat)
@@ -51,15 +52,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-runtime:$lifecycleVersion")
 
-    // --- NETWORKING ---
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("co.infinum:retromock:1.1.0")
-
-    // --- DATABASE (ROOM) ---
-    val roomVersion = "2.6.1"
-    implementation("androidx.room:room-runtime:$roomVersion")
-    annotationProcessor("androidx.room:room-compiler:$roomVersion")
 
     // --- DESUGARING ---
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
