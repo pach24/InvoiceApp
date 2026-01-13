@@ -63,9 +63,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleversion")
     //Conversor de datos a nuestro modelo
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    // Annotation processor
+
     annotationProcessor("androidx.lifecycle:lifecycle-compiler:$lifecycleversion")
-    // Alternativamente - si usas Java 8, usa lo siguiente en lugar de lifecycle-compiler
+
     implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycleversion")
 
     // Retrofit para las peticiones de red
@@ -80,10 +80,15 @@ dependencies {
     implementation ("co.infinum:retromock:1.1.0")
 
     implementation("androidx.recyclerview:recyclerview:1.4.0")
-    // For control over item selection of both touch and mouse driven selection
+
     implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
 
     implementation("com.google.android.material:material:1.6.0")
+
+    //ROOM
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
 
 
 }

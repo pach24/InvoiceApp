@@ -51,7 +51,7 @@ public class InvoiceListActivity extends AppCompatActivity {
         invoiceViewModel = new ViewModelProvider(this, invoiceViewModelFactory).get(InvoiceViewModel.class);
 
         // Cargar facturas iniciales
-        invoiceViewModel.cargarFacturas();
+
 
         // --- OBSERVER PRINCIPAL ---
         invoiceViewModel.getFacturas().observe(this, facturas -> {

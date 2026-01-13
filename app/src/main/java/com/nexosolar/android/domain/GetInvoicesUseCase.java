@@ -1,13 +1,8 @@
 package com.nexosolar.android.domain;
 
-import androidx.annotation.NonNull;
-
+import androidx.lifecycle.LiveData;
 import com.nexosolar.android.data.InvoiceRepository;
-import com.nexosolar.android.data.InvoiceResponse;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.List;
 
 public class GetInvoicesUseCase {
 
@@ -17,25 +12,13 @@ public class GetInvoicesUseCase {
         this.repository = repository;
     }
 
-    // ANTES: public void execute(boolean useMock, final Callback<InvoiceResponse> callback)
-    // AHORA: Quitamos 'boolean useMock'
-    public void execute(final Callback<InvoiceResponse> callback) {
+    // 1. Obtener el flujo de datos (Lectura)
+    public LiveData<List<Invoice>> invoke() {
+        return repository.getFacturas();
+    }
 
-        // Ya no pasamos 'useMock' al repositorio tampoco
-        repository.getFacturas().enqueue(new Callback<InvoiceResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<InvoiceResponse> call, @NonNull Response<InvoiceResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    callback.onResponse(call, response);
-                } else {
-                    callback.onFailure(call, new Throwable("Error en la respuesta de la API"));
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<InvoiceResponse> call, @NonNull Throwable t) {
-                callback.onFailure(call, t);
-            }
-        });
+    // 2. Forzar actualización desde la nube (Escritura)
+    public void refresh() {
+        repository.refreshFacturas();
     }
 }

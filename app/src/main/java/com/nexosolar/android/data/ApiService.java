@@ -9,6 +9,6 @@ public interface ApiService {
 
     @Mock
     @MockResponse(body = "facturas.json") // Archivo en assets
-    @GET("facturas") // Endpoint real de la API
+    @GET("invoices.json") // Endpoint real de la API
     Call<InvoiceResponse> getFacturas();
 }

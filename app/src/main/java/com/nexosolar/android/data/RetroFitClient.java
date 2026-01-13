@@ -12,7 +12,8 @@ import java.time.LocalDate;
 // Devuelve una instancia de RetroFit con la URL base de la api
 public class RetroFitClient {
     private static Retrofit retrofit;
-    private static final String BASE_URL = "https://viewnextandroid.wiremockapi.cloud/";
+    private static final String BASE_URL = "https://francisco-pacheco.com/api/" +
+            "";
 
     public static Retrofit getClient(Context context) {
         if (retrofit == null) {

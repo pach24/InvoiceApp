@@ -1,73 +1,58 @@
 package com.nexosolar.android.ui;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.nexosolar.android.domain.GetInvoicesUseCase;
-import com.nexosolar.android.domain.Invoice;
 import com.nexosolar.android.data.InvoiceRepository;
-import com.nexosolar.android.data.InvoiceResponse;
+import com.nexosolar.android.domain.GetInvoicesUseCase; // IMPORTANTE
+import com.nexosolar.android.domain.Invoice;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import java.time.LocalDate;
-
 public class InvoiceViewModel extends ViewModel {
 
-    // LiveData que la UI observa
-    private final MutableLiveData<List<Invoice>> facturas = new MutableLiveData<>();
+    // LiveData principal
+    private final MediatorLiveData<List<Invoice>> facturas = new MediatorLiveData<>();
 
-    // Lista interna para preservar TODOS los datos
+    // Copia local para filtros
     private List<Invoice> facturasOriginales = new ArrayList<>();
 
+    // CAMBIO: Declaramos el Caso de Uso (NO el repositorio)
     private final GetInvoicesUseCase getInvoicesUseCase;
 
-    // ELIMINADO: private final boolean useMock; (Ya no hace falta guardarlo en la clase)
-
     public InvoiceViewModel(boolean useMock, Context context) {
-        // ELIMINADO: this.useMock = useMock;
-
-        // Usamos el booleano solo aquí para crear el repositorio correcto
+        // 1. Creamos el Repositorio (solo localmente, para pasárselo al UseCase)
         InvoiceRepository repository = new InvoiceRepository(useMock, context);
+
+        // 2. Inicializamos el Caso de Uso
         this.getInvoicesUseCase = new GetInvoicesUseCase(repository);
+
+        // 3. Conectamos la tubería: Room -> UseCase -> ViewModel -> UI
+        facturas.addSource(getInvoicesUseCase.invoke(), listaDeRoom -> {
+            if (listaDeRoom != null) {
+                this.facturasOriginales = listaDeRoom;
+                this.facturas.setValue(listaDeRoom);
+            }
+        });
+
+        // 4. Pedimos datos frescos a la API
+        getInvoicesUseCase.refresh();
     }
 
     public LiveData<List<Invoice>> getFacturas() {
         return facturas;
     }
 
-    public void cargarFacturas() {
-        // Correcto: ya no pasamos parámetros aquí
-        getInvoicesUseCase.execute(new Callback<InvoiceResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<InvoiceResponse> call, @NonNull Response<InvoiceResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    facturasOriginales = new ArrayList<>(response.body().getFacturas());
-                    facturas.setValue(facturasOriginales);
-                } else {
-                    manejarError();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<InvoiceResponse> call, @NonNull Throwable t) {
-                manejarError();
-            }
-        });
+    public void forzarRecarga() {
+        // CAMBIO: Ahora usamos el UseCase, no el repositorio directo
+        getInvoicesUseCase.refresh();
     }
 
-    private void manejarError() {
-        facturasOriginales = new ArrayList<>();
-        facturas.setValue(null);
-    }
+    // --- LÓGICA DE FILTROS (Sin cambios) ---
 
     public List<Invoice> filtrarFacturas(List<String> estadosSeleccionados,
                                          LocalDate fechaInicio,
@@ -83,11 +68,9 @@ public class InvoiceViewModel extends ViewModel {
         List<Invoice> facturasFiltradas = new ArrayList<>();
 
         for (Invoice factura : facturasOriginales) {
-            // 1. Filtrar por estado
             boolean cumpleEstado = (estadosSeleccionados == null ||
                     estadosSeleccionados.contains(factura.getDescEstado()));
 
-            // 2. Filtrar por fecha
             boolean cumpleFecha = true;
             LocalDate fechaFactura = factura.getFecha();
 
@@ -104,7 +87,6 @@ public class InvoiceViewModel extends ViewModel {
                 }
             }
 
-            // 3. Filtrar por importe
             boolean cumpleImporte = (importeMin == null || factura.getImporteOrdenacion() >= importeMin) &&
                     (importeMax == null || factura.getImporteOrdenacion() <= importeMax);
 
@@ -123,7 +105,6 @@ public class InvoiceViewModel extends ViewModel {
         }
         float maxImporte = 0f;
         for (Invoice factura : facturasOriginales) {
-            // Protección contra null pointer si importeOrdenacion fuera objeto (aunque es float primitivo aquí)
             if (factura.getImporteOrdenacion() > maxImporte) {
                 maxImporte = factura.getImporteOrdenacion();
             }
@@ -131,22 +112,14 @@ public class InvoiceViewModel extends ViewModel {
         return maxImporte;
     }
 
-    /**
-     * CORREGIDO: Lógica más robusta para encontrar la fecha más antigua.
-     */
     public LocalDate getOldestDate() {
         if (facturasOriginales == null || facturasOriginales.isEmpty()) {
             return null;
         }
-
         LocalDate oldestDate = null;
-
         for (Invoice factura : facturasOriginales) {
             LocalDate currentDate = factura.getFecha();
-
-            // Si la factura tiene fecha...
             if (currentDate != null) {
-                // Si aún no tenemos fecha antigua guardada, o la actual es anterior a la guardada...
                 if (oldestDate == null || currentDate.isBefore(oldestDate)) {
                     oldestDate = currentDate;
                 }
