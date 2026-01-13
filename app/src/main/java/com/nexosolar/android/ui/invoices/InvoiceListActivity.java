@@ -1,4 +1,4 @@
-package com.nexosolar.android.ui;
+package com.nexosolar.android.ui.invoices;
 
 import android.os.Bundle;
 import android.view.Menu;

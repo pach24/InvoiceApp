@@ -1,4 +1,4 @@
-package com.nexosolar.android.ui;
+package com.nexosolar.android.ui.main;
 
 import android.os.Bundle;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.nexosolar.android.databinding.ActivityMainBinding;
+import com.nexosolar.android.ui.invoices.InvoiceListActivity;
 
 public class MainActivity extends AppCompatActivity {
 

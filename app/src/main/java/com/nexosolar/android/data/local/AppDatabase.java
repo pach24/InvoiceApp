@@ -5,9 +5,9 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
-import com.nexosolar.android.domain.Invoice;
 
-@Database(entities = {Invoice.class}, version = 1, exportSchema = false)
+
+@Database(entities = {InvoiceEntity.class}, version = 2, exportSchema = false)
 @TypeConverters({RoomConverters.class}) // Usamos el convertidor de fechas
 public abstract class AppDatabase extends RoomDatabase {
 

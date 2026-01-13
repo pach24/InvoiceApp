@@ -1,21 +1,26 @@
 package com.nexosolar.android.ui;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.lifecycle.MutableLiveData;
 
 import com.nexosolar.android.domain.GetInvoicesUseCase;
 import com.nexosolar.android.domain.Invoice;
+import com.nexosolar.android.domain.RepositoryCallback;
+import com.nexosolar.android.ui.invoices.InvoiceViewModel;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -24,7 +29,6 @@ import java.util.List;
 @RunWith(MockitoJUnitRunner.class)
 public class InvoiceViewModelTest {
 
-    // Regla para que LiveData funcione de forma síncrona en tests
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
@@ -32,59 +36,64 @@ public class InvoiceViewModelTest {
     private GetInvoicesUseCase useCase;
 
     private InvoiceViewModel viewModel;
-    private MutableLiveData<List<Invoice>> facturasLiveData;
 
     @Before
     public void setUp() {
-        // 1. Preparamos el mock del LiveData
-        facturasLiveData = new MutableLiveData<>();
-        when(useCase.invoke()).thenReturn(facturasLiveData);
+        // --- SIMULACIÓN DEL COMPORTAMIENTO ASÍNCRONO ---
 
-        // 2. Instanciamos el ViewModel con el UseCase simulado
+        // Cuando el ViewModel llame a useCase.invoke(callback)...
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) {
+                // 1. Recuperamos el callback que le pasó el ViewModel
+                RepositoryCallback<List<Invoice>> callback = invocation.getArgument(0);
+
+                // 2. Simulamos que la base de datos devuelve una lista vacía inmediatamente
+                callback.onSuccess(new ArrayList<>());
+                return null;
+            }
+        }).when(useCase).invoke(any()); // interceptamos cualquier llamada a invoke
+
+        // Inicializamos el ViewModel (esto dispara el 'invoke' simulado arriba)
         viewModel = new InvoiceViewModel(useCase);
     }
 
     @Test
-    public void alIniciar_LlamaARefresh() {
-        // Verificamos que el constructor pida datos nuevos automáticamente
-        verify(useCase).refresh();
+    public void alIniciar_CargaFacturasLocalmente() {
+        // Verificamos que al crearse, el ViewModel pidió datos al caso de uso
+        verify(useCase).invoke(any());
     }
 
     @Test
     public void filtrarFacturas_PorImporte_DevuelveCorrectas() {
-
-        // 1. GIVEN: Creamos una lista con 3 facturas de prueba
+        // 1. GIVEN: Datos de prueba
         List<Invoice> datosPrueba = new ArrayList<>();
-        // Hacemos el cast (float)
-        datosPrueba.add(crearFactura(100.0f, "Pagada"));    // > 80
-        datosPrueba.add(crearFactura(500.0f, "Pendiente")); // > 80
-        datosPrueba.add(crearFactura(50.0f, "Pagada"));     // < 80
+        datosPrueba.add(crearFactura(100.0f, "Pagada"));
+        datosPrueba.add(crearFactura(500.0f, "Pendiente"));
+        datosPrueba.add(crearFactura(50.0f, "Pagada"));
 
-        // Inyectamos estos datos en el ViewModel
+        // Inyectamos datos manualmente
         viewModel.setFacturasOriginalesTest(datosPrueba);
 
-        // 2. WHEN: Filtramos facturas con importe mínimo de 80.0
-        List<Invoice> resultado = viewModel.filtrarFacturas(
-                null,
-                null,
-                null,
-                80.0,
-                null
-        );
+        // 2. WHEN: Filtramos > 80
+        // Nota: Ahora filtrarFacturas actualiza el LiveData, no devuelve lista directa
+        // Dependiendo de tu implementación de filtrarFacturas, si devuelve void, tenemos que observar el LiveData.
 
-        // 3. THEN: Deberían quedar exactamente 2 facturas
+
+        viewModel.filtrarFacturas(null, null, null, 80.0, null);
+
+        // 3. THEN: Observamos el valor actual del LiveData
+        List<Invoice> resultado = viewModel.getFacturas().getValue();
+
+        assertNotNull(resultado);
         assertEquals(2, resultado.size());
     }
 
-    // Método helper
     private Invoice crearFactura(float importe, String estado) {
         Invoice invoice = new Invoice();
-        // Aquí pasamos el float directamente
         invoice.setImporteOrdenacion(importe);
         invoice.setDescEstado(estado);
         invoice.setFecha(LocalDate.now());
         return invoice;
     }
 }
-
-

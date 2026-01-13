@@ -1,4 +1,4 @@
-package com.nexosolar.android.data;
+package com.nexosolar.android.data.remote;
 
 import co.infinum.retromock.meta.Mock;
 import co.infinum.retromock.meta.MockResponse;

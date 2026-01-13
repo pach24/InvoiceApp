@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:padding="0dp"
     android:background="@android:color/white"
-    tools:context=".ui.InvoiceListActivity">
+    tools:context=".ui.invoices.InvoiceListActivity">
 
     <!-- 1. TOOLBAR -->
     <androidx.appcompat.widget.Toolbar

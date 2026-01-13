@@ -1,4 +1,4 @@
-package com.nexosolar.android.data;
+package com.nexosolar.android.data.remote;
 
 import com.nexosolar.android.domain.Invoice;
 

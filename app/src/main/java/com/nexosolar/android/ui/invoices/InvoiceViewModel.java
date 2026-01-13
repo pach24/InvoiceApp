@@ -1,65 +1,94 @@
-package com.nexosolar.android.ui;
+package com.nexosolar.android.ui.invoices;
 
-import android.content.Context;
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.nexosolar.android.data.InvoiceRepository;
-import com.nexosolar.android.domain.GetInvoicesUseCase; // IMPORTANTE
+import com.nexosolar.android.domain.GetInvoicesUseCase;
 import com.nexosolar.android.domain.Invoice;
+import com.nexosolar.android.domain.RepositoryCallback;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.VisibleForTesting;
-
 public class InvoiceViewModel extends ViewModel {
 
-    // LiveData principal
-    private final MediatorLiveData<List<Invoice>> facturas = new MediatorLiveData<>();
+    // MutableLiveData simple para la lista que observa la UI
+    private final MutableLiveData<List<Invoice>> facturas = new MutableLiveData<>();
 
-    // Copia local para filtros
+    // Lista auxiliar para no perder los datos originales al filtrar
     private List<Invoice> facturasOriginales = new ArrayList<>();
 
-    // CAMBIO: Declaramos el Caso de Uso (NO el repositorio)
     private final GetInvoicesUseCase getInvoicesUseCase;
 
     public InvoiceViewModel(GetInvoicesUseCase useCase) {
         this.getInvoicesUseCase = useCase;
+        // Cargar datos de la BD local al iniciar
+        cargarFacturas();
+    }
 
-        // Lógica de conexión (Igual que antes)
-        facturas.addSource(getInvoicesUseCase.invoke(), listaDeRoom -> {
-            if (listaDeRoom != null) {
-                this.facturasOriginales = listaDeRoom;
-                this.facturas.setValue(listaDeRoom);
+    /**
+     * Pide al dominio la lista de facturas local (BD)
+     */
+    // 2. Asegúrate de que cargarFacturas llame a recarga solo si es necesario
+    public void cargarFacturas() {
+        getInvoicesUseCase.invoke(new RepositoryCallback<List<Invoice>>() {
+            @Override
+            public void onSuccess(List<Invoice> result) {
+                if (result != null && !result.isEmpty()) {
+                    facturasOriginales = result;
+                    facturas.postValue(result);
+                } else {
+                    // Solo si la BD está vacía intentamos ir a internet
+                    forzarRecarga();
+                }
+            }
+
+            @Override
+            public void onError(Throwable error) {
+                error.printStackTrace();
+                facturas.postValue(new ArrayList<>());
             }
         });
-
-        getInvoicesUseCase.refresh();
     }
 
     public LiveData<List<Invoice>> getFacturas() {
         return facturas;
     }
 
+    /**
+     * Descarga datos de internet y actualiza la BD local
+     */
     public void forzarRecarga() {
-        // CAMBIO: Ahora usamos el UseCase, no el repositorio directo
-        getInvoicesUseCase.refresh();
+        getInvoicesUseCase.refresh(new RepositoryCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean success) {
+                cargarFacturas(); // Si sale bien, recargamos la lista local
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                t.printStackTrace();
+                // Si falla la red, NO llamamos a cargarFacturas() otra vez para evitar bucles.
+                // Simplemente paramos el loading avisando que no hay datos nuevos.
+                facturas.postValue(facturasOriginales != null ? facturasOriginales : new ArrayList<>());
+            }
+        });
     }
 
     // --- LÓGICA DE FILTROS (Sin cambios) ---
 
-    public List<Invoice> filtrarFacturas(List<String> estadosSeleccionados,
-                                         LocalDate fechaInicio,
-                                         LocalDate fechaFin,
-                                         Double importeMin,
-                                         Double importeMax) {
+    public void filtrarFacturas(List<String> estadosSeleccionados,
+                                LocalDate fechaInicio,
+                                LocalDate fechaFin,
+                                Double importeMin,
+                                Double importeMax) {
 
         if (facturasOriginales == null || facturasOriginales.isEmpty()) {
             facturas.setValue(new ArrayList<>());
-            return new ArrayList<>();
+            return;
         }
 
         List<Invoice> facturasFiltradas = new ArrayList<>();
@@ -91,15 +120,11 @@ public class InvoiceViewModel extends ViewModel {
                 facturasFiltradas.add(factura);
             }
         }
-
         facturas.setValue(facturasFiltradas);
-        return facturasFiltradas;
     }
 
     public float getMaxImporte() {
-        if (facturasOriginales == null || facturasOriginales.isEmpty()) {
-            return 0f;
-        }
+        if (facturasOriginales == null || facturasOriginales.isEmpty()) return 0f;
         float maxImporte = 0f;
         for (Invoice factura : facturasOriginales) {
             if (factura.getImporteOrdenacion() > maxImporte) {
@@ -110,9 +135,7 @@ public class InvoiceViewModel extends ViewModel {
     }
 
     public LocalDate getOldestDate() {
-        if (facturasOriginales == null || facturasOriginales.isEmpty()) {
-            return null;
-        }
+        if (facturasOriginales == null || facturasOriginales.isEmpty()) return null;
         LocalDate oldestDate = null;
         for (Invoice factura : facturasOriginales) {
             LocalDate currentDate = factura.getFecha();
@@ -134,8 +157,4 @@ public class InvoiceViewModel extends ViewModel {
         this.facturasOriginales = facturas;
         this.facturas.setValue(facturas);
     }
-
-
 }
-
-

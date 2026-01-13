@@ -1,9 +1,9 @@
-package com.nexosolar.android.data;
+package com.nexosolar.android.data.remote;
 
 import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.nexosolar.android.utils.LocalDateTypeAdapter;
+import com.nexosolar.android.core.LocalDateTypeAdapter;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,20 +1,35 @@
 package com.nexosolar.android.domain;
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+import java.io.Serializable;
 import java.time.LocalDate;
 
-@Entity(tableName = "facturas")
-public class Invoice {
+/**
+ * Entidad de Dominio Pura.
+ * No contiene anotaciones de Android (Room, Retrofit, etc.).
+ * Representa una factura en la lógica de negocio.
+ */
+public class Invoice implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
+    // Identificador (opcional en dominio, pero útil si lo necesitas para navegar a detalles)
     private int id;
 
     private String descEstado;
     private float importeOrdenacion;
     private LocalDate fecha;
 
-    // --- GETTERS Y SETTERS NECESARIOS PARA ROOM ---
+    // --- CONSTRUCTORES ---
+
+    public Invoice() {
+        // Constructor vacío requerido por muchas herramientas de serialización
+    }
+
+    public Invoice(String descEstado, float importeOrdenacion, LocalDate fecha) {
+        this.descEstado = descEstado;
+        this.importeOrdenacion = importeOrdenacion;
+        this.fecha = fecha;
+    }
+
+    // --- GETTERS Y SETTERS ---
 
     public int getId() {
         return id;
@@ -28,7 +43,6 @@ public class Invoice {
         return descEstado;
     }
 
-    // ¡ESTE ES EL QUE TE FALTABA!
     public void setDescEstado(String descEstado) {
         this.descEstado = descEstado;
     }
@@ -37,7 +51,6 @@ public class Invoice {
         return importeOrdenacion;
     }
 
-    // Añadimos este también por si acaso
     public void setImporteOrdenacion(float importeOrdenacion) {
         this.importeOrdenacion = importeOrdenacion;
     }
@@ -46,14 +59,17 @@ public class Invoice {
         return fecha;
     }
 
-    // Añadimos este también por si acaso
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
-    // --- TUS MÉTODOS AUXILIARES ---
+    // --- MÉTODOS DE LÓGICA DE NEGOCIO (Opcionales) ---
 
+    // Puedes mantener métodos auxiliares siempre que no usen clases de Android
+    // Si InvoiceState es un Enum puro de Java, esto está perfecto.
+    /*
     public InvoiceState getEstadoEnum() {
         return InvoiceState.fromTextoServidor(this.descEstado);
     }
+    */
 }
