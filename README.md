@@ -51,10 +51,11 @@ The main goal of the project is to demonstrate modern Android development practi
 | Filters | Date Picker Calendar | Empty State | Invoice Details View |
 
 
-
+---
 
 ## 💡 Features
 
+- **Offline-First Architecture:** Uses **Room Database** as the single source of truth, ensuring the app works seamlessly without internet.
 - **Smart Loading:** Skeleton shimmer animation provides immediate visual feedback during data fetching.
 - **Robust Filtering:** Filter by status, date range (using modern `MaterialDatePicker`), and amount.
 - **State Management:**
@@ -63,25 +64,36 @@ The main goal of the project is to demonstrate modern Android development practi
   -  **Empty:** Custom illustration and helpful text when no results are found.
   -  **Error:** Retry mechanism for network failures.
 - **Dual Data Source:** Toggle between **Real API (Retrofit)** and **Mock Data (Retromock)** instantly.
+- **Quality Assurance:** Comprehensive **Unit Tests** for Domain (Use Cases) and UI Logic (ViewModels).
 - **Modern UI:** Material Design 3 components, rounded corners, and edge-to-edge support.
+
 
 
 ---
 
 ## 🏛️ Architecture
 
-The project follows a layered design with a focus on clarity, testability, and maintainability.
+The project follows a **Clean Architecture** approach with **MVVM**, ensuring separation of concerns and high testability.
 
 ### Presentation Layer (UI + ViewModel)
+- Pattern: **MVVM (Model–View–ViewModel)**.
+- **Dependency Injection:** ViewModels receive dependencies (UseCases) via a Factory, keeping them decoupled from data sources.
+- **Unit Testing:** `InvoiceViewModel` is tested using JUnit 4 and Mockito to verify filtering logic and state updates.
 
-- Pattern: **MVVM (Model–View–ViewModel)**.  
-- Responsibilities:
-  - UI logic and state management.  
-  - Observing `LiveData` and updating views.  
-- Main components:
-  - `MainActivity`: entry point, navigation to the invoice list, and toggle between Retrofit and Retromock.  
-  - `InvoiceListActivity`: displays the invoice list, observes `LiveData<List<Invoice>>`, and integrates filtering.  
-  - `FilterFragment`: panel to select filter criteria (status, dates, amount).  
+### Domain Layer (Use Case)
+- `GetInvoicesUseCase`:
+  - Pure Java logic.
+  - Orchestrates data flow between the Repository and ViewModel.
+  - Tested in isolation to ensure correct business rules.
+
+### Data Layer (Repository + Room + API)
+- `InvoiceRepository`:
+  - Implements the **Single Source of Truth** pattern.
+  - Fetches data from API (Retrofit/Retromock) and saves it to **Room Database**.
+  - The UI always observes the local database, ensuring offline capability.
+- `AppDatabase` (Room):
+  - Local persistence for invoices.
+  - Handles complex types like `LocalDate` using TypeConverters.
 
 ### Domain Layer (Use Case)
 
@@ -134,6 +146,19 @@ cd <your-repo>
 
 - Select a device or emulator.  
 - Click **Run** ▶️ in Android Studio.  
+
+---
+
+## 🧪 Testing Strategy
+
+The project includes a robust suite of Unit Tests ensuring the reliability of business logic and view states:
+
+- **Domain Layer Tests:** Verify that `GetInvoicesUseCase` correctly interacts with the Repository.
+- **ViewModel Tests:** Ensure `InvoiceViewModel` correctly filters data based on user input (Dates, Amounts, Status) and handles the initial data load.
+- **Tools Used:** 
+  - **JUnit 4:** Test framework.
+  - **Mockito:** For mocking dependencies and verifying interactions.
+  - **InstantTaskExecutorRule:** For testing LiveData synchronously.
 
 ---
 
@@ -213,13 +238,12 @@ You can download the latest APK of **InvoiceApp** from the releases section:
 
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=flat&logo=java&logoColor=white)
 ![Android](https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white)
-![Android%20Studio](https://img.shields.io/badge/Android_Studio-3DDC84?logo=android-studio&logoColor=white)
+![Room](https://img.shields.io/badge/Room_Database-42A5F5?logo=sqlite&logoColor=white)
 ![MVVM](https://img.shields.io/badge/Architecture-MVVM-2962FF)
+![JUnit](https://img.shields.io/badge/Testing-JUnit_4-25A162?logo=junit5&logoColor=white)
+![Mockito](https://img.shields.io/badge/Testing-Mockito-yellow?logo=mockito&logoColor=black)
 ![Retrofit](https://img.shields.io/badge/Retrofit-2E7D32)
-![Retromock](https://img.shields.io/badge/Retromock-8E24AA)
-![Material%20Design](https://img.shields.io/badge/Material_Design_Components-757575?logo=material-design&logoColor=white)
-![ViewModel](https://img.shields.io/badge/Android%20ViewModel-4285F4)
-![LiveData](https://img.shields.io/badge/LiveData-FF6F00)
+
 
 ---
 
