@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.VisibleForTesting;
+
 public class InvoiceViewModel extends ViewModel {
 
     // LiveData principal
@@ -24,14 +26,10 @@ public class InvoiceViewModel extends ViewModel {
     // CAMBIO: Declaramos el Caso de Uso (NO el repositorio)
     private final GetInvoicesUseCase getInvoicesUseCase;
 
-    public InvoiceViewModel(boolean useMock, Context context) {
-        // 1. Creamos el Repositorio (solo localmente, para pasárselo al UseCase)
-        InvoiceRepository repository = new InvoiceRepository(useMock, context);
+    public InvoiceViewModel(GetInvoicesUseCase useCase) {
+        this.getInvoicesUseCase = useCase;
 
-        // 2. Inicializamos el Caso de Uso
-        this.getInvoicesUseCase = new GetInvoicesUseCase(repository);
-
-        // 3. Conectamos la tubería: Room -> UseCase -> ViewModel -> UI
+        // Lógica de conexión (Igual que antes)
         facturas.addSource(getInvoicesUseCase.invoke(), listaDeRoom -> {
             if (listaDeRoom != null) {
                 this.facturasOriginales = listaDeRoom;
@@ -39,7 +37,6 @@ public class InvoiceViewModel extends ViewModel {
             }
         });
 
-        // 4. Pedimos datos frescos a la API
         getInvoicesUseCase.refresh();
     }
 
@@ -131,4 +128,14 @@ public class InvoiceViewModel extends ViewModel {
     public boolean hayDatosCargados() {
         return facturasOriginales != null && !facturasOriginales.isEmpty();
     }
+
+    @VisibleForTesting
+    public void setFacturasOriginalesTest(List<Invoice> facturas) {
+        this.facturasOriginales = facturas;
+        this.facturas.setValue(facturas);
+    }
+
+
 }
+
+

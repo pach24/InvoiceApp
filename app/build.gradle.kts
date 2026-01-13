@@ -72,8 +72,6 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    // Mockito para pruebas
-    testImplementation("org.mockito:mockito-core:4.0.0")
 
     // Retromock para pruebas
 
@@ -89,6 +87,14 @@ dependencies {
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
+
+    // Testing Unitario
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito:mockito-core:5.3.1")
+    testImplementation("org.mockito:mockito-inline:5.2.0")
+    // Importante para mockear clases finales/estáticas
+    // Para testear LiveData (InstantTaskExecutorRule)
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
 
 
 }
