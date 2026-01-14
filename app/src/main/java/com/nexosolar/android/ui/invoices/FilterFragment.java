@@ -19,231 +19,216 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Fragmento para aplicar filtros a las facturas.
+ * Ahora sigue MVVM correctamente: solo maneja la UI y observa el ViewModel.
+ */
 public class FilterFragment extends Fragment {
+
     private FragmentFilterBinding binding;
     private InvoiceViewModel viewModel;
+    private final DateTimeFormatter buttonFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
-    // Variables para guardar la selección (ahora como Long)
-    private Long fechaInicioMillis = null;
-    private Long fechaFinMillis = null;
-
-    // Para visualizar fechas en los botones
-    private final DateTimeFormatter buttonFormatter = DateTimeFormatter.ofLocalizedDate(java.time.format.FormatStyle.SHORT);
-
-    private float maxImporte;
-
-    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentFilterBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(InvoiceViewModel.class);
 
-        // 1. Recuperar argumentos (maxImporte y fecha antigua)
-        Bundle args = getArguments();
-        if (args != null) {
-            maxImporte = args.getFloat("MAX_IMPORTE", 100f);
+        // Inicializar filtros con valores por defecto
+        viewModel.inicializarFiltros();
 
-            // Recuperamos fecha más antigua (como long) para inicializar el "Desde"
-            // Nota: Si en InvoiceListActivity aún pasas String, deberás actualizarlo allí también.
-            // Por compatibilidad, si recibimos 0 o nada, usaremos null (hoy/default).
-            long oldestMillis = args.getLong("OLDEST_DATE_MILLIS", 0);
-            if (oldestMillis != 0) {
-                fechaInicioMillis = oldestMillis;
-            }
-        }
-
-        // 2. Configurar Textos Iniciales de Fecha
-        if (fechaInicioMillis != null) {
-            binding.btnSelectDate.setText(millisToLocalDate(fechaInicioMillis).format(buttonFormatter));
-        } else {
-            // Si no hay fecha antigua, ponemos la de hoy
-            fechaInicioMillis = localDateToMillis(LocalDate.now());
-            binding.btnSelectDate.setText(millisToLocalDate(fechaInicioMillis).format(buttonFormatter));
-        }
-
-        // Fecha fin por defecto: Hoy
-        fechaFinMillis = localDateToMillis(LocalDate.now());
-        binding.btnSelectDateUntil.setText(millisToLocalDate(fechaFinMillis).format(buttonFormatter));
-
-
-        // 3. Configurar Sliders
-        if (maxImporte > 0) {
-            binding.rangeSlider.setValueFrom(0f);
-            binding.rangeSlider.setValueTo(maxImporte);
-            binding.rangeSlider.setValues(0f, maxImporte);
-            binding.tvMinValue.setText("0 €");
-            binding.tvMaxValue.setText(String.format("%.02f €", maxImporte));
-            binding.tvMaxImporte.setText(String.format("%.02f €", maxImporte));
-        } else {
-            // Fallback por si maxImporte es 0
-            binding.rangeSlider.setValues(0f, 100f);
-            binding.tvMaxValue.setText("0 €");
-        }
-
-        // Listener Slider
-        binding.rangeSlider.addOnChangeListener((slider, value, fromUser) -> {
-            List<Float> values = slider.getValues();
-            if (values.size() == 2) {
-                float currentMax = values.get(1);
-                binding.tvMinValue.setText(String.format("%.0f €", values.get(0)));
-
-                // Pequeño ajuste visual si está cerca del tope
-                if (currentMax >= maxImporte - 0.001f) {
-                    binding.tvMaxValue.setText(String.format("%.2f €", currentMax));
-                } else {
-                    binding.tvMaxValue.setText(String.format("%.0f €", currentMax));
-                }
-            }
-        });
-
-        // 4. Configurar Checkboxes iniciales
-        binding.checkPendientesPago.setChecked(true);
-        binding.checkPagadas.setChecked(true);
+        setupObservers();
+        setupListeners();
 
         return binding.getRoot();
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    /**
+     * Configura los observadores del ViewModel
+     */
+    private void setupObservers() {
+        // Observar los filtros actuales del ViewModel
+        viewModel.getFiltrosActuales().observe(getViewLifecycleOwner(), this::actualizarUI);
 
-        // Listeners de Fecha (Ahora usan MaterialDatePicker)
-        binding.btnSelectDate.setOnClickListener(v -> openMaterialDatePicker(true));
-        binding.btnSelectDateUntil.setOnClickListener(v -> openMaterialDatePicker(false));
-
-        // Botón Aplicar
-        binding.btnAplicar.setOnClickListener(v -> {
-            // Validación de lógica fechas (simple comparación de longs)
-            if (fechaInicioMillis != null && fechaFinMillis != null) {
-                if (fechaInicioMillis > fechaFinMillis) {
-                    Toast.makeText(requireContext(),
-                            "La fecha de inicio no puede ser posterior a la final.",
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        // Observar errores de validación
+        viewModel.getErrorValidacion().observe(getViewLifecycleOwner(), error -> {
+            if (error != null) {
+                Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
             }
-
-            // Recoger valores del Slider
-            List<Float> valoresSlider = binding.rangeSlider.getValues();
-            float importeMin = valoresSlider.get(0);
-            float importeMax = valoresSlider.get(1);
-
-            // Crear Bundle con datos tipados (Longs y Floats)
-            Bundle bundle = new Bundle();
-            bundle.putStringArrayList("ESTADOS", new ArrayList<>(getStrings()));
-
-            if (fechaInicioMillis != null) bundle.putLong("FECHA_INICIO_MILLIS", fechaInicioMillis);
-            if (fechaFinMillis != null) bundle.putLong("FECHA_FIN_MILLIS", fechaFinMillis);
-
-            bundle.putDouble("IMPORTE_MIN", importeMin);
-            bundle.putDouble("IMPORTE_MAX", importeMax);
-
-            // Comunicar a Activity
-            InvoiceListActivity activity = (InvoiceListActivity) getActivity();
-            if (activity != null) {
-                // OJO: Asegúrate que Activity.aplicarFiltros() sepa leer estos Longs
-                boolean hayResultados = activity.aplicarFiltros(bundle);
-
-                if (!hayResultados) {
-                    Toast.makeText(requireContext(),
-                            "No se encontraron resultados.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                activity.restoreMainView();
-            }
-            getParentFragmentManager().popBackStack();
         });
-
-        // Botón Cerrar
-        binding.btnCerrar.setOnClickListener(v -> {
-            if (getActivity() instanceof InvoiceListActivity) {
-                ((InvoiceListActivity) getActivity()).restoreMainView();
-            }
-            getParentFragmentManager().popBackStack();
-        });
-
-        // Botón Borrar
-        binding.btnBorrar.setOnClickListener(v -> resetFilters());
     }
 
     /**
-     * Nuevo método para abrir el calendario moderno
+     * Actualiza la UI según el estado de los filtros en el ViewModel
      */
-    private void openMaterialDatePicker(boolean isStartDate) {
-        long selection = isStartDate
-                ? (fechaInicioMillis != null ? fechaInicioMillis : MaterialDatePicker.todayInUtcMilliseconds())
-                : (fechaFinMillis != null ? fechaFinMillis : MaterialDatePicker.todayInUtcMilliseconds());
+    @SuppressLint("DefaultLocale")
+    private void actualizarUI(InvoiceFilters filtros) {
+        if (filtros == null) return;
 
-        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText(isStartDate ? "Seleccionar Inicio" : "Seleccionar Fin")
-                .setSelection(selection)
-                .setTheme(com.google.android.material.R.style.ThemeOverlay_MaterialComponents_MaterialCalendar)
-                .build();
+        // Actualizar fechas
+        if (filtros.getFechaInicio() != null) {
+            binding.btnSelectDate.setText(filtros.getFechaInicio().format(buttonFormatter));
+        }
+        if (filtros.getFechaFin() != null) {
+            binding.btnSelectDateUntil.setText(filtros.getFechaFin().format(buttonFormatter));
+        }
 
-        datePicker.addOnPositiveButtonClickListener(selectedMillis -> {
-            // Guardamos el Long seleccionado directamente
-            if (isStartDate) {
-                fechaInicioMillis = selectedMillis;
-                binding.btnSelectDate.setText(millisToLocalDate(selectedMillis).format(buttonFormatter));
-            } else {
-                fechaFinMillis = selectedMillis;
-                binding.btnSelectDateUntil.setText(millisToLocalDate(selectedMillis).format(buttonFormatter));
+        // Actualizar slider
+        float maxImporte = viewModel.getMaxImporte();
+        if (maxImporte > 0) {
+            binding.rangeSlider.setValueFrom(0f);
+            binding.rangeSlider.setValueTo(maxImporte);
+            binding.rangeSlider.setValues(
+                    filtros.getImporteMin().floatValue(),
+                    filtros.getImporteMax().floatValue()
+            );
+            binding.tvMaxImporte.setText(String.format("%.2f €", maxImporte));
+            binding.tvMinValue.setText(String.format("%.0f €", filtros.getImporteMin()));
+            binding.tvMaxValue.setText(String.format("%.0f €", filtros.getImporteMax()));
+        }
+
+        // Actualizar checkboxes
+        List<String> estados = filtros.getEstadosSeleccionados();
+        binding.checkPagadas.setChecked(estados.contains("Pagada"));
+        binding.checkPendientesPago.setChecked(estados.contains("Pendiente de pago"));
+        binding.checkAnuladas.setChecked(estados.contains("Anulada"));
+        binding.checkCuotaFija.setChecked(estados.contains("Cuota fija"));
+        binding.checkPlanPago.setChecked(estados.contains("Plan de pago"));
+    }
+
+    /**
+     * Configura los listeners de los elementos de UI
+     */
+    @SuppressLint("DefaultLocale")
+    private void setupListeners() {
+        // Date pickers
+        binding.btnSelectDate.setOnClickListener(v -> abrirDatePicker(true));
+        binding.btnSelectDateUntil.setOnClickListener(v -> abrirDatePicker(false));
+
+        // Slider listener
+        binding.rangeSlider.addOnChangeListener((slider, value, fromUser) -> {
+            List<Float> values = slider.getValues();
+            if (values.size() == 2) {
+                float min = values.get(0);
+                float max = values.get(1);
+                binding.tvMinValue.setText(String.format("%.0f €", min));
+
+                // Ajuste visual si está cerca del tope
+                float maxImporte = viewModel.getMaxImporte();
+                if (max >= maxImporte - 0.001f) {
+                    binding.tvMaxValue.setText(String.format("%.2f €", max));
+                } else {
+                    binding.tvMaxValue.setText(String.format("%.0f €", max));
+                }
             }
         });
 
-        datePicker.show(getParentFragmentManager(), "MATERIAL_DATE_PICKER");
+        // Botón aplicar
+        binding.btnAplicar.setOnClickListener(v -> {
+            InvoiceFilters nuevosFiltros = construirFiltrosDesdeUI();
+            viewModel.actualizarFiltros(nuevosFiltros);
+
+            // Solo cerrar si los filtros son válidos
+            if (nuevosFiltros.isValid()) {
+                cerrarFragmento();
+            }
+        });
+
+        // Botón borrar
+        binding.btnBorrar.setOnClickListener(v -> viewModel.resetearFiltros());
+
+        // Botón cerrar
+        binding.btnCerrar.setOnClickListener(v -> cerrarFragmento());
     }
 
-    private void resetFilters() {
-        // Resetear fechas a Hoy / Null según prefieras
+    /**
+     * Construye un objeto InvoiceFilters desde el estado actual de la UI
+     */
+    private InvoiceFilters construirFiltrosDesdeUI() {
+        InvoiceFilters filtros = new InvoiceFilters();
 
-        fechaFinMillis = localDateToMillis(LocalDate.now());
-
-        binding.btnSelectDate.setText(millisToLocalDate(fechaInicioMillis).format(buttonFormatter));
-        binding.btnSelectDateUntil.setText(millisToLocalDate(fechaFinMillis).format(buttonFormatter));
-
-        // Resetear Slider
-        binding.rangeSlider.setValues(0f, maxImporte > 0 ? maxImporte : 100f);
-
-        // Resetear Checkboxes
-        binding.checkPagadas.setChecked(false);
-        binding.checkAnuladas.setChecked(false);
-        binding.checkCuotaFija.setChecked(false);
-        binding.checkPendientesPago.setChecked(false);
-        binding.checkPlanPago.setChecked(false);
-    }
-
-    @NonNull
-    private List<String> getStrings() {
+        // Recoger estados de los checkboxes
         List<String> estados = new ArrayList<>();
         if (binding.checkPagadas.isChecked()) estados.add("Pagada");
         if (binding.checkPendientesPago.isChecked()) estados.add("Pendiente de pago");
         if (binding.checkAnuladas.isChecked()) estados.add("Anulada");
         if (binding.checkCuotaFija.isChecked()) estados.add("Cuota fija");
         if (binding.checkPlanPago.isChecked()) estados.add("Plan de pago");
-        return estados;
+        filtros.setEstadosSeleccionados(estados);
+
+        // Recoger fechas del ViewModel actual (ya están actualizadas)
+        InvoiceFilters filtrosActuales = viewModel.getFiltrosActuales().getValue();
+        if (filtrosActuales != null) {
+            filtros.setFechaInicio(filtrosActuales.getFechaInicio());
+            filtros.setFechaFin(filtrosActuales.getFechaFin());
+        }
+
+        // Recoger importes del slider
+        List<Float> valores = binding.rangeSlider.getValues();
+        filtros.setImporteMin((double) valores.get(0));
+        filtros.setImporteMax((double) valores.get(1));
+
+        return filtros;
+    }
+
+    /**
+     * Abre el date picker para seleccionar fecha de inicio o fin
+     */
+    private void abrirDatePicker(boolean esInicio) {
+        InvoiceFilters filtrosActuales = viewModel.getFiltrosActuales().getValue();
+        if (filtrosActuales == null) return;
+
+        LocalDate fechaActual = esInicio ? filtrosActuales.getFechaInicio() : filtrosActuales.getFechaFin();
+
+        long selection = fechaActual != null
+                ? fechaActual.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
+                : MaterialDatePicker.todayInUtcMilliseconds();
+
+        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText(esInicio ? "Seleccionar Inicio" : "Seleccionar Fin")
+                .setSelection(selection)
+                .setTheme(com.google.android.material.R.style.ThemeOverlay_MaterialComponents_MaterialCalendar)
+                .build();
+
+        datePicker.addOnPositiveButtonClickListener(selectedMillis -> {
+            LocalDate nuevaFecha = Instant.ofEpochMilli(selectedMillis)
+                    .atZone(ZoneOffset.UTC).toLocalDate();
+
+            // Obtenemos la referencia actual
+            InvoiceFilters filtros = viewModel.getFiltrosActuales().getValue();
+            if (filtros != null) {
+                if (esInicio) {
+                    filtros.setFechaInicio(nuevaFecha);
+                } else {
+                    filtros.setFechaFin(nuevaFecha);
+                }
+
+                // CORRECCIÓN: Usamos el método público del ViewModel
+                viewModel.actualizarEstadoFiltros(filtros);
+            }
+        });
+
+        datePicker.show(getParentFragmentManager(), "DATE_PICKER");
+    }
+
+    /**
+     * Cierra el fragmento y restaura la vista principal
+     */
+    private void cerrarFragmento() {
+        if (getActivity() instanceof InvoiceListActivity) {
+            ((InvoiceListActivity) getActivity()).restoreMainView();
+        }
+        getParentFragmentManager().popBackStack();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        // Evitamos fugas de memoria del binding
         binding = null;
-    }
-
-    // --- MÉTODOS AUXILIARES FECHAS ---
-
-    private Long localDateToMillis(LocalDate localDate) {
-        if (localDate == null) return null;
-        return localDate.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
-    }
-
-    private LocalDate millisToLocalDate(Long millis) {
-        if (millis == null) return null;
-        return Instant.ofEpochMilli(millis).atZone(ZoneOffset.UTC).toLocalDate();
     }
 }

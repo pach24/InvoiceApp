@@ -6,7 +6,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,11 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.nexosolar.android.R;
 import com.nexosolar.android.databinding.ActivityInvoiceListBinding;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneOffset;
-import java.util.List;
-
+/**
+ * Activity principal para mostrar la lista de facturas.
+ * Ahora solo se encarga de la navegación y la coordinación de vistas.
+ */
 public class InvoiceListActivity extends AppCompatActivity {
 
     private ActivityInvoiceListBinding bindingInvoiceList;
@@ -50,22 +48,16 @@ public class InvoiceListActivity extends AppCompatActivity {
         InvoiceViewModelFactory invoiceViewModelFactory = new InvoiceViewModelFactory(useMock, this);
         invoiceViewModel = new ViewModelProvider(this, invoiceViewModelFactory).get(InvoiceViewModel.class);
 
-        // Cargar facturas iniciales
-
-
-        // --- OBSERVER PRINCIPAL ---
+        // Observer principal de la lista de facturas
         invoiceViewModel.getFacturas().observe(this, facturas -> {
-
             bindingInvoiceList.shimmerViewContainer.stopShimmer();
             bindingInvoiceList.shimmerViewContainer.setVisibility(View.GONE);
-
-            invalidateOptionsMenu(); // Actualiza estado del menú de filtros
+            invalidateOptionsMenu();
 
             if (facturas != null) {
-                // Pasamos siempre la lista al adaptador, esté vacía o llena
                 invoiceAdapter.setFacturas(facturas);
 
-                // Lógica para mostrar/ocultar el "Empty State"
+                // Mostrar/ocultar el "Empty State"
                 if (facturas.isEmpty()) {
                     bindingInvoiceList.recyclerView.setVisibility(View.GONE);
                     bindingInvoiceList.layoutEmptyState.setVisibility(View.VISIBLE);
@@ -73,7 +65,6 @@ public class InvoiceListActivity extends AppCompatActivity {
                     bindingInvoiceList.recyclerView.setVisibility(View.VISIBLE);
                     bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);
                 }
-
             } else {
                 Toast.makeText(InvoiceListActivity.this, "Error al cargar datos", Toast.LENGTH_SHORT).show();
             }
@@ -87,14 +78,9 @@ public class InvoiceListActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_filter, menu);
 
-        // Deshabilitar el ítem de filtro si no hay datos cargados en el ViewModel
+        // Deshabilitar el ítem de filtro si no hay datos cargados
         MenuItem filtroItem = menu.findItem(R.id.action_filters);
-
-        if (invoiceViewModel.hayDatosCargados()) {
-            filtroItem.setEnabled(true);
-        } else {
-            filtroItem.setEnabled(false);
-        }
+        filtroItem.setEnabled(invoiceViewModel.hayDatosCargados());
 
         return true;
     }
@@ -112,10 +98,13 @@ public class InvoiceListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Muestra el fragmento de filtros
+     */
     private void mostrarFiltroFragment() {
-        FilterFragment filterFragment = getFilterFragment();
-
+        FilterFragment filterFragment = new FilterFragment();
         bindingInvoiceList.fragmentContainer.setVisibility(View.VISIBLE);
+
         // Ocultar elementos principales mientras se muestra el filtro
         bindingInvoiceList.toolbar.setVisibility(View.GONE);
         bindingInvoiceList.recyclerView.setVisibility(View.GONE);
@@ -127,61 +116,9 @@ public class InvoiceListActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    @NonNull
-    // Método auxiliar para obtener el fragmento
-    private FilterFragment getFilterFragment() {
-        float maxImporte = invoiceViewModel.getMaxImporte();
-        LocalDate oldestDateObj = invoiceViewModel.getOldestDate();
-
-        Bundle bundle = new Bundle();
-        bundle.putFloat("MAX_IMPORTE", maxImporte);
-
-        // PASO CLAVE: Convertir LocalDate a long para pasarlo al fragmento
-        if (oldestDateObj != null) {
-            long millis = oldestDateObj.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
-            bundle.putLong("OLDEST_DATE_MILLIS", millis);
-        }
-
-        FilterFragment filterFragment = new FilterFragment();
-        filterFragment.setArguments(bundle);
-        return filterFragment;
-    }
-
     /**
-     * Método llamado desde FilterFragment para aplicar los filtros seleccionados.
+     * Restaura la vista principal ocultando el fragmento de filtros
      */
-    public boolean aplicarFiltros(Bundle bundle) {
-        List<String> estadosSeleccionados = bundle.getStringArrayList("ESTADOS");
-        Double importeMin = bundle.getDouble("IMPORTE_MIN");
-        Double importeMax = bundle.getDouble("IMPORTE_MAX");
-
-        // PASO CLAVE: Recuperar Long y convertir a LocalDate
-        // getLong devuelve 0 si no existe la key, por eso verificamos containsKey o usamos un valor centinela (-1)
-        LocalDate fechaInicio = null;
-        if (bundle.containsKey("FECHA_INICIO_MILLIS")) {
-            long millis = bundle.getLong("FECHA_INICIO_MILLIS");
-            fechaInicio = Instant.ofEpochMilli(millis).atZone(ZoneOffset.UTC).toLocalDate();
-        }
-
-        LocalDate fechaFin = null;
-        if (bundle.containsKey("FECHA_FIN_MILLIS")) {
-            long millis = bundle.getLong("FECHA_FIN_MILLIS");
-            fechaFin = Instant.ofEpochMilli(millis).atZone(ZoneOffset.UTC).toLocalDate();
-        }
-
-        // Ya tenemos LocalDate puros, sin try-catch ni parseo de Strings
-        invoiceViewModel.filtrarFacturas(
-                estadosSeleccionados,
-                fechaInicio,
-                fechaFin,
-                importeMin,
-                importeMax
-        );
-
-        restoreMainView();
-        return true;
-    }
-
     public void restoreMainView() {
         bindingInvoiceList.toolbar.setVisibility(View.VISIBLE);
         bindingInvoiceList.recyclerView.setVisibility(View.VISIBLE);
