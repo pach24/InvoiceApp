@@ -39,24 +39,25 @@ public class InvoiceViewModel extends ViewModel {
         getInvoicesUseCase.invoke(new RepositoryCallback<List<Invoice>>() {
             @Override
             public void onSuccess(List<Invoice> result) {
-                // 1. Mostrar caché local inmediatamente
                 if (result != null) {
                     facturasOriginales = result;
                     facturas.postValue(result);
                 }
 
-                // 2. Si es la primera carga o la lista está vacía, forzar actualización de red
-                if (isFirstLoad || (result == null || result.isEmpty())) {
-                    isFirstLoad = false; // Marcamos para no repetir el bucle
-                    forzarRecarga();
+                // CORRECCIÓN: Solo recargar si es la primera carga Y está vacío.
+                // Una vez que isFirstLoad es false, nunca más entramos aquí automáticamente.
+                if (isFirstLoad) {
+                    isFirstLoad = false;
+                    if (result == null || result.isEmpty()) {
+                        forzarRecarga();
+                    }
                 }
             }
 
             @Override
             public void onError(Throwable error) {
                 error.printStackTrace();
-
-                // Si falla la lectura local, intentamos red si es la primera vez
+                // Misma corrección para el error
                 if (isFirstLoad) {
                     isFirstLoad = false;
                     forzarRecarga();
@@ -66,6 +67,7 @@ public class InvoiceViewModel extends ViewModel {
             }
         });
     }
+
 
     public LiveData<List<Invoice>> getFacturas() {
         return facturas;
@@ -78,9 +80,10 @@ public class InvoiceViewModel extends ViewModel {
         getInvoicesUseCase.refresh(new RepositoryCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {
-                // Al terminar de descargar y guardar, volvemos a leer la BD para actualizar la UI.
-                // Como 'isFirstLoad' ya es false, cargarFacturas() NO volverá a llamar a forzarRecarga().
-                cargarFacturas();
+                // Solo recargar si hubo cambios o éxito real
+                if (Boolean.TRUE.equals(success)) {
+                    cargarFacturas();
+                }
             }
 
             @Override
