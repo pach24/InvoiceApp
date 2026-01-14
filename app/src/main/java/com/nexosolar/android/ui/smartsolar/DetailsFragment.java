@@ -8,11 +8,19 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.nexosolar.android.data.remote.ApiClientManager;
+import com.nexosolar.android.data.remote.ApiService;
+import com.nexosolar.android.data.InstallationRepositoryImpl;
+import com.nexosolar.android.domain.Installation;
+import com.nexosolar.android.domain.InstallationRepository;
+import com.nexosolar.android.domain.GetInstallationDetailsUseCase;
 import com.nexosolar.android.databinding.FragmentDetailsBinding;
 
 public class DetailsFragment extends Fragment {
 
     private FragmentDetailsBinding binding;
+    private GetInstallationDetailsUseCase getInstallationDetailsUseCase;
 
     @Nullable
     @Override
@@ -25,20 +33,46 @@ public class DetailsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 1. CARGAR DATOS MOCK (Simulando una llamada a API)
-        loadMockData();
+        // Configurar dependencias (Inyección manual)
+        setupDependencies();
 
-        // 2. CONFIGURAR EL CLICK DE LA 'i'
+        // Cargar datos
+        loadData();
+
+        // Configurar UI
         binding.ivInfo.setOnClickListener(v -> showInfoDialog());
     }
 
-    private void loadMockData() {
-        // En un caso real
-        binding.tvCau.setText("ES0021000000001994LJ1FA000");
-        binding.tvStatus.setText("No hemos recibido ninguna solicitud de autoconsumo");
-        binding.tvType.setText("Con excedentes y compensación Individual - Consumo");
-        binding.tvCompensation.setText("Precio PVPC");
-        binding.tvPower.setText("5kWp");
+    private void setupDependencies() {
+        // 1. Obtener ApiService
+        ApiService apiService = ApiClientManager.getInstance()
+                .getApiService(true, requireContext());
+
+        // 2. Crear repositorio
+        InstallationRepository repository = new InstallationRepositoryImpl(apiService);
+
+        // 3. Crear caso de uso
+        getInstallationDetailsUseCase = new GetInstallationDetailsUseCase(repository);
+    }
+
+    private void loadData() {
+        // Ejecutar caso de uso con callback
+        getInstallationDetailsUseCase.execute(new InstallationRepository.InstallationCallback() {
+            @Override
+            public void onSuccess(Installation installation) {
+                // Actualizar UI en el hilo principal
+                binding.tvCau.setText(installation.getCau());
+                binding.tvStatus.setText(installation.getStatus());
+                binding.tvType.setText(installation.getType());
+                binding.tvCompensation.setText(installation.getCompensation());
+                binding.tvPower.setText(installation.getPower());
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                binding.tvStatus.setText(errorMessage);
+            }
+        });
     }
 
     private void showInfoDialog() {
@@ -47,8 +81,11 @@ public class DetailsFragment extends Fragment {
                 .setMessage("El tiempo estimado de activación de tu autoconsumo es de 1 a 2 meses, éste variará en función de tu comunidad autónoma y distribuidora")
                 .setPositiveButton("Aceptar", (dialog, which) -> dialog.dismiss())
                 .show();
-        // Nota: Si quieres el diseño EXACTO del popup verde y redondeado,
-        // necesitaríamos crear un layout XML personalizado para el diálogo.
-        // ¿Quieres que hagamos eso o te vale con el estándar de Android?
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

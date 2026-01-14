@@ -1,5 +1,7 @@
 package com.nexosolar.android.data.remote;
 
+import com.nexosolar.android.domain.Installation;
+
 import co.infinum.retromock.meta.Mock;
 import co.infinum.retromock.meta.MockCircular;
 import co.infinum.retromock.meta.MockResponse;
@@ -31,4 +33,18 @@ public interface ApiService {
     @MockResponse(body = "facturas_todas_pagadas.json")
     @GET("invoices.json")
     Call<InvoiceResponse> getFacturas();
+
+
+
+
+    /**
+     * Obtiene los detalles de la instalación solar (Smart Solar).
+     *
+     * En modo Mock, devuelve el contenido de "installation_details.json".
+     * En modo Real, llamaría a "installation/details".
+     */
+    @Mock
+    @MockResponse(body = "installation_details.json")
+    @GET("installation/details") // Endpoint ficticio
+    Call<Installation> getInstallationDetails();
 }
