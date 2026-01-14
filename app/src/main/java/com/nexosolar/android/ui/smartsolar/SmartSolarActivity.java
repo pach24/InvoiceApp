@@ -66,9 +66,9 @@ public class SmartSolarActivity extends AppCompatActivity {
                 case 0:
                     return new InstallationFragment(); // Pestaña 1
                 case 1:
-                           // Pestaña 2
+                    return new EnergyFragment(); //Pestaña 2
                 case 2:
-
+                    return  new DetailsFragment();
                 default:
                     return new InstallationFragment();
             }
