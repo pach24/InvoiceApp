@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.nexosolar.android.databinding.ActivityMainBinding;
 import com.nexosolar.android.ui.invoices.InvoiceListActivity;
+import com.nexosolar.android.ui.smartsolar.SmartSolarActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,6 +42,12 @@ public class MainActivity extends AppCompatActivity {
         binding.btFacturasClick.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, InvoiceListActivity.class);
             intent.putExtra("USE_RETROMOCK", useMock);
+            startActivity(intent);
+        });
+
+        binding.btSmartSolarClick.setOnClickListener(v -> {
+            // Asegúrate de importar la clase SmartSolarActivity cuando la crees
+            Intent intent = new Intent(MainActivity.this, SmartSolarActivity.class);
             startActivity(intent);
         });
 

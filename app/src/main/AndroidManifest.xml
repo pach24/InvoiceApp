@@ -32,6 +32,12 @@
             android:windowSoftInputMode="adjustResize">
         </activity>
 
+        <activity
+            android:name=".ui.smartsolar.SmartSolarActivity"
+            android:exported="false" />
+
+
+
     </application>
 
 </manifest>

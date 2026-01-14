@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="@color/white">
+
+    <!-- 1. TEXTO DESCRIPTIVO -->
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Aquí tienes los datos de tu instalación fotovoltaica en tiempo real."
+        android:textColor="#555555"
+        android:textSize="16sp"
+        android:lineSpacingMultiplier="1.2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 2. TEXTO AUTOCONSUMO -->
+    <!-- Este texto está FUERA del gráfico en tu captura, así que lo mantenemos -->
+    <TextView
+        android:id="@+id/tvAutoconsumoLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Autoconsumo: "
+        android:textColor="#9E9E9E"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/tvDescription"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tvAutoconsumoValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="92%"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@id/tvAutoconsumoLabel"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvAutoconsumoLabel"/>
+
+    <!-- 3. IMAGEN DEL GRÁFICO COMPLETO -->
+    <ImageView
+        android:id="@+id/imgFullChart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/grafico1"
+        android:scaleType="fitCenter"
+        app:layout_constraintTop_toBottomOf="@id/tvAutoconsumoLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.3"
+        android:contentDescription="Gráfico de estado solar" />
+    <!-- Bias 0.3 sube la imagen un poco para que no quede muy abajo -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

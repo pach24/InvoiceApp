@@ -34,7 +34,7 @@
                 android:textColor="@android:color/holo_green_light"
                 android:textAllCaps="false"
                 android:textSize="20sp"
-                app:icon="@drawable/baseline_arrow_back_ios_24"
+                app:icon="@drawable/ic_arrow_back_24"
                 app:iconTint="@android:color/holo_green_light"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp" />

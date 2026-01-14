@@ -69,5 +69,7 @@
     <!-- ============================================================ -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="change_filters">Intenta con otros criterios de búsqueda</string>
+    <string name="atr_s">Atrás</string>
+    <string name="smart_solar">Smart Solar</string>
 
 </resources>
