@@ -12,40 +12,27 @@ import co.infinum.retromock.Retromock;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Singleton que gestiona las instancias de Retrofit (API real) y Retromock (API mock).
- * Garantiza una única instancia de cada cliente durante toda la vida de la aplicación.
- */
 public class ApiClientManager {
 
-    // Instancia única del Singleton
     private static volatile ApiClientManager instance;
 
-    // Instancias de los clientes
+    // Clientes base
     private volatile Retrofit retrofitClient;
     private volatile Retromock retromockClient;
 
-    // Base URL de la API real
-    private static final String BASE_URL = "https://francisco-pacheco.com/api/";
+    // INSTANCIAS DE SERVICIOS CACHEADAS (La clave para que funcione el circular)
+    private volatile ApiService mockApiService;
+    private volatile ApiService realApiService;
 
-    // Contexto de aplicación necesario para Retromock
+    private static final String BASE_URL = "https://francisco-pacheco.com/api/";
     private Context applicationContext;
 
-    /**
-     * Constructor privado para prevenir instanciación externa
-     */
-    private ApiClientManager() {
-        // Constructor privado para Singleton
-    }
+    private ApiClientManager() { }
 
-    /**
-     * Obtiene la instancia única del ApiClientManager (Thread-safe con Double-Checked Locking)
-     * @return Instancia única del manager
-     */
     public static ApiClientManager getInstance() {
-        if (instance == null) { // Primera verificación sin sincronización (optimización)
+        if (instance == null) {
             synchronized (ApiClientManager.class) {
-                if (instance == null) { // Segunda verificación con sincronización (thread-safety)
+                if (instance == null) {
                     instance = new ApiClientManager();
                 }
             }
@@ -53,26 +40,21 @@ public class ApiClientManager {
         return instance;
     }
 
-    /**
-     * Inicializa el contexto de aplicación (llamar desde Application o MainActivity)
-     * @param context Contexto de aplicación
-     */
     public void init(Context context) {
-        this.applicationContext = context.getApplicationContext();
+        if (this.applicationContext == null) {
+            this.applicationContext = context.getApplicationContext();
+        }
     }
 
-    /**
-     * Obtiene la instancia de Retrofit (API real) - Thread-safe con Double-Checked Locking
-     * @return Instancia única de Retrofit
-     */
-    public Retrofit getRetrofitClient() {
-        if (retrofitClient == null) { // Primera verificación
+    // --- Métodos Privados para obtener Clientes ---
+
+    private Retrofit getRetrofitClient() {
+        if (retrofitClient == null) {
             synchronized (this) {
-                if (retrofitClient == null) { // Segunda verificación
+                if (retrofitClient == null) {
                     Gson gson = new GsonBuilder()
                             .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
                             .create();
-
                     retrofitClient = new Retrofit.Builder()
                             .baseUrl(BASE_URL)
                             .addConverterFactory(GsonConverterFactory.create(gson))
@@ -83,23 +65,18 @@ public class ApiClientManager {
         return retrofitClient;
     }
 
-    /**
-     * Obtiene la instancia de Retromock (API mock) - Thread-safe con Double-Checked Locking
-     * @param context Contexto necesario para acceder a assets/
-     * @return Instancia única de Retromock
-     */
-    public Retromock getRetromockClient(Context context) {
-        if (retromockClient == null) { // Primera verificación
+    private Retromock getRetromockClient(Context context) {
+        if (retromockClient == null) {
             synchronized (this) {
-                if (retromockClient == null) { // Segunda verificación
-                    if (applicationContext == null) {
-                        applicationContext = context.getApplicationContext();
-                    }
+                if (retromockClient == null) {
+                    // Asegurar contexto
+                    if (applicationContext == null) init(context);
 
                     Gson gson = new GsonBuilder()
                             .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
                             .create();
 
+                    // Usamos la misma configuración de Retrofit base
                     Retrofit retrofit = new Retrofit.Builder()
                             .baseUrl(BASE_URL)
                             .addConverterFactory(GsonConverterFactory.create(gson))
@@ -120,11 +97,38 @@ public class ApiClientManager {
         return retromockClient;
     }
 
+    // --- NUEVO MÉTODO PÚBLICO: Obtener Servicio ---
+
     /**
-     * Reinicia ambas instancias (útil para testing o cambios de configuración)
+     * Devuelve la instancia Singleton del Servicio API.
+     * Al reutilizar la instancia, se mantiene el estado (como el contador circular de Retromock).
      */
+    public ApiService getApiService(boolean useMock, Context context) {
+        if (useMock) {
+            if (mockApiService == null) {
+                synchronized (this) {
+                    if (mockApiService == null) {
+                        mockApiService = getRetromockClient(context).create(ApiService.class);
+                    }
+                }
+            }
+            return mockApiService;
+        } else {
+            if (realApiService == null) {
+                synchronized (this) {
+                    if (realApiService == null) {
+                        realApiService = getRetrofitClient().create(ApiService.class);
+                    }
+                }
+            }
+            return realApiService;
+        }
+    }
+
     public synchronized void reset() {
         retrofitClient = null;
         retromockClient = null;
+        mockApiService = null;
+        realApiService = null;
     }
 }

@@ -1,6 +1,7 @@
 package com.nexosolar.android.data;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import com.nexosolar.android.data.local.AppDatabase;
 import com.nexosolar.android.data.local.InvoiceDao;
@@ -20,152 +21,190 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Implementación del repositorio de facturas que maneja la lógica de datos.
- * Utiliza ApiClientManager (Singleton) para obtener instancias de Retrofit o Retromock.
- */
 public class InvoiceRepositoryImpl implements InvoiceRepository {
 
+    private static final String TAG = "DEBUG_REPO";
+    private static final String PREFS_NAME = "RepoPrefs";
+    private static final String KEY_LAST_MODE_WAS_MOCK = "last_mode_was_mock";
+
+    private final boolean isMockMode;
     private final ApiService apiService;
     private final InvoiceDao invoiceDao;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final SharedPreferences prefs;
 
-    /**
-     * Constructor que inicializa el repositorio con el cliente adecuado (Mock o Real).
-     *
-     * @param useMock true para usar Retromock (datos simulados), false para API real
-     * @param context Contexto de aplicación necesario para Room y Retromock
-     */
     public InvoiceRepositoryImpl(boolean useMock, Context context) {
-        // Obtener el Singleton del ApiClientManager
+
+        Log.d(TAG, "=================================================");
+        Log.d(TAG, "Inicializando InvoiceRepositoryImpl");
+        Log.d(TAG, "Modo solicitado: " + (useMock ? "MOCK" : "REAL"));
+
         ApiClientManager clientManager = ApiClientManager.getInstance();
-
-        // Inicializar el contexto en el manager (si no se hizo antes)
         clientManager.init(context);
+        this.apiService = clientManager.getApiService(useMock, context);
+        this.isMockMode = useMock;
 
-        // Inicializar API o Mock según el flag usando el Singleton
-        if (useMock) {
-            this.apiService = clientManager
-                    .getRetromockClient(context)
-                    .create(ApiService.class);
-            Log.d("DEBUG_REPO", "Repositorio inicializado en modo MOCK (Singleton)");
-        } else {
-            this.apiService = clientManager
-                    .getRetrofitClient()
-                    .create(ApiService.class);
-            Log.d("DEBUG_REPO", "Repositorio inicializado en modo REAL API (Singleton)");
-        }
-
-        // Inicializar siempre la base de datos local (Room también usa Singleton)
         AppDatabase db = AppDatabase.getInstance(context);
         this.invoiceDao = db.invoiceDao();
+        this.prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+
+
+        checkAndClearIfModeChangedSync();
+
+        Log.d(TAG, "Repositorio listo.");
+        Log.d(TAG, "=================================================");
     }
 
     /**
-     * Obtiene las facturas desde la base de datos local (Room).
-     * Este método es síncrono respecto a Room pero devuelve los datos mediante callback.
-     *
-     * @param callback Callback con la lista de facturas o error
+     * VERSIÓN SÍNCRONA del chequeo (se ejecuta en el hilo del constructor)
+     * Así nos aseguramos de que termina ANTES de cualquier llamada a getFacturas.
      */
+    private void checkAndClearIfModeChangedSync() {
+        try {
+            // Usamos submit().get() para bloquear hasta que termine la tarea en background
+            executor.submit(() -> {
+                boolean lastModeWasMock = prefs.getBoolean(KEY_LAST_MODE_WAS_MOCK, false);
+
+                Log.d(TAG, "Último modo guardado: " + (lastModeWasMock ? "MOCK" : "REAL"));
+                Log.d(TAG, "Modo actual: " + (isMockMode ? "MOCK" : "REAL"));
+
+                if (isMockMode != lastModeWasMock) {
+                    Log.w(TAG, "*** CAMBIO DE MODO DETECTADO ***");
+                    Log.w(TAG, "Limpiando base de datos para evitar datos sucios...");
+
+                    // CORRECCIÓN 1: No asignar el resultado a 'int' si devuelve void
+                    invoiceDao.deleteAll();
+
+                    Log.w(TAG, "Base de datos limpiada.");
+
+                    // Guardar el nuevo estado
+                    prefs.edit().putBoolean(KEY_LAST_MODE_WAS_MOCK, isMockMode).apply();
+                    Log.d(TAG, "Preferencia actualizada al modo actual.");
+                } else {
+                    Log.d(TAG, "Sin cambio de modo. Caché preservada (si existe).");
+                    prefs.edit().putBoolean(KEY_LAST_MODE_WAS_MOCK, isMockMode).apply();
+                }
+            }).get(); // Esto lanza excepciones
+
+            Log.d(TAG, "Sincronización de borrado completada.");
+
+        } catch (Exception e) {
+            // Captura InterruptedException y ExecutionException
+            Log.e(TAG, "Error crítico sincronizando borrado de BD: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void getFacturas(RepositoryCallback<List<Invoice>> callback) {
-        executor.execute(() -> {
-            try {
-                Log.d("DEBUG_REPO", "Consultando base de datos local...");
+        Log.d(TAG, "-------------------------------------------------");
+        Log.d(TAG, "getFacturas() llamado. Modo: " + (isMockMode ? "MOCK" : "REAL"));
 
-                // 1. Obtener datos de la DB
+        executor.execute(() -> {
+            if (isMockMode) {
+                // MODO MOCK: Siempre forzar ciclo circular
+                Log.d(TAG, "[MOCK] Borrando caché para avanzar ciclo Retromock...");
+                invoiceDao.deleteAll();
+                Log.d(TAG, "[MOCK] Solicitando siguiente respuesta del ciclo...");
+
+                refreshFacturas(new RepositoryCallback<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean result) {
+                        Log.d(TAG, "[MOCK] Refresh exitoso. Leyendo datos guardados...");
+                        readFromDatabase(callback);
+                    }
+                    @Override
+                    public void onError(Throwable t) {
+                        Log.e(TAG, "[MOCK] Error en refresh: " + t.getMessage());
+                        callback.onError(t);
+                    }
+                });
+            } else {
+                // MODO REAL: Cache first
+                Log.d(TAG, "[REAL] Consultando caché local...");
                 List<InvoiceEntity> entities = invoiceDao.getAllList();
 
-                // 2. Mapear Entity -> Domain
-                List<Invoice> domainList = new ArrayList<>();
-                if (entities != null) {
-                    for (InvoiceEntity entity : entities) {
-                        domainList.add(entity.toDomain());
-                    }
-                    Log.d("DEBUG_REPO", "Datos locales encontrados: " + entities.size());
+                if (entities != null && !entities.isEmpty()) {
+                    Log.d(TAG, "[REAL] Caché encontrada: " + entities.size() + " facturas.");
+                    Log.d(TAG, "[REAL] Devolviendo datos locales.");
+
+                    List<Invoice> domainList = new ArrayList<>();
+                    for (InvoiceEntity e : entities) domainList.add(e.toDomain());
+                    callback.onSuccess(domainList);
                 } else {
-                    Log.d("DEBUG_REPO", "Base de datos local vacía (null)");
+                    Log.d(TAG, "[REAL] Caché vacía. Descargando desde API...");
+                    refreshFacturas(new RepositoryCallback<Boolean>() {
+                        @Override
+                        public void onSuccess(Boolean result) {
+                            Log.d(TAG, "[REAL] Descarga exitosa. Leyendo datos...");
+                            readFromDatabase(callback);
+                        }
+                        @Override
+                        public void onError(Throwable t) {
+                            Log.e(TAG, "[REAL] Error en descarga: " + t.getMessage());
+                            callback.onError(t);
+                        }
+                    });
                 }
-
-                // 3. Devolver datos al callback
-                callback.onSuccess(domainList);
-
-            } catch (Throwable e) {
-                Log.e("DEBUG_REPO", "Error leyendo DB: " + e.getMessage());
-                e.printStackTrace();
-                callback.onError(e);
             }
         });
     }
 
-    /**
-     * Refresca las facturas desde la API (Real o Mock según configuración).
-     * Descarga los datos y los guarda en la base de datos local.
-     *
-     * @param callback Callback que indica si la operación fue exitosa
-     */
+    private void readFromDatabase(RepositoryCallback<List<Invoice>> callback) {
+        executor.execute(() -> {
+            List<InvoiceEntity> entities = invoiceDao.getAllList();
+            int count = (entities != null) ? entities.size() : 0;
+            Log.d(TAG, "Lectura final de BD: " + count + " registros.");
+
+            List<Invoice> domainList = new ArrayList<>();
+            if (entities != null) {
+                for (InvoiceEntity e : entities) domainList.add(e.toDomain());
+            }
+            callback.onSuccess(domainList);
+        });
+    }
+
     @Override
     public void refreshFacturas(RepositoryCallback<Boolean> callback) {
-        Log.d("DEBUG_REPO", "Iniciando refreshFacturas (Llamada a API)...");
+        Log.d(TAG, ">>> refreshFacturas: Iniciando petición HTTP...");
 
         apiService.getFacturas().enqueue(new Callback<InvoiceResponse>() {
             @Override
             public void onResponse(Call<InvoiceResponse> call, Response<InvoiceResponse> response) {
-                Log.d("DEBUG_REPO", "Respuesta API recibida. Code: " + response.code());
+                Log.d(TAG, "<<< HTTP Response: Code " + response.code());
 
                 if (response.isSuccessful() && response.body() != null) {
                     List<Invoice> facturasApi = response.body().getFacturas();
-                    Log.d("DEBUG_REPO", "Facturas descargadas: " + facturasApi.size());
+                    Log.d(TAG, "Payload recibido: " + facturasApi.size() + " facturas");
 
-                    // Guardar en DB en hilo secundario
                     executor.execute(() -> {
                         try {
-                            Log.d("DEBUG_REPO", "Guardando datos en Room...");
-
-                            // Mapear Domain (API) -> Entity (BD)
-                            List<InvoiceEntity> entitiesToSave = new ArrayList<>();
-                            for (Invoice inv : facturasApi) {
-                                entitiesToSave.add(InvoiceEntity.fromDomain(inv));
-                            }
-
-                            // Reemplazar datos en BD (borrar todo e insertar nuevos)
+                            Log.d(TAG, "Guardando en Room...");
                             invoiceDao.deleteAll();
-                            invoiceDao.insertAll(entitiesToSave);
 
-                            Log.d("DEBUG_REPO", "Datos guardados correctamente en Room.");
+                            List<InvoiceEntity> entities = new ArrayList<>();
+                            for (Invoice i : facturasApi) entities.add(InvoiceEntity.fromDomain(i));
+                            invoiceDao.insertAll(entities);
 
-                            // Avisar que terminó correctamente
-                            if (callback != null) {
-                                callback.onSuccess(true);
-                            }
-
+                            Log.d(TAG, "Datos persistidos correctamente.");
+                            if (callback != null) callback.onSuccess(true);
                         } catch (Throwable e) {
-                            Log.e("DEBUG_REPO", "Error guardando en DB: " + e.getMessage());
+                            Log.e(TAG, "ERROR guardando en Room: " + e.getMessage());
                             e.printStackTrace();
-                            if (callback != null) {
-                                callback.onError(e);
-                            }
+                            if (callback != null) callback.onError(e);
                         }
                     });
-
                 } else {
-                    Log.e("DEBUG_REPO", "Error API: " + response.message());
-                    // La API respondió pero con error (ej. 404, 500)
-                    if (callback != null) {
-                        callback.onSuccess(false);
-                    }
+                    Log.e(TAG, "Error HTTP: " + response.message());
+                    if (callback != null) callback.onSuccess(false);
                 }
             }
 
             @Override
             public void onFailure(Call<InvoiceResponse> call, Throwable t) {
-                Log.e("DEBUG_REPO", "Fallo total de red: " + t.getMessage());
+                Log.e(TAG, "FALLO DE RED: " + t.getMessage());
                 t.printStackTrace();
-
-                // Error de red (sin conexión, timeout, etc.)
-                if (callback != null) {
-                    callback.onError(t);
-                }
+                if (callback != null) callback.onError(t);
             }
         });
     }

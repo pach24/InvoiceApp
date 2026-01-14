@@ -1,5 +1,5 @@
 {
-  "numFacturas": 3,
+  "numFacturas": 5,
   "facturas": [
     {
       "descEstado": "Pagada",
@@ -17,27 +17,12 @@
       "fecha": "23/12/2023"
     },
     {
-      "descEstado": "Cuota fija",
-      "importeOrdenacion": 30.00,
-      "fecha": "15/03/2024"
-    },
-    {
-      "descEstado": "Plan de pago",
+      "descEstado": "Pendiente de pago",
       "importeOrdenacion": 120.00,
       "fecha": "10/05/2024"
     },
     {
-      "descEstado": "Anulada",
-      "importeOrdenacion": 1.00,
-      "fecha": "05/06/2019"
-    },
-    {
-      "descEstado": "Cuota fija",
-      "importeOrdenacion": 45.99,
-      "fecha": "30/08/2024"
-    },
-    {
-      "descEstado": "Plan de pago",
+      "descEstado": "Pagada",
       "importeOrdenacion": 200.50,
       "fecha": "12/11/2024"
     }
