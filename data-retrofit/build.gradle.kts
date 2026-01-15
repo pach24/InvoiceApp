@@ -1,5 +1,5 @@
 plugins {
-    // 1. Usar alias si lo tienes en libs.versions.toml, o el id directo
+
     id("com.android.library")
 }
 
@@ -11,8 +11,26 @@ android {
     defaultConfig {
         minSdk = 24
     }
+    buildFeatures {
+        buildConfig = true
+    }
+    buildTypes{
+        release {
 
-    compileOptions {
+            buildConfigField(
+                "String",
+                "API_BASE_URL",
+                "\"https://francisco-pacheco.com/api/\""
+            ) //Usé mi propia api ya que la proporcinada no funcionaba
+        }
+        debug {
+            buildConfigField("String", "API_BASE_URL", "\"https://francisco-pacheco.com/api/\"")
+        }
+    }
+
+
+
+        compileOptions {
         isCoreLibraryDesugaringEnabled = true
 
         sourceCompatibility = JavaVersion.VERSION_1_8

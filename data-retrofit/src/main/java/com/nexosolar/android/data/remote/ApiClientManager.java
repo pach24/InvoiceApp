@@ -20,11 +20,11 @@ public class ApiClientManager {
     private volatile Retrofit retrofitClient;
     private volatile Retromock retromockClient;
 
-    // INSTANCIAS DE SERVICIOS CACHEADAS (La clave para que funcione el circular)
+    // INSTANCIAS DE SERVICIOS CACHEADAS
     private volatile ApiService mockApiService;
     private volatile ApiService realApiService;
 
-    private static final String BASE_URL = "https://francisco-pacheco.com/api/";
+
     private Context applicationContext;
 
     private ApiClientManager() { }
@@ -56,7 +56,7 @@ public class ApiClientManager {
                             .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
                             .create();
                     retrofitClient = new Retrofit.Builder()
-                            .baseUrl(BASE_URL)
+                            .baseUrl(BuildConfig.API_BASE_URL)
                             .addConverterFactory(GsonConverterFactory.create(gson))
                             .build();
                 }
@@ -78,7 +78,7 @@ public class ApiClientManager {
 
                     // Usamos la misma configuración de Retrofit base
                     Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(BASE_URL)
+                            .baseUrl(BuildConfig.API_BASE_URL)
                             .addConverterFactory(GsonConverterFactory.create(gson))
                             .build();
 
