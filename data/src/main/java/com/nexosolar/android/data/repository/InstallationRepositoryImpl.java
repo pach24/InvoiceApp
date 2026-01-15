@@ -8,15 +8,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Implementación del repositorio en la capa DATA.
- * Coordina la obtención de datos (en este caso, solo de red).
- */
 public class InstallationRepositoryImpl implements InstallationRepository {
 
     private final ApiService apiService;
 
-    // Inyección de dependencias (Manual o Hilt)
     public InstallationRepositoryImpl(ApiService apiService) {
         this.apiService = apiService;
     }
@@ -27,8 +22,6 @@ public class InstallationRepositoryImpl implements InstallationRepository {
             @Override
             public void onResponse(Call<Installation> call, Response<Installation> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // Mapeo directo: Modelo de API -> Modelo de Dominio
-                    // (Si tuvieras mappers, aquí los usarías)
                     callback.onSuccess(response.body());
                 } else {
                     callback.onError("Error del servidor: " + response.code());
