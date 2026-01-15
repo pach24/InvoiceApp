@@ -14,9 +14,9 @@ A native Android application focused on displaying and filtering invoice data, c
 - 🖼️ [Visual Showcase](#visual-showcase)
 - 💡 [Features](#features)
 - 🏛️ [Architecture](#architecture)
+- 🧩 [Modularization Strategy](#modularization-strategy)
 - 💾 [Installation](#installation)
 - 🚀 [Usage](#usage)
-- 📊 [Use Case Diagram](#use-case-diagram)
 - 🛠️ [Tech Stack](#tech-stack)
 - 📚 [Lessons Learned](#lessons-learned)
 - ⚖️ [License](#license)
@@ -25,8 +25,17 @@ A native Android application focused on displaying and filtering invoice data, c
 
 ## 📄 Overview
 
-This project is a small Android app that loads a list of invoices and allows users to filter them by status, date range, and amount.  
-The main goal of the project is to demonstrate modern Android development practices (MVVM, separation of concerns, repository pattern) and a production-like structure suitable for a professional environment or portfolio.  
+Developed during a **Professional Traineeship at Viewnext**, this project demonstrates **enterprise-grade Android development** practices, bridging the gap between academic theory and **industry standards**.
+
+The application is engineered with a focus on **Scalability** and **Maintainability**, strictly adhering to **SOLID principles** and **Clean Architecture (MVVM)**. It moves beyond simple functionality to showcase a decoupled, modular codebase ready for complex business requirements.
+
+Key technical highlights include:
+- A robust **Offline-First** strategy using **Room** as the **Single Source of Truth (SSOT)**.
+- **Reactive UI** updates utilizing **LiveData** and separation of concerns.
+- A flexible networking layer supporting both **Real API (Retrofit)** and **Mocking strategies** for isolated development.
+- Commitment to **Code Quality** with comprehensive **Unit Testing** (JUnit/Mockito).
+
+​
 
 ---
 
@@ -55,63 +64,53 @@ The main goal of the project is to demonstrate modern Android development practi
 
 ## 💡 Features
 
-- **Offline-First Architecture:** Uses **Room Database** as the single source of truth, ensuring the app works seamlessly without internet.
-- **Smart Loading:** Skeleton shimmer animation provides immediate visual feedback during data fetching.
-- **Robust Filtering:** Filter by status, date range (using modern `MaterialDatePicker`), and amount.
-- **State Management:**
-  -  **Loading:** Shimmer effect.
-  -  **Success:** RecyclerView list.
-  -  **Empty:** Custom illustration and helpful text when no results are found.
-  -  **Error:** Retry mechanism for network failures.
-- **Dual Data Source:** Toggle between **Real API (Retrofit)** and **Mock Data (Retromock)** instantly.
-- **Quality Assurance:** Comprehensive **Unit Tests** for Domain (Use Cases) and UI Logic (ViewModels).
-- **Modern UI:** Material Design 3 components, rounded corners, and edge-to-edge support.
-
+- **Offline-First Architecture:** Uses **Room Database** as the single source of truth.
+- **Smart Loading:** Skeleton shimmer animation during data fetching.
+- **Invoice Management:**
+  - Robust Filtering: Status, date range, and amount.
+  - Visual status indicators.
+- **Installation Management:** 
+  -  **Installation Details:** View technical specs of your solar setup.
+  -  **Energy Monitoring:** Track self-consumption and energy generation.
+- **Dual Data Source:** Toggle between **Real API (Retrofit)** and **Mock Data (Retromock)** instantly via a UI switch.
+- **Quality Assurance:** Unit Tests for Domain and ViewModels.
 
 
 ---
 
 ## 🏛️ Architecture
 
-The project follows a **Clean Architecture** approach with **MVVM**, ensuring separation of concerns and high testability.
+The project follows a strict **Clean Architecture** approach combined with **MVVM (Model-View-ViewModel)**. This ensures a unidirectional data flow, adherence to **SOLID principles**, and high testability by decoupling the business logic from the Android framework.
 
-### Presentation Layer (UI + ViewModel)
-- Pattern: **MVVM (Model–View–ViewModel)**.
-- **Dependency Injection:** ViewModels receive dependencies (UseCases) via a Factory, keeping them decoupled from data sources.
-- **Unit Testing:** `InvoiceViewModel` is tested using JUnit 4 and Mockito to verify filtering logic and state updates.
+### 📱 Presentation Layer (UI + ViewModel)
+- **Pattern:** MVVM. The View (Activities/Fragments) observes the ViewModel and reacts to state changes.
+- **State Management:** Uses `LiveData` to propagate data reactively to the UI.
+- **Dependency Injection:** ViewModels (`InvoiceViewModel`, `InstallationViewModel`) receive dependencies via a Factory, preventing tight coupling with repositories.
 
-### Domain Layer (Use Case)
-- `GetInvoicesUseCase`:
-  - Pure Java logic.
-  - Orchestrates data flow between the Repository and ViewModel.
-  - Tested in isolation to ensure correct business rules.
+### 🧠 Domain Layer (Business Logic)
+- **Pure Java Module:** Completely isolated from the Android SDK.
+- **Use Cases:** Encapsulate specific business rules (e.g., `GetInvoicesUseCase`, `FilterInvoicesUseCase`). They orchestrate the flow between the Repository and the Presentation layer.
+- **Testability:** Being pure Java, this layer is tested continuously with fast-running JUnit tests.
 
-### Data Layer (Repository + Room + API)
-- `InvoiceRepository`:
-  - Implements the **Single Source of Truth** pattern.
-  - Fetches data from API (Retrofit/Retromock) and saves it to **Room Database**.
-  - The UI always observes the local database, ensuring offline capability.
-- `AppDatabase` (Room):
-  - Local persistence for invoices.
-  - Handles complex types like `LocalDate` using TypeConverters.
+### 💾 Data Layer (Repository + Sources)
+- **Repository Pattern:** Acts as a mediator that abstracts the origin of the data.
+- **Single Source of Truth (SSOT):** The app prioritizes **Room Database** for data retrieval, ensuring total offline capabilities.
+- **Dual Network Strategy:** 
+  - **Retrofit:** For production-grade HTTP requests.
+  - **Retromock:** For simulating backend responses during development or demos.
 
-### Domain Layer (Use Case)
+---
 
-- `GetInvoicesUseCase`:
-  - Encapsulates the logic to request invoices from the repository.  
-  - Hides the details of whether data comes from a real API or mocked responses.  
+## 🧩 Modularization Strategy
 
-### Data Layer (Repository + API Clients)
+The application is strictly modularized to enforce separation of concerns, scalability, and faster build times:
 
-- `InvoiceRepository`:
-  - Implements the Repository pattern to abstract data sources.  
-  - Decides whether to use Retrofit or Retromock based on a flag (`useMock`).  
-- `ApiService` + `RetroFitClient`:
-  - Handle real HTTP requests to the remote API.  
-- `RetromockClient`:
-  - Provides mocked responses for local development, demos, or offline use.  
+- **`app`**: The **Presentation Layer**. Contains Activities, Fragments, ViewModels, and Dependency Injection setup. It depends on all other modules.
+- **`domain`**: The **Business Logic Layer**. A pure Java module containing Use Cases, Domain Models, and Repository Interfaces. It has **zero Android dependencies**.
+- **`data`**: The **Data Layer**. Responsible for the Repository implementation and local persistence (Room Database). It orchestrates data fetching strategies.
+- **`data-retrofit`**: The **Network Layer**. Dedicated module for API communication, containing Retrofit service definitions, DTOs, and Retromock client implementation.
+- **`core`**: **Shared Utilities**. Contains common extensions, helper classes, and constants used across the entire application.
 
-This structure helps keep the code decoupled, easier to evolve, and prepared for unit testing.
 
 ---
 
@@ -164,7 +163,7 @@ The project includes a robust suite of Unit Tests ensuring the reliability of bu
 
 ## 💾 Download / Release
 
-You can download the latest APK of **InvoiceApp** from the releases section:
+You can download the latest APK of **NexoSolar** from the releases section:
 
 - **Version:** v1.0.0 – Initial Demo Release  
 - **Download:** [app-release.apk](https://github.com/pach24/InvoiceApp/releases/download/v1.0.0/app-release.apk)
@@ -177,59 +176,30 @@ You can download the latest APK of **InvoiceApp** from the releases section:
 
 ### Basic Flow
 
-1. **Launch the app** to open `MainActivity`.  
-2. **Toggle data source**:
-- Use the toggle button to switch between **Retrofit (real API)** and **Retromock (mock data)**.  
-- The current mode is passed to the next screen via an intent extra (`USERETROMOCK`).  
-3. **Open the invoice list**:
-- Tap the button to navigate to `InvoiceListActivity`.  
-- The app loads invoices through `InvoiceViewModel` → `GetInvoicesUseCase` → `InvoiceRepository`.  
+1. **Launch the app** to open `MainActivity`.
+2. **Select Data Source**:
+   - Use the toggle switch to choose between **Retrofit (Real API)** and **Retromock (Mock Data)**.
+   - This preference controls the data source for the entire session.
+3. **Enter Smart Solar Dashboard**:
+   - Tap the enter button to navigate to `SmartSolarActivity`.
+   - Here you can access the new monitoring features:
+     - **🏠 Installation:** View technical details and status of your solar setup.
+     - **⚡ Energy:** Monitor real-time self-consumption and energy generation.
+4. **View Invoices**:
+   - Navigate to the **Invoices** section (launches `InvoiceListActivity`).
+   - The app loads bills through `InvoiceViewModel` → `GetInvoicesUseCase` → `InvoiceRepository` (using Room for offline cache).
 
 ### Filtering Invoices
 
-1. In the invoice list, open the filter panel from the toolbar/menu.  
-2. In `FilterFragment`, configure:
-- **Status** checkboxes (paid, pending payment, cancelled, fixed fee, payment plan…).  
-- **Date range** using the “from” and “until” buttons (date pickers).  
-- **Amount range** using the `RangeSlider` (min and max).  
+1. In the invoice list (`InvoiceListActivity`), open the filter panel from the toolbar/menu.
+2. In `FilterFragment`, configure your criteria:
+   - **Status:** Select checkboxes (Paid, Pending, Cancelled, Fixed Fee, Payment Plan...).
+   - **Date Range:** Use the "From" and "Until" date pickers to set a period.
+   - **Amount Range:** Adjust the `RangeSlider` to set minimum and maximum amounts.
 3. Tap **Apply**:
-- The fragment sends the filter data back to `InvoiceListActivity` via a `Bundle`.  
-- The activity applies the filters and updates the list if there are results.  
-4. Optionally, tap **Reset** in the filter panel to restore default values (status, dates, and slider).  
-
----
-
-## 📊 Use Case Diagram
-
-### Conceptual Use Cases
-
-- Open app.  
-- Select data source (Retrofit / Retromock).  
-- View invoice list.  
-- Refresh invoices.  
-- Open filter panel.  
-- Filter invoices by status.  
-- Filter invoices by date range.  
-- Filter invoices by amount range.  
-- Apply filters.  
-- Reset filters.  
-- View filtered results.  
-
-### Use Case Summary
-
-| Use Case                     | Description                                                                 |
-|-----------------------------|-----------------------------------------------------------------------------|
-| Open app                    | The user launches the app and reaches the main screen.                     |
-| Select data source          | The user chooses between real API (Retrofit) or mock data (Retromock).     |
-| View invoice list           | The user sees the loaded invoices in a `RecyclerView`.                     |
-| Refresh invoices            | The user triggers a reload of invoices from the repository.                |
-| Open filter panel           | The user opens the `FilterFragment` from the toolbar/menu.                 |
-| Filter by status            | The user selects one or more invoice statuses.                             |
-| Filter by date range        | The user sets start and end dates via date pickers.                        |
-| Filter by amount range      | The user adjusts the amount range using a `RangeSlider`.                   |
-| Apply filters               | The user applies all selected filter criteria.                             |
-| Reset filters               | The user clears filters and restores default values.                       |
-| View filtered results       | The user sees only invoices matching the chosen criteria.                  |
+   - The fragment sends the filter parameters back to the activity via a `Bundle`.
+   - The list updates instantly to show only matching invoices.
+4. **Reset:** Tap the "Reset" button in the filter panel to clear all filters and restore the full list.
 
 
 ---
@@ -249,10 +219,10 @@ You can download the latest APK of **InvoiceApp** from the releases section:
 
 ## 📚 Lessons Learned
 
-- The benefits of **decoupled architecture**: separating UI, domain, and data layers simplifies reasoning and refactoring.  
-- Robust **UI state management** using `ViewModel` and `LiveData` improves resilience to configuration changes.  
-- Designing for **multiple data sources** (Retrofit vs Retromock) encourages clean abstractions and easier testing.  
-- Structuring code with future testing in mind makes it easier to gradually introduce unit tests for ViewModels and use cases.  
+- **Single Source of Truth:** Implementing **Room** as the cache layer taught me that the UI should never observe the network directly. By observing the database, the app remains responsive and fully functional offline.
+- **Modularization Discipline:** keeping the `domain` module as a pure Java library (no Android dependencies) forced me to write cleaner, decoupled code that is strictly focused on business rules.
+- **Abstraction Power:** Designing the toggle between **Retrofit and Retromock** demonstrated the value of coding against interfaces. It allows the app to be testable and demos to run without relying on a stable internet connection or backend.
+- **Unit Testing:** Writing tests for the `InvoiceViewModel` helped verify that the complex filtering logic (dates, amounts, status) works correctly without needing to run the app on a device constantly.
 
 ## ⚖️ License
 
