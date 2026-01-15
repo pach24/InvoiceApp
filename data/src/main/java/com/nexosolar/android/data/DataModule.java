@@ -1,4 +1,3 @@
-// com.nexosolar.android.data.di.DataModule
 package com.nexosolar.android.data;
 
 import android.content.Context;
@@ -10,65 +9,75 @@ import com.nexosolar.android.data.remote.ApiClientManager;
 import com.nexosolar.android.data.remote.ApiService;
 import com.nexosolar.android.data.repository.InstallationRepositoryImpl;
 import com.nexosolar.android.data.repository.InvoiceRepositoryImpl;
+import com.nexosolar.android.data.source.InvoiceRemoteDataSource;
+import com.nexosolar.android.data.source.InvoiceRemoteDataSourceImpl;
 import com.nexosolar.android.domain.repository.InstallationRepository;
 import com.nexosolar.android.domain.repository.InvoiceRepository;
 
-/**
- * Módulo de Inyección Manual para la capa Data.
- * Encapsula toda la creación de dependencias "sucias" (Room, Retrofit, Prefs).
- */
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+
 public class DataModule {
 
     private final Context context;
     private final boolean useMock;
 
-    // Singletons cacheados
-    private ApiService apiService;
-    private InvoiceDao invoiceDao;
-    private SharedPreferences sharedPrefs;
+    // Claves para SharedPreferences
+    private static final String PREFS_NAME = "RepoPrefs";
+    private static final String KEY_LAST_MODE_WAS_MOCK = "last_mode_was_mock";
 
     public DataModule(Context context, boolean useMock) {
         this.context = context.getApplicationContext();
         this.useMock = useMock;
     }
 
-    // --- PROVEEDORES PÚBLICOS (Lo único que ve el módulo APP) ---
-
     public InvoiceRepository provideInvoiceRepository() {
-        return new InvoiceRepositoryImpl(
-                provideApiService(),
-                provideInvoiceDao(),
-                provideSharedPrefs(),
-                useMock
-        );
+        ApiService apiService = provideApiService();
+        InvoiceDao invoiceDao = provideInvoiceDao();
+        SharedPreferences prefs = provideSharedPrefs();
+
+        // 1. Limpieza de base de datos si cambia el modo (igual que antes)
+        boolean lastModeWasMock = prefs.getBoolean(KEY_LAST_MODE_WAS_MOCK, false);
+
+        if (this.useMock != lastModeWasMock) {
+            try {
+                Executors.newSingleThreadExecutor().submit(() -> {
+                    invoiceDao.deleteAll();
+                }).get();
+                prefs.edit().putBoolean(KEY_LAST_MODE_WAS_MOCK, this.useMock).apply();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        InvoiceRemoteDataSource remoteDataSource = new InvoiceRemoteDataSourceImpl(apiService);
+
+        // 2. CORRECCIÓN AQUÍ:
+        // Pasamos 'this.useMock' como tercer parámetro.
+        // Si es true (Mock), el repositorio siempre forzará la recarga (activando la circularidad).
+        // Si es false (Real), el repositorio usará caché primero.
+        return new InvoiceRepositoryImpl(remoteDataSource, invoiceDao, this.useMock);
     }
 
     public InstallationRepository provideInstallationRepository() {
         return new InstallationRepositoryImpl(provideApiService());
     }
 
-    // --- PROVEEDORES PRIVADOS (Detalles internos de Data) ---
+    // --- Proveedores Privados (Singletons o Helpers) ---
 
     private ApiService provideApiService() {
-        if (apiService == null) {
-            ApiClientManager.getInstance().init(context);
-            apiService = ApiClientManager.getInstance().getApiService(useMock, context);
-        }
-        return apiService;
+        // Inicializamos el Manager si no lo estaba
+        ApiClientManager.getInstance().init(context);
+        // ApiClientManager devuelve la instancia Mock o Real según el booleano
+        return ApiClientManager.getInstance().getApiService(useMock, context);
     }
 
     private InvoiceDao provideInvoiceDao() {
-        if (invoiceDao == null) {
-            AppDatabase db = AppDatabase.getInstance(context);
-            invoiceDao = db.invoiceDao();
-        }
-        return invoiceDao;
+        // Obtenemos la instancia singleton de la BD y devolvemos el DAO
+        return AppDatabase.getInstance(context).invoiceDao();
     }
 
     private SharedPreferences provideSharedPrefs() {
-        if (sharedPrefs == null) {
-            sharedPrefs = context.getSharedPreferences("RepoPrefs", Context.MODE_PRIVATE);
-        }
-        return sharedPrefs;
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
     }
 }
