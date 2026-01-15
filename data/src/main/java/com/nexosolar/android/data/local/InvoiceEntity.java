@@ -18,22 +18,4 @@ public class InvoiceEntity {
     public InvoiceEntity() {
     }
 
-    // --- MAPPER: De Entity (BD) a Domain (Lógica) ---
-    public Invoice toDomain() {
-        Invoice invoice = new Invoice();
-        // invoice.setId(this.id); // Si tu dominio tiene ID, úsalo
-        invoice.setDescEstado(this.estado);
-        invoice.setImporteOrdenacion(this.importe);
-        invoice.setFecha(this.fecha);
-        return invoice;
-    }
-
-    // --- MAPPER: De Domain (Lógica) a Entity (BD) ---
-    public static InvoiceEntity fromDomain(Invoice invoice) {
-        InvoiceEntity entity = new InvoiceEntity();
-        entity.estado = invoice.getDescEstado();
-        entity.importe = invoice.getImporteOrdenacion();
-        entity.fecha = invoice.getFecha();
-        return entity;
-    }
 }
