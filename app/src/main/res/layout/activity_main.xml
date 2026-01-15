@@ -14,6 +14,7 @@
         android:id="@+id/headerBackground"
         android:layout_width="match_parent"
         android:layout_height="420dp"
+        android:contentDescription="@null"
         android:scaleType="fitXY"
         android:src="@drawable/bg_header_abstract"
         app:layout_constraintTop_toTopOf="parent"
@@ -41,6 +42,7 @@
             android:layout_width="27dp"
             android:layout_height="27dp"
             android:layout_gravity="center"
+            android:contentDescription="@null"
             android:src="@drawable/ic_user_outline"
             app:tint="#555555" />
     </com.google.android.material.card.MaterialCardView>
@@ -62,7 +64,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="RetroMock"
+        android:text="@string/retromock"
         android:textColor="@color/white"
         android:textStyle="bold"
         android:layout_marginEnd="4dp"
@@ -78,7 +80,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginStart="24dp"
-        android:text="Hola, USUARIO"
         android:textSize="32sp"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -93,7 +94,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="24dp"
-        android:text="Avenida de la Constitución, 45..."
+        android:text="@string/avenida_de_la_constituci_n_45"
         android:textSize="15sp"
         android:textColor="#333333"
         android:ellipsize="end"
@@ -108,7 +109,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Mi Energía"
+        android:text="@string/mi_energ_a"
         android:textStyle="bold"
         android:textColor="#212121"
         android:textSize="17sp"
@@ -139,6 +140,7 @@
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_lightbulb_outline"
                 app:tint="#7CB342"/>
 
@@ -148,7 +150,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ver\nConsumo"
+                android:text="@string/ver_nconsumo"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:textColor="#000000"
@@ -158,7 +160,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Histórico"
+                android:text="@string/hist_rico"
                 android:textSize="14sp"
                 android:textColor="#8E8E93"
                 android:layout_marginTop="4dp"/>
@@ -172,11 +174,11 @@
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
-            android:contentDescription="Abrir listado de facturas"/>
+            android:contentDescription="@string/abrir_listado_de_facturas"/>
 
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- 7. NUEVA TARJETA SMART SOLAR -->
+    <!-- 7. TARJETA SMART SOLAR -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardSmartSolar"
         android:layout_width="160dp"
@@ -196,10 +198,11 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <!-- ICONO SOLAR (Usamos bombilla como placeholder, cambia el tinte a naranja) -->
+            <!-- ICONO SOLAR -->
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_sun"
                 app:tint="#FFA000"/>
 
@@ -209,7 +212,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Smart\nSolar"
+                android:text="@string/smart_nsolar"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:textColor="#000000"
@@ -219,7 +222,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Paneles"
+                android:text="@string/paneles"
                 android:textSize="14sp"
                 android:textColor="#8E8E93"
                 android:layout_marginTop="4dp"/>
@@ -233,7 +236,7 @@
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
-            android:contentDescription="Abrir Smart Solar"/>
+            android:contentDescription="@string/abrir_smart_solar"/>
 
     </com.google.android.material.card.MaterialCardView>
 

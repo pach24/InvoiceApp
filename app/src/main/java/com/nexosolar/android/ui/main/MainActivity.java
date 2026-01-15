@@ -10,6 +10,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.nexosolar.android.R;
 import com.nexosolar.android.databinding.ActivityMainBinding;
 import com.nexosolar.android.ui.invoices.InvoiceListActivity;
 import com.nexosolar.android.ui.smartsolar.SmartSolarActivity;
@@ -20,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     // Por defecto true (Mock) para desarrollo
     private boolean useMock = true;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +31,10 @@ public class MainActivity extends AppCompatActivity {
         // Inflar el layout usando ViewBinding
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        String nombreUsuario = "Carlos"; //Hardcodeado porque no tengo lógica para un login y poder extraer los datos
+        String saludoCompleto = getString(R.string.greeting_user, nombreUsuario);
+        binding.tvGreeting.setText(saludoCompleto);
 
         // Configurar insets (Importante para que no se corte el fondo verde arriba)
         ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {

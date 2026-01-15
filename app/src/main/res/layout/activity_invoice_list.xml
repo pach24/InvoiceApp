@@ -72,7 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <!-- Añadimos varios items falsos para llenar la pantalla -->
+            <!-- Skeletons para la carga -->
             <include layout="@layout/item_invoice_skeleton" />
             <include layout="@layout/item_invoice_skeleton" />
             <include layout="@layout/item_invoice_skeleton" />

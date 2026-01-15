@@ -1,151 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- 1. LA RAÍZ DEBE SER FRAMELAYOUT PARA APILAR VISTAS -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <LinearLayout
+    <!-- 2. TU CONTENIDO REAL (Inicialmente oculto) -->
+    <!-- Solo un NestedScrollView aquí para el contenido -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/contentLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
-
-        <!-- 1. CAU -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="CAU (Código Autoconsumo)"
-            android:textColor="#757575"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/tvCau"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ES0021000000001994LJ1FA000"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:layout_marginTop="4dp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#E0E0E0"
-            android:layout_marginTop="8dp"/>
-
-        <!-- 2. ESTADO SOLICITUD (Con icono 'i') -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Estado solicitud alta autoconsumidor"
-            android:textColor="#757575"
-            android:textSize="12sp"
-            android:layout_marginTop="24dp"/>
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="4dp">
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- 1. CAU -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CAU (Código Autoconsumo)"
+                android:textColor="#757575"
+                android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/tvStatus"
-                android:layout_width="0dp"
+                android:id="@+id/tvCau"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="No hemos recibido ninguna solicitud de autoconsumo"
+                android:layout_marginTop="4dp"
+                android:text=""
                 android:textColor="#000000"
                 android:textSize="16sp" />
 
-            <!-- Icono de información clickable -->
-            <ImageView
-                android:id="@+id/ivInfo"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/tooltip_azul_estados"
-                android:contentDescription="Más información"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="#2196F3"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="#E0E0E0" />
+
+            <!-- 2. ESTADO SOLICITUD -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/estado_solicitud_alta_autoconsumidor"
+                android:textColor="#757575"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvStatus"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/ivInfo"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:contentDescription="@string/m_s_informaci_n"
+                    android:focusable="true"
+                    android:src="@drawable/tooltip_azul_estados"
+                    app:tint="#2196F3" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="#E0E0E0" />
+
+            <!-- 3. TIPO AUTOCONSUMO -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/tipo_autoconsumo"
+                android:textColor="#757575"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text=""
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="#E0E0E0" />
+
+            <!-- 4. COMPENSACIÓN -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/compensaci_n_de_excedentes"
+                android:textColor="#757575"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvCompensation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text=""
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="#E0E0E0" />
+
+            <!-- 5. POTENCIA -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/potencia_de_instalaci_n"
+                android:textColor="#757575"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvPower"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text=""
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="#E0E0E0" />
+
         </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#E0E0E0"
-            android:layout_marginTop="8dp"/>
+    <!-- 3. EL SHIMMER (Visible por defecto) -->
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerViewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
-        <!-- 3. TIPO AUTOCONSUMO -->
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tipo autoconsumo"
-            android:textColor="#757575"
-            android:textSize="12sp"
-            android:layout_marginTop="24dp"/>
+            android:orientation="vertical"
+            android:padding="24dp">
 
-        <TextView
-            android:id="@+id/tvType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Con excedentes y compensación Individual - Consumo"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:layout_marginTop="4dp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#E0E0E0"
-            android:layout_marginTop="8dp"/>
+            <!-- 5 items skeleton para simular tus 5 campos -->
+            <include layout="@layout/item_detail_skeleton" />
+            <include layout="@layout/item_detail_skeleton" />
+            <include layout="@layout/item_detail_skeleton" />
+            <include layout="@layout/item_detail_skeleton" />
+            <include layout="@layout/item_detail_skeleton" />
 
-        <!-- 4. COMPENSACIÓN -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Compensación de excedentes"
-            android:textColor="#757575"
-            android:textSize="12sp"
-            android:layout_marginTop="24dp"/>
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
-        <TextView
-            android:id="@+id/tvCompensation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Precio PVPC"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:layout_marginTop="4dp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#E0E0E0"
-            android:layout_marginTop="8dp"/>
-
-        <!-- 5. POTENCIA -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Potencia de instalación"
-            android:textColor="#757575"
-            android:textSize="12sp"
-            android:layout_marginTop="24dp"/>
-
-        <TextView
-            android:id="@+id/tvPower"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="5kWp"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:layout_marginTop="4dp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#E0E0E0"
-            android:layout_marginTop="8dp"/>
-
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+</FrameLayout>

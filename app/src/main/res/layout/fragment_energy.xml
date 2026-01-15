@@ -15,7 +15,7 @@
         android:layout_height="200dp"
         android:src="@drawable/plan_gestiones"
         android:scaleType="fitCenter"
-        android:contentDescription="Trabajo en progreso" />
+        android:contentDescription="@string/trabajo_en_progreso" />
 
     <!-- Reduce este espacio si también quieres acercar el texto a la imagen -->
     <Space
@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Estamos trabajando en mejorar la App. Tus paneles solares siguen produciendo, en breve podrás seguir viendo tu producción solar. Sentimos las molestias."
+        android:text="@string/estamos_trabajando_en_mejorar_la_app_tus_paneles_solares_siguen_produciendo_en_breve_podr_s_seguir_viendo_tu_producci_n_solar_sentimos_las_molestias"
         android:textColor="#424242"
         android:textSize="16sp"
         android:lineSpacingMultiplier="1.2" />

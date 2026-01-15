@@ -33,6 +33,10 @@ public class DetailsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+        // Iniciar la animación del shimmer mientras se cargan los datos
+        binding.shimmerViewContainer.startShimmer();
+
         // Configurar dependencias (Inyección manual)
         setupDependencies();
 
@@ -60,20 +64,40 @@ public class DetailsFragment extends Fragment {
         getInstallationDetailsUseCase.execute(new InstallationRepository.InstallationCallback() {
             @Override
             public void onSuccess(Installation installation) {
-                // Actualizar UI en el hilo principal
-                binding.tvCau.setText(installation.getCau());
-                binding.tvStatus.setText(installation.getStatus());
-                binding.tvType.setText(installation.getType());
-                binding.tvCompensation.setText(installation.getCompensation());
-                binding.tvPower.setText(installation.getPower());
+                // Asegurarnos de tocar la UI en el hilo principal
+                if (getActivity() == null) return;
+
+                getActivity().runOnUiThread(() -> {
+                    // 1. Rellenar datos
+                    binding.tvCau.setText(installation.getCau());
+                    binding.tvStatus.setText(installation.getStatus());
+                    binding.tvType.setText(installation.getType());
+                    binding.tvCompensation.setText(installation.getCompensation());
+                    binding.tvPower.setText(installation.getPower());
+
+                    // 2. CONTROL DEL SHIMMER (Apagar)
+                    binding.shimmerViewContainer.stopShimmer();
+                    binding.shimmerViewContainer.setVisibility(View.GONE);
+                    binding.contentLayout.setVisibility(View.VISIBLE);
+                });
             }
 
             @Override
             public void onError(String errorMessage) {
-                binding.tvStatus.setText(errorMessage);
+                if (getActivity() == null) return;
+
+                getActivity().runOnUiThread(() -> {
+                    // También apagamos el shimmer si hay error
+                    binding.shimmerViewContainer.stopShimmer();
+                    binding.shimmerViewContainer.setVisibility(View.GONE);
+                    // Mostrar error
+                    binding.tvStatus.setText(errorMessage);
+
+                });
             }
         });
     }
+
 
     private void showInfoDialog() {
         new AlertDialog.Builder(requireContext())

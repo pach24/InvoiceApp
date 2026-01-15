@@ -20,6 +20,8 @@
     <string name="error_conexion">No hay conexión a internet</string>
     <string name="sin_resultados">No se encontraron resultados</string>
     <string name="reintentar">Reintentar</string>
+    <string name="greeting_user">Hola, %1$s</string>
+
 
     <!-- ============================================================ -->
     <!-- ELEMENTOS DE LA LISTA (Adapter) -->
@@ -71,5 +73,24 @@
     <string name="change_filters">Intenta con otros criterios de búsqueda</string>
     <string name="atr_s">Atrás</string>
     <string name="smart_solar">Smart Solar</string>
+    <string name="avenida_de_la_constituci_n_45">Avenida de la Constitución, 45...</string>
+    <string name="mi_energ_a">Mi Energía</string>
+    <string name="ver_nconsumo">Ver\nConsumo</string>
+    <string name="hist_rico">Histórico</string>
+    <string name="abrir_listado_de_facturas">Abrir listado de facturas</string>
+    <string name="smart_nsolar">Smart\nSolar</string>
+    <string name="retromock">RetroMock</string>
+    <string name="paneles">Paneles</string>
+    <string name="abrir_smart_solar">Abrir Smart Solar</string>
+    <string name="estado_solicitud_alta_autoconsumidor">Estado solicitud alta autoconsumidor</string>
+    <string name="m_s_informaci_n">Más información</string>
+    <string name="tipo_autoconsumo">Tipo autoconsumo</string>
+    <string name="compensaci_n_de_excedentes">Compensación de excedentes</string>
+    <string name="potencia_de_instalaci_n">Potencia de instalación</string>
+    <string name="trabajo_en_progreso">Trabajo en progreso</string>
+    <string name="estamos_trabajando_en_mejorar_la_app_tus_paneles_solares_siguen_produciendo_en_breve_podr_s_seguir_viendo_tu_producci_n_solar_sentimos_las_molestias">Estamos trabajando en mejorar la App. Tus paneles solares siguen produciendo, en breve podrás seguir viendo tu producción solar. Sentimos las molestias.</string>
+    <string name="aqu_tienes_los_datos_de_tu_instalaci_n_fotovoltaica_en_tiempo_real">Aquí tienes los datos de tu instalación fotovoltaica en tiempo real.</string>
+    <string name="autoconsumo">Autoconsumo:</string>
+    <string name="_92">92%</string>
 
 </resources>
