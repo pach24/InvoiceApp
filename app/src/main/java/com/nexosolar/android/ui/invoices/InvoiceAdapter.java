@@ -1,6 +1,7 @@
 package com.nexosolar.android.ui.invoices;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.nexosolar.android.R;
+import com.nexosolar.android.core.DateUtils;
 import com.nexosolar.android.domain.models.Invoice;
 import com.nexosolar.android.databinding.ItemInvoiceBinding;
 
@@ -41,12 +44,15 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
     public void onBindViewHolder(@NonNull InvoiceViewHolder holder, int position) {
         Invoice factura = listaFacturas.get(position);
 
-        // CORRECCIÓN: Formatear LocalDate a String antes de ponerlo en el TextView
-        LocalDate fecha = factura.getFecha();
-        if (fecha != null) {
-            holder.binding.txtFecha.setText(fecha.format(outputFormatter));
+        // 1. Obtenemos el texto ya formateado
+        String fechaTexto = DateUtils.formatDate(factura.getFecha());
+
+        // 2. Lo asignamos directamente
+        if (fechaTexto != null && !fechaTexto.isEmpty()) {
+            holder.binding.txtFecha.setText(fechaTexto);
         } else {
-            holder.binding.txtFecha.setText("Sin fecha");
+            Context context = holder.itemView.getContext();
+            holder.binding.txtFecha.setText(context.getString(R.string.sin_fecha));
         }
 
         // Establecer el importe
