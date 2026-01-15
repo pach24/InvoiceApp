@@ -1,7 +1,7 @@
 package com.nexosolar.android.ui.utils;
 
 import com.nexosolar.android.R;
-import com.nexosolar.android.domain.InvoiceState;
+import com.nexosolar.android.domain.models.InvoiceState;
 
 public class InvoiceStateMapper {
 

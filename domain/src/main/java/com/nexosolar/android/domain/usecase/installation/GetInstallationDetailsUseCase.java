@@ -1,7 +1,6 @@
-package com.nexosolar.android.domain;
+package com.nexosolar.android.domain.usecase.installation;
 
-import com.nexosolar.android.domain.Installation;
-import com.nexosolar.android.domain.InstallationRepository;
+import com.nexosolar.android.domain.repository.InstallationRepository;
 
 /**
  * Caso de uso que encapsula la lógica de negocio para obtener detalles de instalación.

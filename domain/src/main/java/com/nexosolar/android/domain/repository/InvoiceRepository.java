@@ -1,4 +1,6 @@
-package com.nexosolar.android.domain;
+package com.nexosolar.android.domain.repository;
+
+import com.nexosolar.android.domain.models.Invoice;
 
 import java.util.List;
 

@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.nexosolar.android.domain.Invoice;
+import com.nexosolar.android.domain.models.Invoice;
 import com.nexosolar.android.databinding.ItemInvoiceBinding;
 
 import java.time.LocalDate;

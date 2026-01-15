@@ -1,6 +1,6 @@
 package com.nexosolar.android.data.remote;
 
-import com.nexosolar.android.domain.Invoice;
+import com.nexosolar.android.domain.models.Invoice;
 
 import java.util.List;
 

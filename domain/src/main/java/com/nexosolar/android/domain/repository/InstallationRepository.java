@@ -1,6 +1,6 @@
-package com.nexosolar.android.domain;
+package com.nexosolar.android.domain.repository;
 
-import com.nexosolar.android.domain.Installation;
+import com.nexosolar.android.domain.models.Installation;
 
 /**
  * Contrato para obtener datos de instalación solar.

@@ -1,6 +1,6 @@
 package com.nexosolar.android.data.remote;
 
-import com.nexosolar.android.domain.Installation;
+import com.nexosolar.android.domain.models.Installation;
 
 import co.infinum.retromock.meta.Mock;
 import co.infinum.retromock.meta.MockCircular;

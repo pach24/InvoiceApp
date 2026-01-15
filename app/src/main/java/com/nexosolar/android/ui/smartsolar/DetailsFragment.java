@@ -11,10 +11,10 @@ import androidx.fragment.app.Fragment;
 
 import com.nexosolar.android.data.remote.ApiClientManager;
 import com.nexosolar.android.data.remote.ApiService;
-import com.nexosolar.android.data.InstallationRepositoryImpl;
-import com.nexosolar.android.domain.Installation;
-import com.nexosolar.android.domain.InstallationRepository;
-import com.nexosolar.android.domain.GetInstallationDetailsUseCase;
+import com.nexosolar.android.data.repository.InstallationRepositoryImpl;
+import com.nexosolar.android.domain.models.Installation;
+import com.nexosolar.android.domain.repository.InstallationRepository;
+import com.nexosolar.android.domain.usecase.installation.GetInstallationDetailsUseCase;
 import com.nexosolar.android.databinding.FragmentDetailsBinding;
 
 public class DetailsFragment extends Fragment {

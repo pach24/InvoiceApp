@@ -1,4 +1,4 @@
-package com.nexosolar.android.domain;
+package com.nexosolar.android.domain.repository;
 
 // Interfaz pura de Java para devolver resultados asíncronos
 public interface RepositoryCallback<T> {

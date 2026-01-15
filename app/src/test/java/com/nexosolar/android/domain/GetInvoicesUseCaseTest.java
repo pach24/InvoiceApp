@@ -4,6 +4,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
 
+import com.nexosolar.android.domain.repository.InvoiceRepository;
+import com.nexosolar.android.domain.usecase.invoice.GetInvoicesUseCase;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

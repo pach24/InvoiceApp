@@ -1,4 +1,4 @@
-package com.nexosolar.android.data;
+package com.nexosolar.android.data.repository;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,9 +9,9 @@ import com.nexosolar.android.data.local.InvoiceEntity;
 import com.nexosolar.android.data.remote.ApiClientManager;
 import com.nexosolar.android.data.remote.ApiService;
 import com.nexosolar.android.data.remote.InvoiceResponse;
-import com.nexosolar.android.domain.Invoice;
-import com.nexosolar.android.domain.InvoiceRepository;
-import com.nexosolar.android.domain.RepositoryCallback;
+import com.nexosolar.android.domain.models.Invoice;
+import com.nexosolar.android.domain.repository.InvoiceRepository;
+import com.nexosolar.android.domain.repository.RepositoryCallback;
 
 import java.util.ArrayList;
 import java.util.List;

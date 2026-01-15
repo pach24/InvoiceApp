@@ -1,4 +1,4 @@
-package com.nexosolar.android.domain;
+package com.nexosolar.android.domain.models;
 
 public class Installation {
     private String cau;

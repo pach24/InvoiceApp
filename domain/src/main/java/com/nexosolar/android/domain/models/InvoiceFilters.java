@@ -1,4 +1,4 @@
-package com.nexosolar.android.ui.invoices;
+package com.nexosolar.android.domain.models;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

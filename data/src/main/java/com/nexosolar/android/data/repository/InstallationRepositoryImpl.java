@@ -1,8 +1,8 @@
-package com.nexosolar.android.data;
+package com.nexosolar.android.data.repository;
 
 import com.nexosolar.android.data.remote.ApiService;
-import com.nexosolar.android.domain.Installation;
-import com.nexosolar.android.domain.InstallationRepository;
+import com.nexosolar.android.domain.models.Installation;
+import com.nexosolar.android.domain.repository.InstallationRepository;
 
 import retrofit2.Call;
 import retrofit2.Callback;

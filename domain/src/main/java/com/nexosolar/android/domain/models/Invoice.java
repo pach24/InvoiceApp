@@ -1,4 +1,4 @@
-package com.nexosolar.android.domain;
+package com.nexosolar.android.domain.models;
 
 import java.io.Serializable;
 import java.time.LocalDate;

@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.nexosolar.android.databinding.FragmentFilterBinding;
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.nexosolar.android.domain.models.InvoiceFilters;
 
 import java.time.Instant;
 import java.time.LocalDate;

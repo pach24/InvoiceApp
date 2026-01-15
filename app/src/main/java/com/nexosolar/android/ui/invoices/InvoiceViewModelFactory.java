@@ -1,11 +1,14 @@
 package com.nexosolar.android.ui.invoices;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import com.nexosolar.android.data.InvoiceRepositoryImpl;
-import com.nexosolar.android.domain.GetInvoicesUseCase;
+
+import com.nexosolar.android.data.repository.InvoiceRepositoryImpl;
+import com.nexosolar.android.domain.usecase.invoice.FilterInvoicesUseCase;
+import com.nexosolar.android.domain.usecase.invoice.GetInvoicesUseCase;
 
 public class InvoiceViewModelFactory implements ViewModelProvider.Factory {
 
@@ -15,21 +18,22 @@ public class InvoiceViewModelFactory implements ViewModelProvider.Factory {
     public InvoiceViewModelFactory(boolean useMock, Context context) {
         this.useMock = useMock;
         this.context = context.getApplicationContext();
-    } // <--- LLAVE DE CIERRE CORREGIDA
+    }
 
     @NonNull
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(InvoiceViewModel.class)) {
-            // Crea el repositorio concreto
+
             InvoiceRepositoryImpl repository = new InvoiceRepositoryImpl(useMock, context);
 
-            // Crea el caso de uso
-            GetInvoicesUseCase useCase = new GetInvoicesUseCase(repository);
+            GetInvoicesUseCase getInvoicesUseCase = new GetInvoicesUseCase(repository);
+            FilterInvoicesUseCase filterInvoicesUseCase = new FilterInvoicesUseCase();
 
-            // Crea el ViewModel
-            return (T) new InvoiceViewModel(useCase);
+            return (T) new InvoiceViewModel(getInvoicesUseCase, filterInvoicesUseCase);
         }
+
         throw new IllegalArgumentException("Unknown ViewModel class");
     }
 }
