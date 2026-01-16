@@ -33,7 +33,7 @@ public class InvoiceViewModel extends ViewModel {
     private final MutableLiveData<InvoiceFilters> filtrosActuales = new MutableLiveData<>(new InvoiceFilters());
     private final MutableLiveData<String> errorValidacion = new MutableLiveData<>();
 
-    // CONSTRUCTOR ACTUALIZADO
+
     public InvoiceViewModel(GetInvoicesUseCase getInvoicesUseCase, FilterInvoicesUseCase filterInvoicesUseCase) {
         this.getInvoicesUseCase = getInvoicesUseCase;
         this.filterInvoicesUseCase = filterInvoicesUseCase;
@@ -132,11 +132,11 @@ public class InvoiceViewModel extends ViewModel {
         InvoiceFilters nuevosFiltros = new InvoiceFilters();
 
         // Resetear Fechas
-        LocalDate fechaAntigua = getOldestDate();
-        if (fechaAntigua != null) {
-            nuevosFiltros.setFechaInicio(fechaAntigua);
-            nuevosFiltros.setFechaFin(LocalDate.now());
-        }
+        // 1. FECHAS A NULL (Crucial para que salga día/mes/año)
+        nuevosFiltros.setFechaInicio(null);
+        nuevosFiltros.setFechaFin(null);
+
+
 
         // Resetear Importes
         nuevosFiltros.setImporteMin(0.0);
@@ -167,18 +167,17 @@ public class InvoiceViewModel extends ViewModel {
             filtros.setFechaFin(LocalDate.now());
         }
 
+        filtros.setFechaInicio(null);
+        filtros.setFechaFin(null);
+
+
         filtros.setImporteMin(0.0);
         filtros.setImporteMax((double) getMaxImporte());
 
-        List<String> todosEstados = new ArrayList<>();
-        todosEstados.add("Pagada");
-        todosEstados.add("Pendiente de pago");
-        todosEstados.add("Anulada");
-        todosEstados.add("Cuota fija");
-        todosEstados.add("Plan de pago");
-        filtros.setEstadosSeleccionados(todosEstados);
 
-        // CAMBIO AQUÍ: Usar postValue en lugar de setValue
+        filtros.setEstadosSeleccionados(new ArrayList<>());
+
+
         filtrosActuales.postValue(filtros);
     }
 
@@ -230,6 +229,19 @@ public class InvoiceViewModel extends ViewModel {
             }
         }
         return oldestDate;
+    }
+
+    public LocalDate getNewestDate() {
+        if (facturasOriginales == null || facturasOriginales.isEmpty()) return null;
+        LocalDate newest = null;
+        for (Invoice f : facturasOriginales) {
+            if (f.getFecha() != null) {
+                if (newest == null || f.getFecha().isAfter(newest)) {
+                    newest = f.getFecha();
+                }
+            }
+        }
+        return newest;
     }
 
     public boolean hayDatosCargados() {

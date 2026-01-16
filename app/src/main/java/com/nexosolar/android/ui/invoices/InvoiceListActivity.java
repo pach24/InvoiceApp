@@ -72,6 +72,14 @@ public class InvoiceListActivity extends AppCompatActivity {
 
         // Botón para volver a la actividad principal
         bindingInvoiceList.btnVolver.setOnClickListener(v -> finish());
+
+        // LISTENER PARA DETECTAR CUANDO SE CIERRA EL FRAGMENTO
+        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
+            // Si la pila está vacía (0), significa que hemos vuelto a la Activity base
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                restoreMainView();
+            }
+        });
     }
 
     @Override
