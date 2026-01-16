@@ -4,27 +4,31 @@
     <!-- ============================================================ -->
     <string name="app_name">Nexo Solar</string>
     <string name="back_button">Consumo</string>
+    <string name="atr_s">Atrás</string>
+    <string name="cerrar">Cerrar</string>
     <string name="usuario">usuario</string>
     <string name="hola_usuario">hola usuario</string>
-    <string name="cerrar">Cerrar</string>
+    <string name="greeting_user">Hola, %1$s</string>
 
     <!-- ============================================================ -->
     <!-- PANTALLA PRINCIPAL (Listado) -->
     <!-- ============================================================ -->
     <string name="facturas">Facturas</string>
     <string name="cambiar_a_retromock">Cambiar a Retromock</string>
+    <string name="retromock">RetroMock</string>
+    <string name="abrir_listado_de_facturas">Abrir listado de facturas</string>
+    <string name="abrir_smart_solar">Abrir Smart Solar</string>
 
-    <!-- Manejo de Errores y Estados (NUEVOS - Estilo antiguo) -->
+    <!-- Empty States y Errores -->
     <string name="cargando_datos">Cargando facturas...</string>
     <string name="error_carga">Ha ocurrido un error al cargar los datos</string>
     <string name="error_conexion">No hay conexión a internet</string>
     <string name="sin_resultados">No se encontraron resultados</string>
+    <string name="change_filters">Intenta con otros criterios de búsqueda</string>
     <string name="reintentar">Reintentar</string>
-    <string name="greeting_user">Hola, %1$s</string>
-
 
     <!-- ============================================================ -->
-    <!-- ELEMENTOS DE LA LISTA (Adapter) -->
+    <!-- ADAPTER / ITEM FACTURA (Singular) -->
     <!-- ============================================================ -->
     <string name="fecha">Fecha</string>
     <string name="estado">Estado</string>
@@ -32,12 +36,16 @@
     <string name="sin_fecha">Sin fecha</string>
     <string name="icono_de_flecha_para_item_factura">Icono de flecha para item factura</string>
 
-    <!-- Diálogos / Popups  -->
-    <string name="titulo_informacion">Información</string>
-    <string name="mensaje_funcionalidad_no_disponible">Esta funcionalidad aún no está disponible</string>
+    <!-- Estados de Factura (Singular) -->
+    <string name="estado_pendiente">Pendiente de pago</string>
+    <string name="estado_pagada">Pagada</string>
+    <string name="estado_anulada">Anulada</string>
+    <string name="estado_cuota_fija">Cuota fija</string>
+    <string name="estado_plan_pago">Plan de pago</string>
+    <string name="estado_desconocido">Desconocido</string>
 
     <!-- ============================================================ -->
-    <!-- PANTALLA DE FILTROS -->
+    <!-- PANTALLA DE FILTROS (Plural / Categorías) -->
     <!-- ============================================================ -->
     <string name="filtros">Filtros</string>
     <string name="filtrar_facturas">Filtrar facturas</string>
@@ -58,30 +66,29 @@
     <string name="_0">0</string>
     <string name="_0eur">0 €</string>
 
-    <!-- Sección Estados (Checkboxes y Etiquetas) -->
+    <!-- Checkboxes de Filtro (Mapeados a fragment_filter.xml) -->
     <string name="por_estado">Por estado</string>
-    <string name="pagadas">Pagadas</string>
-    <string name="anuladas">Anuladas</string>
-    <string name="cuota_fija">Cuota Fija</string>
-    <string name="pendientes_de_pago">Pendientes de pago</string>
-    <string name="plan_de_pago">Plan de pago</string>
+    <string name="pagadas">Pagadas</string>             <!-- Plural -->
+    <string name="anuladas">Anuladas</string>            <!-- Plural -->
+    <string name="pendientes_de_pago">Pendientes de pago</string> <!-- Plural -->
+    <!-- Reutilizamos los singulares cuando no cambian en plural -->
+    <string name="cuota_fija">@string/estado_cuota_fija</string>
+    <string name="plan_de_pago">@string/estado_plan_pago</string>
 
     <!-- ============================================================ -->
-    <!-- OTROS / GENERADOS -->
+    <!-- SMART SOLAR / DETALLES -->
     <!-- ============================================================ -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="change_filters">Intenta con otros criterios de búsqueda</string>
-    <string name="atr_s">Atrás</string>
     <string name="smart_solar">Smart Solar</string>
-    <string name="avenida_de_la_constituci_n_45">Avenida de la Constitución, 45...</string>
+    <string name="smart_nsolar">Smart\nSolar</string>
     <string name="mi_energ_a">Mi Energía</string>
     <string name="ver_nconsumo">Ver\nConsumo</string>
     <string name="hist_rico">Histórico</string>
-    <string name="abrir_listado_de_facturas">Abrir listado de facturas</string>
-    <string name="smart_nsolar">Smart\nSolar</string>
-    <string name="retromock">RetroMock</string>
     <string name="paneles">Paneles</string>
-    <string name="abrir_smart_solar">Abrir Smart Solar</string>
+    <string name="avenida_de_la_constituci_n_45">Avenida de la Constitución, 45...</string>
+
+    <!-- Textos de Información / Dialogs -->
+    <string name="titulo_informacion">Información</string>
+    <string name="mensaje_funcionalidad_no_disponible">Esta funcionalidad aún no está disponible</string>
     <string name="estado_solicitud_alta_autoconsumidor">Estado solicitud alta autoconsumidor</string>
     <string name="m_s_informaci_n">Más información</string>
     <string name="tipo_autoconsumo">Tipo autoconsumo</string>
@@ -92,5 +99,6 @@
     <string name="aqu_tienes_los_datos_de_tu_instalaci_n_fotovoltaica_en_tiempo_real">Aquí tienes los datos de tu instalación fotovoltaica en tiempo real.</string>
     <string name="autoconsumo">Autoconsumo:</string>
     <string name="_92">92%</string>
+
 
 </resources>

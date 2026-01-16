@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="activeThumbColor">#FF4081</color>
-    <color name="inactiveThumbColor">#BDBDBD</color>
-    <color name="holo_green_light">#ff99cc00</color>
-    <color name="holo_green_dark">#ff669900</color>
 
-    <color name="texto_alerta">#D32F2F</color> <!-- Rojo para Pendiente/Anulada -->
-    <color name="texto_normal">#000000</color> <!-- Negro para el resto de estados de facturas -->
+    <!-- ============================================= -->
+    <!-- Colores Base / Sistema -->
+    <!-- ============================================= -->
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+
+    <color name="holo_green_light">#FF99CC00</color>
+    <color name="holo_green_dark">#FF669900</color>
+
+    <!-- ============================================= -->
+    <!-- Estados de Facturas  -->
+    <!-- ============================================= -->
+
+    <!-- Rojo para Pendiente/Anulada -->
+    <color name="texto_alerta">#F46565</color>
+    <!-- Negro para Pagada, Cuota Fija, Plan de Pago -->
+    <color name="texto_normal">#000000</color>
+
+
+
+    <!-- ============================================= -->
+    <!-- Componentes UI (Sliders, Switches) -->
+    <!-- ============================================= -->
+    <color name="inactiveThumbColor">#BDBDBD</color>
+    <color name="activeThumbColor">#FF03DAC5</color>
+
 </resources>
