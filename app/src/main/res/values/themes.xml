@@ -5,14 +5,21 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/holo_green_light</item>
-        <item name="colorPrimaryVariant">@color/holo_green_dark</item>
+        <item name="colorPrimary">@color/my_theme_green_light</item>
+        <item name="colorPrimaryVariant">@color/my_theme_green_dark</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/activeThumbColor</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/white</item>
+
+    </style>
+
+    <style name="smart_solar_tab" parent="TextAppearance.AppCompat.Medium">
+
+        <item name="android:textSize">16sp</item>
+
 
     </style>
 

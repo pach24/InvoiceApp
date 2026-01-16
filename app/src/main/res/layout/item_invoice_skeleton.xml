@@ -10,24 +10,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="1">
+        android:weightSum="1"> <!-- Total de pesos = 1.0 -->
 
-        <!-- Fecha falsa -->
+        <!-- 1. Fecha falsa (Ocupa el 40%) -->
         <View
             android:layout_width="0dp"
             android:layout_height="16dp"
             android:layout_weight="0.4"
-
             android:background="#E0E0E0" />
 
-        <View android:layout_width="16dp" android:layout_height="match_parent"/>
+        <!-- 2. CAMBIO CLAVE: Espaciador flexible -->
+        <!-- Le damos el peso restante (0.4) para empujar lo siguiente a la derecha.
+             Cálculo: 1.0 (total) - 0.4 (fecha) - 0.2 (importe) = 0.4 sobrante -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3" />
 
-        <!-- Importe falso -->
+        <!-- 3. Importe falso (Ocupa el 20% y queda a la derecha) -->
         <View
             android:layout_width="0dp"
             android:layout_height="16dp"
-            android:layout_weight="0.6"
+            android:layout_weight="0.2"
             android:background="#E0E0E0" />
+
     </LinearLayout>
 
     <View android:layout_width="match_parent" android:layout_height="8dp"/>

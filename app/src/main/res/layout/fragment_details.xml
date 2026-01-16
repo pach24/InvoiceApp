@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="CAU (Código Autoconsumo)"
-                android:textColor="#757575"
+                android:textColor="@android:color/darker_gray"
                 android:textSize="12sp" />
 
             <TextView
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/estado_solicitud_alta_autoconsumidor"
-                android:textColor="#757575"
+                android:textColor="@android:color/darker_gray"
                 android:textSize="12sp" />
 
             <LinearLayout
@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/tipo_autoconsumo"
-                android:textColor="#757575"
+                android:textColor="@android:color/darker_gray"
                 android:textSize="12sp" />
 
             <TextView
@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/compensaci_n_de_excedentes"
-                android:textColor="#757575"
+                android:textColor="@android:color/darker_gray"
                 android:textSize="12sp" />
 
             <TextView
@@ -140,7 +140,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/potencia_de_instalaci_n"
-                android:textColor="#757575"
+                android:textColor="@android:color/darker_gray"
                 android:textSize="12sp" />
 
             <TextView

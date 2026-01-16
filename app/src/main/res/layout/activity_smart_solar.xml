@@ -49,18 +49,20 @@
     <!-- 3. TABS (Pestañas) -->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
+        app:tabTextAppearance="@style/smart_solar_tab"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginHorizontal="16dp"
         android:background="@color/white"
+        app:tabIndicator="@drawable/tab_indicator_rounded"
         app:tabIndicatorColor="@color/black"
-        app:tabIndicatorHeight="3dp"
+        app:tabIndicatorHeight="3.3dp"
+        app:tabIndicatorFullWidth="false"
         app:tabTextColor="#757575"
         app:tabSelectedTextColor="@color/black"
         app:tabMode="scrollable"
         app:tabGravity="start"
-        app:tabTextAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitle" />

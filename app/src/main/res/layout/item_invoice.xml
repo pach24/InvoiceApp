@@ -21,14 +21,13 @@
         android:layout_marginTop="23dp"
         android:text=""
         android:textColor="@android:color/black"
-        android:textSize="27sp"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guideline" /> <!-- Alinea a la guía -->
 
     <!-- Importe -->
 
-    <!-- Estado (Ej: Pendiente de pago) -->
 
     <TextView
         android:id="@+id/txtImporte"
@@ -37,11 +36,13 @@
         android:layout_marginEnd="44dp"
         android:text=""
         android:textColor="@android:color/black"
-        android:textSize="27sp"
+        android:textSize="23sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:gravity="end"/>
+
+    <!-- Estado (Ej: Pendiente de pago) -->
 
     <TextView
         android:id="@+id/txtEstado"
@@ -50,7 +51,7 @@
         android:layout_marginStart="16dp"
         android:text=""
         android:textColor="@color/texto_alerta"
-        android:textSize="16sp"
+        android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtFecha"

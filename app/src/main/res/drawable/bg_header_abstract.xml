@@ -11,7 +11,7 @@
         <aapt:attr name="android:fillColor">
             <gradient android:startY="0" android:endY="250" android:type="linear">
                 <item android:offset="0" android:color="#4C6F09"/> <!-- Verde iOS Brillante -->
-                <item android:offset="1" android:color="@color/holo_green_light"/> <!-- Verde Profundo -->
+                <item android:offset="1" android:color="#99CC00"/> <!-- Verde Profundo -->
             </gradient>
         </aapt:attr>
     </path>
