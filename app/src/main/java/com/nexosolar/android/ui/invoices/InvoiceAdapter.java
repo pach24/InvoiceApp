@@ -2,20 +2,19 @@ package com.nexosolar.android.ui.invoices;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nexosolar.android.R;
 import com.nexosolar.android.core.DateUtils;
 import com.nexosolar.android.domain.models.Invoice;
 import com.nexosolar.android.databinding.ItemInvoiceBinding;
+import com.nexosolar.android.domain.models.InvoiceState;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
@@ -23,8 +22,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
 
     private List<Invoice> listaFacturas;
 
-    // Formateador reutilizable para convertir LocalDate a String (Ej: 25 Ene 2024)
-    private final DateTimeFormatter outputFormatter = DateTimeFormatter.ofLocalizedDate(java.time.format.FormatStyle.MEDIUM);
+
 
     @SuppressLint("NotifyDataSetChanged")
     public void setFacturas(List<Invoice> facturas) {
@@ -43,51 +41,60 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
     @Override
     public void onBindViewHolder(@NonNull InvoiceViewHolder holder, int position) {
         Invoice factura = listaFacturas.get(position);
-
+        Context context = holder.itemView.getContext();
         // 1. Obtenemos el texto ya formateado
         String fechaTexto = DateUtils.formatDate(factura.getFecha());
 
         // 2. Lo asignamos directamente
-        if (fechaTexto != null && !fechaTexto.isEmpty()) {
+        if (!fechaTexto.isEmpty()) {
             holder.binding.txtFecha.setText(fechaTexto);
         } else {
-            Context context = holder.itemView.getContext();
+            context = holder.itemView.getContext();
             holder.binding.txtFecha.setText(context.getString(R.string.sin_fecha));
         }
 
         // Establecer el importe
         holder.binding.txtImporte.setText(String.format(Locale.getDefault(), "%.2f €", factura.getImporteOrdenacion()));
 
-        // Configurar estado
-        String estado = factura.getDescEstado();
-        if (estado == null) estado = "";
+        // Establecer el estado
+        InvoiceState estadoEnum = factura.getEstadoEnum();
 
-        switch (estado) {
-            case "Pendiente de pago":
-                holder.binding.txtEstado.setText("Pendiente de pago");
-                holder.binding.txtEstado.setTextColor(Color.RED);
+
+
+        switch (estadoEnum) {
+            case PENDIENTE:
+                holder.binding.txtEstado.setText(R.string.estado_pendiente);
+                holder.binding.txtEstado.setTextColor(ContextCompat.getColor(context, R.color.texto_alerta));
                 holder.binding.txtEstado.setVisibility(View.VISIBLE);
                 break;
-            case "Pagada":
+
+            case PAGADA:
+                // Si está pagada, ¿queremos ocultarlo o mostrarlo en otro color?
+                // Tu código original lo ocultaba:
                 holder.binding.txtEstado.setVisibility(View.GONE);
                 break;
-            case "Anulada":
-                holder.binding.txtEstado.setText("Anulada");
-                holder.binding.txtEstado.setTextColor(Color.RED);
+
+            case ANULADA:
+                holder.binding.txtEstado.setText(R.string.estado_anulada);
+                holder.binding.txtEstado.setTextColor(ContextCompat.getColor(context, R.color.texto_alerta));
                 holder.binding.txtEstado.setVisibility(View.VISIBLE);
                 break;
-            case "Cuota fija":
-                holder.binding.txtEstado.setText("Cuota fija");
-                holder.binding.txtEstado.setTextColor(Color.BLACK);
+
+            case CUOTA_FIJA:
+                holder.binding.txtEstado.setText(R.string.estado_cuota_fija);
+                holder.binding.txtEstado.setTextColor(ContextCompat.getColor(context, android.R.color.black));
                 holder.binding.txtEstado.setVisibility(View.VISIBLE);
                 break;
-            case "Plan de pago":
-                holder.binding.txtEstado.setText("Plan de pago");
-                holder.binding.txtEstado.setTextColor(Color.BLACK);
+
+            case PLAN_PAGO:
+                holder.binding.txtEstado.setText(R.string.estado_plan_pago);
+                holder.binding.txtEstado.setTextColor(ContextCompat.getColor(context, android.R.color.black));
                 holder.binding.txtEstado.setVisibility(View.VISIBLE);
                 break;
+
             default:
-                holder.binding.txtEstado.setText(estado);
+                // Fallback para estados nuevos que no controlamos
+                holder.binding.txtEstado.setText(factura.getDescEstado());
                 holder.binding.txtEstado.setVisibility(View.VISIBLE);
                 break;
         }

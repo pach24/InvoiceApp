@@ -1,6 +1,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- 1. Cuando está ACTIVADO (Checked = true) -> Púrpura -->
-    <item android:color="@color/teal_200" android:state_checked="true" />
+    <item android:color="@color/activeThumbColor" android:state_checked="true" />
 
     <!-- 2. Cuando está DESACTIVADO (Cualquier otro estado) -> Gris -->
     <item android:color="@android:color/darker_gray" />

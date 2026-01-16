@@ -63,13 +63,16 @@ public class Invoice implements Serializable {
         this.fecha = fecha;
     }
 
-    // --- MÉTODOS DE LÓGICA DE NEGOCIO (Opcionales) ---
 
-    // Puedes mantener métodos auxiliares siempre que no usen clases de Android
-    // Si InvoiceState es un Enum puro de Java, esto está perfecto.
-    /*
+    // --- NUEVO (LÓGICA DE DOMINIO) ---
+    /**
+     * Convierte el texto del servidor a un Enum para que la UI trabaje
+     * con tipos seguros en lugar de Strings.
+     *
+     * @return El estado como Enum InvoiceState
+     */
     public InvoiceState getEstadoEnum() {
         return InvoiceState.fromTextoServidor(this.descEstado);
     }
-    */
+
 }

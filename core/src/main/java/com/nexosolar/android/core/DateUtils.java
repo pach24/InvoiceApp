@@ -8,6 +8,16 @@ import java.util.Locale;
 
 public class DateUtils {
 
+    private static final DateTimeFormatter SHORT_FORMATTER =
+            DateTimeFormatter.ofPattern("dd/MM/yy", Locale.getDefault());
+
+    public static String formatDateShort(LocalDate date) {
+        if (date == null) {
+            return ""; // O puedes devolver null si prefieres manejarlo fuera
+        }
+        return date.format(SHORT_FORMATTER);
+    }
+
     // Convierte LocalDate a milisegundos (para MaterialDatePicker)
     public static Long localDateToMillis(LocalDate localDate) {
         if (localDate == null) return null;
@@ -25,6 +35,7 @@ public class DateUtils {
      */
     public static String formatDate(LocalDate date) {
         if (date == null) return "";
+
 
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.forLanguageTag("es-ES"));
