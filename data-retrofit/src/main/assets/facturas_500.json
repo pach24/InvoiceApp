@@ -1,0 +1,2505 @@
+{
+    "numFacturas": 500,
+    "facturas": [
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 682.1,
+            "fecha": "28/11/2017"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 1868.17,
+            "fecha": "25/11/2024"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2594.54,
+            "fecha": "18/07/2023"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 2445.09,
+            "fecha": "28/07/2022"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 851.46,
+            "fecha": "22/03/2017"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 357.84,
+            "fecha": "27/05/2015"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4583.8,
+            "fecha": "21/01/2025"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4307.42,
+            "fecha": "20/02/2024"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1752.29,
+            "fecha": "23/12/2019"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4715.61,
+            "fecha": "21/02/2021"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1784.34,
+            "fecha": "10/02/2019"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 4052.1,
+            "fecha": "27/04/2017"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4118.32,
+            "fecha": "06/08/2021"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 2914.09,
+            "fecha": "04/08/2024"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4018.62,
+            "fecha": "05/12/2017"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 2482.46,
+            "fecha": "02/12/2016"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 876.14,
+            "fecha": "07/09/2018"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 1472.77,
+            "fecha": "24/10/2023"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 1857.5,
+            "fecha": "22/09/2023"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 3427.8,
+            "fecha": "12/05/2022"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3415.98,
+            "fecha": "01/01/2022"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 755.37,
+            "fecha": "10/04/2020"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2687.01,
+            "fecha": "23/03/2015"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 4407.37,
+            "fecha": "11/01/2015"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1025.37,
+            "fecha": "21/09/2017"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 499.46,
+            "fecha": "10/01/2018"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 4104.26,
+            "fecha": "13/08/2021"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 1811.6,
+            "fecha": "30/06/2022"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 2830.49,
+            "fecha": "02/07/2023"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 1737.23,
+            "fecha": "15/10/2020"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2614.15,
+            "fecha": "14/09/2015"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 390.34,
+            "fecha": "18/08/2022"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 98.35,
+            "fecha": "08/09/2015"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 493.11,
+            "fecha": "31/01/2025"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 2298.26,
+            "fecha": "12/11/2018"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1926.43,
+            "fecha": "27/12/2019"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3890.69,
+            "fecha": "17/01/2025"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 4662.38,
+            "fecha": "08/12/2024"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 1301.81,
+            "fecha": "31/12/2019"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 1434.31,
+            "fecha": "18/05/2024"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 1698.7,
+            "fecha": "11/06/2024"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4315.83,
+            "fecha": "07/04/2019"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1646.55,
+            "fecha": "02/11/2016"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 2625.52,
+            "fecha": "06/11/2025"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 632.05,
+            "fecha": "08/08/2017"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3095.93,
+            "fecha": "12/05/2019"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 870.05,
+            "fecha": "20/09/2025"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 300.22,
+            "fecha": "06/03/2024"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1706.36,
+            "fecha": "02/06/2015"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1958.11,
+            "fecha": "06/08/2020"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 4797.57,
+            "fecha": "01/11/2016"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 692.51,
+            "fecha": "23/11/2022"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 4015.7,
+            "fecha": "19/03/2021"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4288.72,
+            "fecha": "24/11/2020"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4938.32,
+            "fecha": "03/11/2021"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 1059.17,
+            "fecha": "07/07/2023"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1630.34,
+            "fecha": "02/07/2023"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 4134.32,
+            "fecha": "10/12/2024"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 3184.54,
+            "fecha": "13/02/2021"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2983.06,
+            "fecha": "02/04/2025"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4467.09,
+            "fecha": "11/08/2025"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2281.96,
+            "fecha": "26/01/2023"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4820.11,
+            "fecha": "31/10/2021"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 4944.14,
+            "fecha": "26/08/2019"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2897.41,
+            "fecha": "12/10/2021"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 2463.62,
+            "fecha": "20/08/2023"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3308.93,
+            "fecha": "13/11/2016"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 1499.88,
+            "fecha": "03/09/2019"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3300.72,
+            "fecha": "16/09/2018"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 4583.41,
+            "fecha": "23/04/2022"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 4908.25,
+            "fecha": "24/05/2021"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1525.63,
+            "fecha": "20/12/2022"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3358.22,
+            "fecha": "16/01/2021"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 1914.99,
+            "fecha": "06/03/2024"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 1156.28,
+            "fecha": "29/10/2017"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 2168.75,
+            "fecha": "16/07/2017"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 1753.99,
+            "fecha": "20/11/2025"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 2427.84,
+            "fecha": "29/09/2019"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 1711.41,
+            "fecha": "19/05/2025"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 879.18,
+            "fecha": "20/12/2015"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1979.32,
+            "fecha": "19/07/2022"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 684.4,
+            "fecha": "19/01/2019"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 969.33,
+            "fecha": "16/10/2016"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 2368.56,
+            "fecha": "16/06/2018"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 1920.76,
+            "fecha": "03/06/2018"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4136.72,
+            "fecha": "23/10/2025"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 2487.66,
+            "fecha": "06/11/2025"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 1264.85,
+            "fecha": "20/07/2025"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 633.45,
+            "fecha": "16/10/2022"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1400.05,
+            "fecha": "04/08/2022"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 3681.08,
+            "fecha": "03/09/2020"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 1511.51,
+            "fecha": "27/03/2024"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 142.29,
+            "fecha": "21/08/2019"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 4069.73,
+            "fecha": "31/05/2018"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 691.63,
+            "fecha": "09/11/2024"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 3321.26,
+            "fecha": "15/02/2019"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 455.5,
+            "fecha": "09/03/2021"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3095.62,
+            "fecha": "02/02/2023"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 1573.88,
+            "fecha": "14/02/2015"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 971.59,
+            "fecha": "02/06/2020"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3362.32,
+            "fecha": "13/07/2015"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3739.43,
+            "fecha": "04/12/2021"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3043.04,
+            "fecha": "03/07/2024"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 2381.46,
+            "fecha": "01/09/2019"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 847.73,
+            "fecha": "14/10/2018"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4333.66,
+            "fecha": "03/07/2019"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 1752.92,
+            "fecha": "26/03/2024"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1405.31,
+            "fecha": "17/12/2015"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 4395.73,
+            "fecha": "25/02/2019"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4004.91,
+            "fecha": "28/07/2017"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 1432.2,
+            "fecha": "28/02/2018"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3845.57,
+            "fecha": "18/06/2016"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2820.61,
+            "fecha": "05/02/2023"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3225.93,
+            "fecha": "22/09/2019"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 452.91,
+            "fecha": "22/05/2018"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 1476.82,
+            "fecha": "27/09/2015"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 3968.77,
+            "fecha": "25/09/2025"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 445.38,
+            "fecha": "23/05/2019"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 2777.11,
+            "fecha": "16/06/2017"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3940.94,
+            "fecha": "25/11/2025"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 1987.51,
+            "fecha": "11/02/2019"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3617.61,
+            "fecha": "16/01/2020"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 769.8,
+            "fecha": "08/08/2022"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 4556.69,
+            "fecha": "06/07/2019"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 4102.44,
+            "fecha": "09/06/2015"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 774.91,
+            "fecha": "25/11/2015"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 1723.6,
+            "fecha": "22/04/2019"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 2046.4,
+            "fecha": "07/10/2020"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 299.45,
+            "fecha": "15/01/2016"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4645.18,
+            "fecha": "01/06/2021"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 707.66,
+            "fecha": "04/12/2024"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 88.84,
+            "fecha": "18/08/2020"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1626.44,
+            "fecha": "17/05/2015"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 4634.62,
+            "fecha": "07/08/2021"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 4854.52,
+            "fecha": "20/11/2023"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3691.46,
+            "fecha": "29/05/2015"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1238.31,
+            "fecha": "22/12/2020"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 891.66,
+            "fecha": "03/01/2019"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3228.28,
+            "fecha": "17/05/2024"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3994.68,
+            "fecha": "28/11/2023"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3575.74,
+            "fecha": "31/07/2020"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 4504.9,
+            "fecha": "06/09/2024"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 442.58,
+            "fecha": "12/10/2023"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1991.98,
+            "fecha": "16/02/2017"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1638.21,
+            "fecha": "26/04/2021"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 601.16,
+            "fecha": "25/05/2023"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 244.79,
+            "fecha": "14/06/2021"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 1451.76,
+            "fecha": "24/07/2024"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2364.28,
+            "fecha": "22/12/2024"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4287.08,
+            "fecha": "24/10/2023"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 1169.07,
+            "fecha": "18/07/2023"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 2088.38,
+            "fecha": "15/02/2015"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 955.37,
+            "fecha": "21/06/2019"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2093.94,
+            "fecha": "27/11/2022"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4904.0,
+            "fecha": "27/05/2016"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3265.15,
+            "fecha": "02/10/2021"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1513.85,
+            "fecha": "23/06/2025"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3282.07,
+            "fecha": "28/01/2021"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 710.87,
+            "fecha": "15/02/2017"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1200.63,
+            "fecha": "29/04/2023"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 772.59,
+            "fecha": "09/07/2022"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 2155.77,
+            "fecha": "12/03/2016"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4646.27,
+            "fecha": "24/04/2021"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 2131.45,
+            "fecha": "27/04/2017"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3853.01,
+            "fecha": "29/11/2021"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 85.67,
+            "fecha": "18/09/2020"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3259.96,
+            "fecha": "22/11/2019"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 2396.32,
+            "fecha": "26/04/2016"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 175.83,
+            "fecha": "04/05/2018"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3106.09,
+            "fecha": "22/12/2021"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4466.89,
+            "fecha": "14/03/2023"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1460.74,
+            "fecha": "19/01/2021"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 721.57,
+            "fecha": "01/10/2024"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 4213.79,
+            "fecha": "19/07/2015"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3470.81,
+            "fecha": "28/12/2018"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4441.47,
+            "fecha": "04/10/2015"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3392.33,
+            "fecha": "02/05/2021"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3725.18,
+            "fecha": "06/12/2022"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1495.51,
+            "fecha": "17/05/2017"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 2429.26,
+            "fecha": "31/08/2021"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 4768.8,
+            "fecha": "18/03/2017"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2923.97,
+            "fecha": "08/08/2020"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1617.07,
+            "fecha": "25/06/2025"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 117.97,
+            "fecha": "10/09/2024"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 2922.54,
+            "fecha": "03/01/2025"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4153.13,
+            "fecha": "06/01/2023"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 1028.48,
+            "fecha": "04/10/2016"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3051.7,
+            "fecha": "14/11/2016"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 4242.27,
+            "fecha": "26/05/2021"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 2866.4,
+            "fecha": "06/02/2024"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 1832.15,
+            "fecha": "02/02/2018"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 1585.6,
+            "fecha": "15/11/2025"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1701.71,
+            "fecha": "15/03/2018"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 108.97,
+            "fecha": "15/07/2020"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 59.81,
+            "fecha": "12/10/2017"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1994.52,
+            "fecha": "12/11/2016"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 2884.13,
+            "fecha": "12/07/2016"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 4949.81,
+            "fecha": "08/02/2024"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 4634.96,
+            "fecha": "27/07/2022"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 2674.4,
+            "fecha": "01/03/2015"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 996.77,
+            "fecha": "30/05/2016"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2595.92,
+            "fecha": "02/02/2016"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1251.53,
+            "fecha": "14/06/2022"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3644.3,
+            "fecha": "05/09/2016"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3962.03,
+            "fecha": "04/08/2022"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 415.38,
+            "fecha": "14/10/2019"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 570.13,
+            "fecha": "10/08/2020"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3804.92,
+            "fecha": "05/02/2024"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 2973.12,
+            "fecha": "01/12/2023"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 3581.53,
+            "fecha": "19/08/2017"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 906.26,
+            "fecha": "27/11/2024"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 4258.45,
+            "fecha": "24/03/2022"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4798.28,
+            "fecha": "27/08/2016"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 1140.21,
+            "fecha": "01/03/2021"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 424.95,
+            "fecha": "24/01/2018"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 1637.59,
+            "fecha": "10/02/2025"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4062.74,
+            "fecha": "12/07/2023"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3100.49,
+            "fecha": "04/02/2018"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 919.69,
+            "fecha": "02/01/2025"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 2237.68,
+            "fecha": "13/03/2017"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3894.91,
+            "fecha": "10/06/2024"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 749.68,
+            "fecha": "03/04/2023"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 184.85,
+            "fecha": "26/01/2015"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 629.94,
+            "fecha": "28/05/2016"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4178.95,
+            "fecha": "28/02/2016"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 1125.84,
+            "fecha": "23/10/2017"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3431.04,
+            "fecha": "24/06/2020"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1695.03,
+            "fecha": "14/09/2023"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3181.16,
+            "fecha": "24/07/2017"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 195.5,
+            "fecha": "24/02/2016"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4158.48,
+            "fecha": "03/08/2019"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2117.3,
+            "fecha": "11/12/2019"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 2334.05,
+            "fecha": "03/06/2020"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 843.46,
+            "fecha": "09/12/2025"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 723.51,
+            "fecha": "09/03/2015"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 123.59,
+            "fecha": "23/05/2019"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 4109.52,
+            "fecha": "17/05/2024"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 3280.85,
+            "fecha": "24/01/2022"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 2926.98,
+            "fecha": "25/06/2021"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 639.45,
+            "fecha": "24/01/2017"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2394.69,
+            "fecha": "10/11/2021"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 587.96,
+            "fecha": "26/10/2025"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 2566.5,
+            "fecha": "06/05/2023"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 824.23,
+            "fecha": "27/12/2017"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4225.32,
+            "fecha": "18/12/2019"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 4635.34,
+            "fecha": "02/06/2018"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 384.61,
+            "fecha": "10/01/2022"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1110.6,
+            "fecha": "09/05/2025"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3613.62,
+            "fecha": "11/02/2016"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 4889.05,
+            "fecha": "30/06/2015"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3068.48,
+            "fecha": "08/11/2016"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 246.06,
+            "fecha": "23/09/2022"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4816.24,
+            "fecha": "08/09/2017"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 647.3,
+            "fecha": "16/12/2022"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 1288.17,
+            "fecha": "28/02/2017"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 4242.2,
+            "fecha": "08/03/2021"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1924.28,
+            "fecha": "13/05/2022"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 276.77,
+            "fecha": "30/05/2023"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 3834.89,
+            "fecha": "14/10/2015"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 295.52,
+            "fecha": "07/01/2016"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3574.57,
+            "fecha": "02/04/2021"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3908.1,
+            "fecha": "29/08/2020"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 2619.93,
+            "fecha": "13/10/2015"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 1653.09,
+            "fecha": "11/05/2023"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 2382.57,
+            "fecha": "17/12/2015"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3672.67,
+            "fecha": "19/08/2022"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 75.98,
+            "fecha": "26/02/2021"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 2385.94,
+            "fecha": "27/08/2023"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 112.7,
+            "fecha": "12/01/2015"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 2922.47,
+            "fecha": "07/07/2025"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 2168.05,
+            "fecha": "19/12/2020"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 739.53,
+            "fecha": "16/10/2020"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4403.24,
+            "fecha": "13/09/2022"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 1900.24,
+            "fecha": "06/01/2015"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 4897.21,
+            "fecha": "02/06/2022"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1807.24,
+            "fecha": "16/07/2019"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4276.74,
+            "fecha": "24/11/2019"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 639.04,
+            "fecha": "13/10/2022"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3132.57,
+            "fecha": "11/11/2017"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 2608.0,
+            "fecha": "06/10/2015"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 2593.44,
+            "fecha": "28/08/2023"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 2991.74,
+            "fecha": "14/09/2016"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 3620.06,
+            "fecha": "12/12/2019"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3272.96,
+            "fecha": "30/06/2025"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 927.79,
+            "fecha": "22/11/2025"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1665.08,
+            "fecha": "08/06/2016"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1111.73,
+            "fecha": "21/12/2020"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 729.65,
+            "fecha": "08/09/2017"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 1229.71,
+            "fecha": "05/03/2024"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 4081.27,
+            "fecha": "18/11/2024"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 313.59,
+            "fecha": "13/06/2023"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 3808.42,
+            "fecha": "15/06/2018"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2866.92,
+            "fecha": "29/05/2023"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 574.76,
+            "fecha": "03/06/2024"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 4073.0,
+            "fecha": "23/08/2017"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1559.91,
+            "fecha": "12/07/2016"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 2384.94,
+            "fecha": "12/05/2025"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 1274.89,
+            "fecha": "30/05/2025"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1359.17,
+            "fecha": "11/03/2015"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 4800.29,
+            "fecha": "10/10/2025"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 2960.38,
+            "fecha": "22/08/2018"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3373.28,
+            "fecha": "02/02/2017"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 2247.29,
+            "fecha": "04/12/2020"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 3764.19,
+            "fecha": "28/03/2020"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 2909.06,
+            "fecha": "08/07/2025"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 428.1,
+            "fecha": "14/08/2015"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 2355.61,
+            "fecha": "07/04/2022"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3021.23,
+            "fecha": "18/04/2024"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 3306.32,
+            "fecha": "04/10/2015"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 2590.95,
+            "fecha": "24/10/2016"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 3494.74,
+            "fecha": "09/11/2021"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3707.09,
+            "fecha": "27/02/2015"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 1623.86,
+            "fecha": "29/09/2020"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 72.82,
+            "fecha": "08/09/2018"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 571.3,
+            "fecha": "17/04/2021"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 3826.1,
+            "fecha": "13/02/2020"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3042.23,
+            "fecha": "10/06/2020"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 814.9,
+            "fecha": "13/01/2019"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 4082.1,
+            "fecha": "21/03/2019"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 4030.19,
+            "fecha": "04/04/2021"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1070.16,
+            "fecha": "25/04/2020"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1181.05,
+            "fecha": "08/06/2019"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2163.47,
+            "fecha": "09/02/2024"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2056.5,
+            "fecha": "26/02/2024"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4228.27,
+            "fecha": "24/02/2020"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 2320.1,
+            "fecha": "16/09/2017"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 4552.34,
+            "fecha": "09/09/2021"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 1218.82,
+            "fecha": "08/09/2024"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3898.75,
+            "fecha": "28/03/2020"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 114.24,
+            "fecha": "07/03/2019"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 4524.52,
+            "fecha": "01/03/2015"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4978.38,
+            "fecha": "01/10/2017"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 448.69,
+            "fecha": "04/03/2022"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 2744.88,
+            "fecha": "14/05/2022"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 2658.33,
+            "fecha": "29/07/2019"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 2441.46,
+            "fecha": "14/07/2023"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3411.02,
+            "fecha": "05/01/2019"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 3603.95,
+            "fecha": "01/07/2017"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1573.42,
+            "fecha": "27/02/2025"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 574.49,
+            "fecha": "08/06/2019"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 205.7,
+            "fecha": "30/09/2023"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3062.5,
+            "fecha": "18/05/2019"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 949.96,
+            "fecha": "05/07/2024"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 2432.76,
+            "fecha": "21/02/2020"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2159.9,
+            "fecha": "16/11/2020"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1800.16,
+            "fecha": "13/05/2018"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 685.18,
+            "fecha": "23/02/2022"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3465.61,
+            "fecha": "19/09/2017"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3379.38,
+            "fecha": "16/10/2025"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 343.89,
+            "fecha": "11/11/2018"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 536.24,
+            "fecha": "24/11/2025"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4615.62,
+            "fecha": "20/04/2023"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 3520.61,
+            "fecha": "29/03/2018"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2773.62,
+            "fecha": "05/10/2025"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 310.03,
+            "fecha": "11/05/2021"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4227.42,
+            "fecha": "28/11/2023"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 3409.52,
+            "fecha": "28/02/2016"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3055.04,
+            "fecha": "17/01/2016"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2778.16,
+            "fecha": "29/01/2016"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1122.43,
+            "fecha": "15/04/2023"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3563.91,
+            "fecha": "06/06/2021"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 1767.18,
+            "fecha": "08/09/2019"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 680.85,
+            "fecha": "10/03/2023"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 2004.04,
+            "fecha": "09/09/2020"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2354.14,
+            "fecha": "30/05/2024"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 3893.34,
+            "fecha": "25/05/2024"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4312.33,
+            "fecha": "31/01/2020"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 3817.7,
+            "fecha": "18/11/2023"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 1076.48,
+            "fecha": "31/08/2018"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 2815.18,
+            "fecha": "14/12/2021"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3732.95,
+            "fecha": "23/04/2024"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2280.37,
+            "fecha": "15/02/2015"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 645.83,
+            "fecha": "24/08/2018"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 375.48,
+            "fecha": "21/07/2024"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1592.03,
+            "fecha": "20/04/2018"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4671.23,
+            "fecha": "19/01/2022"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4698.36,
+            "fecha": "16/12/2020"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 1284.55,
+            "fecha": "03/07/2016"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 882.26,
+            "fecha": "29/05/2017"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 21.15,
+            "fecha": "11/01/2017"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 828.21,
+            "fecha": "25/07/2019"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2227.88,
+            "fecha": "14/03/2022"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1162.39,
+            "fecha": "20/01/2017"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 2240.44,
+            "fecha": "19/04/2022"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 901.23,
+            "fecha": "18/09/2022"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 83.94,
+            "fecha": "24/04/2020"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 916.99,
+            "fecha": "01/05/2018"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1887.94,
+            "fecha": "25/01/2019"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 1846.08,
+            "fecha": "09/02/2020"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3748.13,
+            "fecha": "11/03/2025"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 3705.7,
+            "fecha": "24/01/2022"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 4962.98,
+            "fecha": "25/12/2022"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 253.49,
+            "fecha": "13/01/2020"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 4285.86,
+            "fecha": "30/08/2021"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3289.13,
+            "fecha": "12/07/2024"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4976.5,
+            "fecha": "19/11/2023"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 812.97,
+            "fecha": "19/09/2015"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 699.67,
+            "fecha": "27/06/2020"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 903.15,
+            "fecha": "09/08/2015"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 4302.68,
+            "fecha": "26/04/2023"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 1281.34,
+            "fecha": "07/11/2016"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 206.47,
+            "fecha": "25/05/2017"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 1594.61,
+            "fecha": "23/09/2023"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 399.92,
+            "fecha": "28/10/2016"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 3480.53,
+            "fecha": "25/12/2018"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 269.65,
+            "fecha": "06/11/2025"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 4607.7,
+            "fecha": "23/05/2021"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1621.76,
+            "fecha": "15/07/2025"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2519.97,
+            "fecha": "05/03/2016"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 234.74,
+            "fecha": "02/04/2021"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2250.73,
+            "fecha": "16/10/2021"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3892.43,
+            "fecha": "10/04/2019"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 581.48,
+            "fecha": "05/07/2017"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1535.78,
+            "fecha": "18/10/2019"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 2430.35,
+            "fecha": "07/12/2024"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1983.24,
+            "fecha": "05/09/2017"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3542.32,
+            "fecha": "27/08/2016"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4688.56,
+            "fecha": "06/11/2023"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3778.55,
+            "fecha": "15/08/2016"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 1608.17,
+            "fecha": "07/04/2021"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 2697.11,
+            "fecha": "19/01/2019"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 4422.3,
+            "fecha": "09/03/2021"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 832.24,
+            "fecha": "27/09/2024"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 2838.76,
+            "fecha": "25/01/2018"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 809.74,
+            "fecha": "24/01/2023"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 389.97,
+            "fecha": "16/04/2022"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 2278.04,
+            "fecha": "24/02/2021"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4704.99,
+            "fecha": "05/01/2025"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3639.32,
+            "fecha": "21/02/2023"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 858.86,
+            "fecha": "02/06/2015"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 4325.73,
+            "fecha": "25/12/2018"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4254.94,
+            "fecha": "12/05/2023"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1234.41,
+            "fecha": "08/06/2016"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3359.6,
+            "fecha": "08/11/2025"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1739.17,
+            "fecha": "15/12/2016"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3213.41,
+            "fecha": "11/09/2019"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 599.12,
+            "fecha": "05/02/2022"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2634.6,
+            "fecha": "15/04/2016"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 3407.58,
+            "fecha": "04/07/2015"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4564.32,
+            "fecha": "11/01/2020"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3127.06,
+            "fecha": "03/07/2017"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 4183.09,
+            "fecha": "13/02/2015"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1240.66,
+            "fecha": "30/05/2021"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 4466.13,
+            "fecha": "03/04/2023"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 107.31,
+            "fecha": "11/08/2020"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 760.24,
+            "fecha": "09/11/2022"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 3004.46,
+            "fecha": "27/07/2019"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2151.26,
+            "fecha": "02/02/2019"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 4516.52,
+            "fecha": "07/11/2017"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 1841.0,
+            "fecha": "06/02/2016"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 1326.45,
+            "fecha": "28/07/2024"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 4900.88,
+            "fecha": "13/01/2022"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 1153.25,
+            "fecha": "22/01/2022"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2328.69,
+            "fecha": "26/04/2015"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 2663.84,
+            "fecha": "21/10/2016"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3110.52,
+            "fecha": "12/10/2023"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 787.9,
+            "fecha": "06/06/2016"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4974.9,
+            "fecha": "01/12/2025"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4245.77,
+            "fecha": "08/02/2016"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 4416.83,
+            "fecha": "04/09/2019"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2611.35,
+            "fecha": "19/07/2025"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 2901.41,
+            "fecha": "27/10/2018"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3673.84,
+            "fecha": "15/01/2022"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2404.35,
+            "fecha": "22/01/2022"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 442.91,
+            "fecha": "11/06/2016"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 4256.08,
+            "fecha": "01/05/2025"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4626.87,
+            "fecha": "13/09/2016"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4469.61,
+            "fecha": "26/12/2016"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 1584.62,
+            "fecha": "26/08/2018"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 4017.6,
+            "fecha": "18/03/2018"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3737.4,
+            "fecha": "15/01/2018"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 340.76,
+            "fecha": "05/07/2017"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 3417.69,
+            "fecha": "29/11/2020"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1400.5,
+            "fecha": "08/09/2025"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 4461.74,
+            "fecha": "21/11/2015"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4660.1,
+            "fecha": "16/02/2021"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 1892.95,
+            "fecha": "26/06/2025"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 2177.78,
+            "fecha": "22/09/2024"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4781.48,
+            "fecha": "04/05/2025"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 824.35,
+            "fecha": "07/06/2016"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3483.58,
+            "fecha": "17/03/2017"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 1864.49,
+            "fecha": "08/03/2015"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 1184.35,
+            "fecha": "29/08/2020"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 1034.79,
+            "fecha": "06/11/2025"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2979.38,
+            "fecha": "29/10/2021"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 2705.21,
+            "fecha": "19/02/2017"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 674.19,
+            "fecha": "22/01/2016"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2085.41,
+            "fecha": "21/06/2024"
+        },
+        {
+            "descEstado": "Cuota fija",
+            "importeOrdenacion": 4799.61,
+            "fecha": "08/11/2021"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 3500.72,
+            "fecha": "30/07/2025"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 2734.6,
+            "fecha": "15/02/2018"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 1480.08,
+            "fecha": "08/01/2025"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 3289.14,
+            "fecha": "05/10/2018"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 136.9,
+            "fecha": "12/04/2023"
+        },
+        {
+            "descEstado": "Anulada",
+            "importeOrdenacion": 648.35,
+            "fecha": "24/04/2022"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 890.19,
+            "fecha": "09/04/2020"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 288.88,
+            "fecha": "24/04/2017"
+        },
+        {
+            "descEstado": "Pendiente de pago",
+            "importeOrdenacion": 4760.0,
+            "fecha": "05/11/2022"
+        },
+        {
+            "descEstado": "Pagada",
+            "importeOrdenacion": 740.74,
+            "fecha": "15/02/2022"
+        },
+        {
+            "descEstado": "Plan de pago",
+            "importeOrdenacion": 442.12,
+            "fecha": "28/06/2024"
+        }
+    ]
+}

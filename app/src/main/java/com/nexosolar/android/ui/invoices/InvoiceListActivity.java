@@ -13,11 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.nexosolar.android.R;
 import com.nexosolar.android.databinding.ActivityInvoiceListBinding;
+import com.nexosolar.android.domain.models.Invoice;
 
-/**
- * Activity principal para mostrar la lista de facturas.
- * Ahora solo se encarga de la navegación y la coordinación de vistas.
- */
+import java.util.List;
+
 public class InvoiceListActivity extends AppCompatActivity {
 
     private ActivityInvoiceListBinding bindingInvoiceList;
@@ -28,12 +27,8 @@ public class InvoiceListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Configuración de ViewBinding
         bindingInvoiceList = ActivityInvoiceListBinding.inflate(getLayoutInflater());
         setContentView(bindingInvoiceList.getRoot());
-        bindingInvoiceList.shimmerViewContainer.startShimmer();
-
-        // Configuración de la Toolbar
         setSupportActionBar(bindingInvoiceList.toolbar);
 
         // Configurar RecyclerView
@@ -41,55 +36,77 @@ public class InvoiceListActivity extends AppCompatActivity {
         bindingInvoiceList.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         bindingInvoiceList.recyclerView.setAdapter(invoiceAdapter);
 
-        // Obtener el valor de USE_RETROMOCK desde el intent
+        // Configurar ViewModel
         boolean useMock = getIntent().getBooleanExtra("USE_RETROMOCK", false);
-
-        // Configurar ViewModel usando la Factory
         InvoiceViewModelFactory invoiceViewModelFactory = new InvoiceViewModelFactory(useMock, this);
         invoiceViewModel = new ViewModelProvider(this, invoiceViewModelFactory).get(InvoiceViewModel.class);
 
-        // Observer principal de la lista de facturas
-        invoiceViewModel.getFacturas().observe(this, facturas -> {
-            bindingInvoiceList.shimmerViewContainer.stopShimmer();
-            bindingInvoiceList.shimmerViewContainer.setVisibility(View.GONE);
-            invalidateOptionsMenu();
+        // --- 1. OBSERVER DE CARGA (SHIMMER) ---
+        invoiceViewModel.getIsLoading().observe(this, isLoading -> {
+            // Siempre que cambie el estado de carga, recalculamos qué se debe ver
+            actualizarEstadoUI();
+        });
 
+        // --- 2. OBSERVER DE DATOS ---
+        invoiceViewModel.getFacturas().observe(this, facturas -> {
+            invalidateOptionsMenu();
             if (facturas != null) {
                 invoiceAdapter.setFacturas(facturas);
-
-                // Mostrar/ocultar el "Empty State"
-                if (facturas.isEmpty()) {
-                    bindingInvoiceList.recyclerView.setVisibility(View.GONE);
-                    bindingInvoiceList.layoutEmptyState.setVisibility(View.VISIBLE);
-                } else {
-                    bindingInvoiceList.recyclerView.setVisibility(View.VISIBLE);
-                    bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);
-                }
+                // Cuando llegan datos nuevos, recalculamos qué se debe ver
+                actualizarEstadoUI();
             } else {
                 Toast.makeText(InvoiceListActivity.this, "Error al cargar datos", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Botón para volver a la actividad principal
         bindingInvoiceList.btnVolver.setOnClickListener(v -> finish());
 
-        // LISTENER PARA DETECTAR CUANDO SE CIERRA EL FRAGMENTO
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
-            // Si la pila está vacía (0), significa que hemos vuelto a la Activity base
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                 restoreMainView();
             }
         });
     }
 
+    private void actualizarEstadoUI() {
+        Boolean isLoading = invoiceViewModel.getIsLoading().getValue();
+        List<Invoice> facturas = invoiceViewModel.getFacturas().getValue();
+
+        // 1. Si estamos cargando -> Manda el SHIMMER
+        if (isLoading != null && isLoading) {
+            if (bindingInvoiceList.shimmerViewContainer.getVisibility() != View.VISIBLE) {
+                bindingInvoiceList.shimmerViewContainer.setVisibility(View.VISIBLE);
+                bindingInvoiceList.shimmerViewContainer.startShimmer();
+            }
+            bindingInvoiceList.recyclerView.setVisibility(View.GONE);
+            bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);
+            return; // Cortamos aquí
+        }
+
+        // 2. Si NO estamos cargando -> Apagar Shimmer y decidir entre Lista o Empty
+        bindingInvoiceList.shimmerViewContainer.stopShimmer();
+        bindingInvoiceList.shimmerViewContainer.setVisibility(View.GONE);
+
+        if (facturas == null || facturas.isEmpty()) {
+            // CASO VACÍO
+            bindingInvoiceList.recyclerView.setVisibility(View.GONE);
+            bindingInvoiceList.layoutEmptyState.setVisibility(View.VISIBLE);
+        } else {
+            // CASO CON DATOS
+            bindingInvoiceList.recyclerView.setVisibility(View.VISIBLE);
+            bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_filter, menu);
-
-        // Deshabilitar el ítem de filtro si no hay datos cargados
         MenuItem filtroItem = menu.findItem(R.id.action_filters);
-        filtroItem.setEnabled(invoiceViewModel.hayDatosCargados());
 
+        Boolean loading = invoiceViewModel.getIsLoading().getValue();
+        boolean isNotLoading = loading == null || !loading;
+
+        filtroItem.setEnabled(invoiceViewModel.hayDatosCargados() && isNotLoading);
         return true;
     }
 
@@ -106,16 +123,13 @@ public class InvoiceListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Muestra el fragmento de filtros
-     */
     private void mostrarFiltroFragment() {
         FilterFragment filterFragment = new FilterFragment();
         bindingInvoiceList.fragmentContainer.setVisibility(View.VISIBLE);
-
-        // Ocultar elementos principales mientras se muestra el filtro
         bindingInvoiceList.toolbar.setVisibility(View.GONE);
         bindingInvoiceList.recyclerView.setVisibility(View.GONE);
+        // Ocultamos empty state por si acaso estaba visible
+        bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -124,12 +138,12 @@ public class InvoiceListActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    /**
-     * Restaura la vista principal ocultando el fragmento de filtros
-     */
     public void restoreMainView() {
         bindingInvoiceList.toolbar.setVisibility(View.VISIBLE);
-        bindingInvoiceList.recyclerView.setVisibility(View.VISIBLE);
         bindingInvoiceList.fragmentContainer.setVisibility(View.GONE);
+
+        // Al volver, simplemente forzamos una actualización de UI
+        // para que decida si muestra Shimmer, Lista o Empty State según el estado actual.
+        actualizarEstadoUI();
     }
 }

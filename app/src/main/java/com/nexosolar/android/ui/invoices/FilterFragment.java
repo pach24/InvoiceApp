@@ -240,16 +240,27 @@ public class FilterFragment extends Fragment {
 
     private void actualizarEstadoCheckbox(String estado, boolean isChecked) {
         InvoiceFilters filtros = viewModel.getFiltrosActuales().getValue();
+
         if (filtros != null) {
-            List estados = new ArrayList<>(filtros.getEstadosSeleccionados());
+            // 1. Gestionar la lista de estados (añadir o quitar)
+            List<String> estados = new ArrayList<>(filtros.getEstadosSeleccionados());
             if (isChecked) {
                 if (!estados.contains(estado)) estados.add(estado);
             } else {
                 estados.remove(estado);
             }
             filtros.setEstadosSeleccionados(estados);
-            // Actualizamos SOLO el valor en el LiveData sin notificar a la UI completa
-            // para evitar bucles o parpadeos, aunque viewModel.actualizarEstadoFiltros funcionaría.
+
+            // 2. IMPORTANTE: Guardar también la posición actual del slider
+            // Si no hacemos esto, al notificarse el cambio al ViewModel, este volverá a llamar a actualizarUI()
+            // con los valores antiguos de importe, reseteando el slider visualmente.
+            List<Float> currentSliderValues = binding.rangeSlider.getValues();
+            if (currentSliderValues.size() >= 2) {
+                filtros.setImporteMin((double) currentSliderValues.get(0));
+                filtros.setImporteMax((double) currentSliderValues.get(1));
+            }
+
+            // 3. Notificar al ViewModel con el estado completo actualizado
             viewModel.actualizarEstadoFiltros(filtros);
         }
     }
