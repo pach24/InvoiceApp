@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="44dp"
+    app:cardBackgroundColor="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+
+        <!-- TÍTULO -->
+        <TextView
+            android:layout_marginTop="24dp"
+            android:layout_width="254dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:text="Estado solicitud autoconsumo"
+            android:textColor="#333333"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- MENSAJE -->
+
+        <!-- BOTÓN VERDE PERSONALIZADO -->
+        <TextView
+            android:layout_width="263dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            android:text="El tiempo estimado de activación de tu autoconsumo es de 1 a 2 meses, éste variará en función de tu comunidad autónoma y distribuidora"
+            android:textColor="#666666"
+            android:textSize="14sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAceptar"
+            android:layout_width="217dp"
+            android:layout_height="66dp"
+            android:stateListAnimator="@null"
+            android:text="Aceptar"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:layout_marginBottom="24dp"
+            app:backgroundTint="@color/holo_green_light"
+            app:cornerRadius="28dp" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

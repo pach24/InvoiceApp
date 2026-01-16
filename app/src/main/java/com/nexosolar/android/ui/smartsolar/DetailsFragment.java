@@ -2,10 +2,13 @@ package com.nexosolar.android.ui.smartsolar;
 
 
 import android.app.AlertDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,7 +16,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.nexosolar.android.R;
 import com.nexosolar.android.databinding.FragmentDetailsBinding;
+
+
 
 
 
@@ -79,13 +85,39 @@ public class DetailsFragment extends Fragment {
         binding.ivInfo.setOnClickListener(v -> showInfoDialog());
     }
 
+
+
     private void showInfoDialog() {
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Estado solicitud autoconsumo")
-                .setMessage("El tiempo estimado de activación de tu autoconsumo es de 1 a 2 meses, éste variará en función de tu comunidad autónoma y distribuidora")
-                .setPositiveButton("Aceptar", (dialog, which) -> dialog.dismiss())
-                .show();
+        // 1. Inflar el diseño personalizado
+        LayoutInflater inflater = LayoutInflater.from(requireContext());
+        View view = inflater.inflate(R.layout.dialog_info, null);
+
+        // 2. Crear el Dialog
+        AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                .setView(view)
+                .setCancelable(false)
+                .create();
+
+        // 3. Configurar el fondo transparente (CRUCIAL para que se vean las esquinas redondeadas)
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+
+        // 4. Configurar el botón del layout
+        Button btnAceptar = view.findViewById(R.id.btnAceptar);
+        btnAceptar.setOnClickListener(v -> dialog.dismiss());
+
+
+        dialog.show();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setLayout(
+                    (int) (getResources().getDisplayMetrics().widthPixels * 0.85),
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+        }
     }
+
 
     @Override
     public void onDestroyView() {
