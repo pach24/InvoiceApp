@@ -7,8 +7,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="black">#FF000000</color>
 
-    <color name="holo_green_light">#FF99CC00</color>
-    <color name="holo_green_dark">#FF669900</color>
+    <color name="my_theme_green_light">#95bb4e</color>
+    <color name="my_theme_green_dark">#FF669900</color>
 
     <!-- ============================================= -->
     <!-- Estados de Facturas  -->
@@ -26,5 +26,6 @@
     <!-- ============================================= -->
     <color name="inactiveThumbColor">#BDBDBD</color>
     <color name="activeThumbColor">#FF03DAC5</color>
+    <color name="light_gray">#e8e8e8</color>
 
 </resources>

@@ -49,8 +49,8 @@
     <!-- ============================================================ -->
     <string name="filtros">Filtros</string>
     <string name="filtrar_facturas">Filtrar facturas</string>
-    <string name="aplicar_filtros">Aplicar Filtros</string>
-    <string name="borrar_filtros">Borrar filtros</string>
+    <string name="aplicar_filtros">Aplicar</string>
+    <string name="borrar_filtros">Eliminar filtros</string>
 
     <!-- Sección Fechas -->
     <string name="con_fecha_de_emision">Con fecha de emisión</string>
@@ -95,7 +95,7 @@
     <string name="compensaci_n_de_excedentes">Compensación de excedentes</string>
     <string name="potencia_de_instalaci_n">Potencia de instalación</string>
     <string name="trabajo_en_progreso">Trabajo en progreso</string>
-    <string name="estamos_trabajando_en_mejorar_la_app_tus_paneles_solares_siguen_produciendo_en_breve_podr_s_seguir_viendo_tu_producci_n_solar_sentimos_las_molestias">Estamos trabajando en mejorar la App. Tus paneles solares siguen produciendo, en breve podrás seguir viendo tu producción solar. Sentimos las molestias.</string>
+    <string name="desc_energy_fragment">Estamos trabajando en mejorar la App. Tus paneles solares siguen produciendo, en breve podrás seguir viendo tu producción solar. Sentimos las molestias.</string>
     <string name="aqu_tienes_los_datos_de_tu_instalaci_n_fotovoltaica_en_tiempo_real">Aquí tienes los datos de tu instalación fotovoltaica en tiempo real.</string>
     <string name="autoconsumo">Autoconsumo:</string>
     <string name="_92">92%</string>

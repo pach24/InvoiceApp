@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:text="@string/aqu_tienes_los_datos_de_tu_instalaci_n_fotovoltaica_en_tiempo_real"
         android:textColor="#555555"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:lineSpacingMultiplier="1.2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,14 +47,20 @@
     <!-- 3. IMAGEN DEL GRÁFICO COMPLETO -->
     <ImageView
         android:id="@+id/imgFullChart"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+
+        android:layout_width="326dp"
+        android:layout_height="348dp"
+
         android:layout_marginTop="24dp"
-        android:src="@drawable/grafico1"
-        android:scaleType="fitCenter"
         android:adjustViewBounds="true"
-        app:layout_constraintTop_toBottomOf="@id/tvAutoconsumoLabel"
+        android:scaleType="fitCenter"
+        android:src="@drawable/grafico1"
+
+        app:layout_constraintEnd_toEndOf="parent"
+
+
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/tvAutoconsumoLabel" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
