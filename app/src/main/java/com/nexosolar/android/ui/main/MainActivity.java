@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        String nombreUsuario = "Carlos"; //Hardcodeado porque no tengo lógica para un login y poder extraer los datos
+        String nombreUsuario = "Usuario"; //Hardcodeado porque no tengo lógica para un login y poder extraer los datos
         String saludoCompleto = getString(R.string.greeting_user, nombreUsuario);
         binding.tvGreeting.setText(saludoCompleto);
 
@@ -58,17 +58,14 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Configurar el Switch para alternar API/Mock
-        // En el XML nuevo es un SwitchMaterial, pero funciona igual el setOnClickListener
-        // O mejor aún, setOnCheckedChangeListener para un Switch
-        binding.btToggleApi.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            useMock = isChecked; // Si está checked -> Mock, si no -> Real
+        // 1. PRIMERO establece el valor inicial
+        binding.btToggleApi.setChecked(useMock);
 
-            String mode = useMock ? "Modo: Mock (Datos falsos)" : "Modo: Real (API)";
+        // 2. DESPUÉS configura el listener para cambios futuros
+        binding.btToggleApi.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            useMock = isChecked;
+            String mode = useMock ? "Using RetroMock" : "Using RetroFit";
             Toast.makeText(MainActivity.this, mode, Toast.LENGTH_SHORT).show();
         });
-
-        // Sincronizar estado inicial del switch con la variable
-        binding.btToggleApi.setChecked(useMock);
     }
 }
