@@ -1,47 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:paddingHorizontal="8dp"
+    android:paddingTop="8dp">
 
-    <!-- Fila superior: Fecha y Importe -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1"> <!-- Total de pesos = 1.0 -->
-
-        <!-- 1. Fecha falsa (Ocupa el 40%) -->
-        <View
-            android:layout_width="0dp"
-            android:layout_height="16dp"
-            android:layout_weight="0.4"
-            android:background="#E0E0E0" />
-
-        <!-- 2. CAMBIO CLAVE: Espaciador flexible -->
-        <!-- Le damos el peso restante (0.4) para empujar lo siguiente a la derecha.
-             Cálculo: 1.0 (total) - 0.4 (fecha) - 0.2 (importe) = 0.4 sobrante -->
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.3" />
-
-        <!-- 3. Importe falso (Ocupa el 20% y queda a la derecha) -->
-        <View
-            android:layout_width="0dp"
-            android:layout_height="16dp"
-            android:layout_weight="0.2"
-            android:background="#E0E0E0" />
-
-    </LinearLayout>
-
-    <View android:layout_width="match_parent" android:layout_height="8dp"/>
-
-    <!-- Estado falso -->
+    <!-- 1. FECHA FALSA (Coincide con txtFecha) -->
     <View
-        android:layout_width="100dp"
-        android:layout_height="14dp"
-        android:background="#E0E0E0" />
+        android:id="@+id/viewFechaSkeleton"
+        android:layout_width="160dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="23dp"
+        android:background="@drawable/bg_skeleton_shape"
 
-</LinearLayout>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- 2. IMPORTE FALSO (Coincide con txtImporte) -->
+    <!-- Alineado a la derecha, igual que tu TextView real -->
+    <View
+        android:id="@+id/viewImporteSkeleton"
+        android:layout_width="80dp"
+        android:layout_height="23dp"
+        android:layout_marginEnd="44dp"
+        android:background="@drawable/bg_skeleton_shape"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- 3. ESTADO FALSO (Coincide con txtEstado) -->
+    <!-- Debajo de la fecha -->
+    <View
+        android:id="@+id/viewEstadoSkeleton"
+        android:layout_width="100dp"
+        android:layout_height="17dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_skeleton_shape"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewFechaSkeleton" />
+
+    <!-- (Opcional) FLECHA FALSA - Un cuadradito gris pequeño -->
+    <View
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/bg_skeleton_shape"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- LÍNEA SEPARADORA (Igual que la real) -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E0E0E0"
+        android:layout_marginTop="16dp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewEstadoSkeleton"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

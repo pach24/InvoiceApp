@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- El color gris de fondo -->
+    <solid android:color="#E0E0E0" />
+
+    <!-- El radio de las esquinas (4dp suele ser ideal para texto) -->
+    <corners android:radius="4dp" />
+
+</shape>
