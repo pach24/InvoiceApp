@@ -7,7 +7,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:paddingTop="40dp"
+    android:clipToPadding="false"
     tools:context=".ui.smartsolar.SmartSolarActivity">
+
+
 
     <!-- 1. BOTÓN ATRÁS -->
     <com.google.android.material.button.MaterialButton
@@ -66,8 +70,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitle" />
-
-
 
     <!-- 4. CONTENEDOR DE PÁGINAS (ViewPager2) -->
     <androidx.viewpager2.widget.ViewPager2

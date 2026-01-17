@@ -19,6 +19,11 @@ public class InvoiceViewModel extends ViewModel {
 
     // LiveData para la lista de facturas que observa la UI
     private final MutableLiveData<List<Invoice>> facturas = new MutableLiveData<>();
+
+    // Nuevo LiveData para mostrar error vacío
+    private final MutableLiveData<Boolean> showEmptyError = new MutableLiveData<>(false);
+    public LiveData<Boolean> getShowEmptyError() { return showEmptyError; }
+
     private List<Invoice> facturasOriginales = new ArrayList<>();
 
     private final GetInvoicesUseCase getInvoicesUseCase;
@@ -38,44 +43,47 @@ public class InvoiceViewModel extends ViewModel {
     }
 
     public void cargarFacturas() {
-        // Aseguramos que se marque como cargando
         isLoading.setValue(true);
+        showEmptyError.setValue(false); // Reseteamos error al empezar
 
         getInvoicesUseCase.invoke(new RepositoryCallback<List<Invoice>>() {
             @Override
             public void onSuccess(List<Invoice> result) {
-                // Desactivamos carga
                 isLoading.postValue(false);
-
-                if (result != null) {
+                if (result != null && !result.isEmpty()) {
                     facturasOriginales = result;
                     facturas.postValue(result);
-
-                    if (isFirstLoad) {
-                        isFirstLoad = false;
-                        inicializarFiltros();
+                    // Si recargamos y ahora sí hay datos, quitamos el error
+                    showEmptyError.postValue(false);
+                } else {
+                    // Si viene vacío y tampoco teníamos datos viejos...
+                    if (facturasOriginales == null || facturasOriginales.isEmpty()) {
+                        showEmptyError.postValue(true);
                     }
-                } else if (isFirstLoad) {
-                    isFirstLoad = false;
-                    forzarRecarga();
+                    facturas.postValue(new ArrayList<>());
                 }
             }
 
             @Override
             public void onError(Throwable error) {
-                // Desactivamos carga incluso en error
-                isLoading.postValue(false);
+                // AQUÍ ESTÁ LA SOLUCIÓN AL PARPADEO
+                // Forzamos esperar 500ms o 1s antes de mostrar el error de nuevo
+                new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                    isLoading.postValue(false);
+                    error.printStackTrace();
 
-                error.printStackTrace();
-                if (isFirstLoad) {
-                    isFirstLoad = false;
-                    forzarRecarga();
-                } else {
-                    facturas.postValue(new ArrayList<>());
-                }
+                    if (facturasOriginales != null && !facturasOriginales.isEmpty()) {
+                        facturas.postValue(facturasOriginales);
+                        showEmptyError.postValue(false);
+                    } else {
+                        facturas.postValue(new ArrayList<>());
+                        showEmptyError.postValue(true);
+                    }
+                }, 1000); // 1 segundo de espera para que el usuario vea que "pensó"
             }
         });
     }
+
 
     public LiveData<List<Invoice>> getFacturas() { return facturas; }
     public LiveData<Boolean> getIsLoading() { return isLoading; }

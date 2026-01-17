@@ -1,5 +1,7 @@
 package com.nexosolar.android.data.repository;
 
+import android.util.Log; // Importante
+
 import com.nexosolar.android.data.InvoiceMapper;
 import com.nexosolar.android.data.local.InvoiceDao;
 import com.nexosolar.android.data.local.InvoiceEntity;
@@ -19,13 +21,12 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
     private final InvoiceMapper mapper;
     private final ExecutorService executor;
 
-    // NUEVO: Bandera para decidir la estrategia de caché
+    // Bandera para decidir la estrategia de caché
     private final boolean alwaysReload;
 
-    // Constructor actualizado
     public InvoiceRepositoryImpl(InvoiceRemoteDataSource remoteDataSource,
                                  InvoiceDao localDataSource,
-                                 boolean alwaysReload) { // <--- Recibimos la preferencia
+                                 boolean alwaysReload) {
         this.remoteDataSource = remoteDataSource;
         this.localDataSource = localDataSource;
         this.mapper = new InvoiceMapper();
@@ -39,12 +40,13 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
             List<InvoiceEntity> localData = localDataSource.getAllList();
             boolean hasData = localData != null && !localData.isEmpty();
 
-            // LÓGICA CORREGIDA:
             // Si nos piden recargar siempre (Mock) O si no tenemos datos locales... vamos a red.
             if (alwaysReload || !hasData) {
+                Log.d("FUENTE_DATOS", "🔄 Decisión: Ir a la RED (alwaysReload=" + alwaysReload + " o sin datos locales)");
                 fetchFromNetwork(callback);
             } else {
-                // Si es modo real y ya tenemos datos, usamos la caché
+                // Si es modo real y ya tenemos datos, usamos la caché directamente
+                Log.d("FUENTE_DATOS", "✅ DATOS RECUPERADOS DE ROOM (Caché rápida) - Total: " + localData.size());
                 callback.onSuccess(mapper.toDomainList(localData));
             }
         });
@@ -52,10 +54,12 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
 
     @Override
     public void refreshFacturas(RepositoryCallback<Boolean> callback) {
+        Log.d("FUENTE_DATOS", "🔄 Forzando recarga desde RED (Pull to Refresh)...");
         remoteDataSource.getFacturas(new RepositoryCallback<List<InvoiceEntity>>() {
             @Override
             public void onSuccess(List<InvoiceEntity> entities) {
                 executor.execute(() -> {
+                    Log.d("FUENTE_DATOS", "✅ Recarga EXITOSA desde RED. Guardando " + entities.size() + " facturas.");
                     saveToDatabase(entities);
                     if (callback != null) callback.onSuccess(true);
                 });
@@ -63,31 +67,44 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
 
             @Override
             public void onError(Throwable error) {
+                Log.e("FUENTE_DATOS", "❌ Recarga FALLIDA: " + error.getMessage());
                 if (callback != null) callback.onError(error);
             }
         });
     }
+
 
     private void fetchFromNetwork(RepositoryCallback<List<Invoice>> callback) {
         remoteDataSource.getFacturas(new RepositoryCallback<List<InvoiceEntity>>() {
             @Override
             public void onSuccess(List<InvoiceEntity> entities) {
                 executor.execute(() -> {
+                    // 1. ÉXITO DE RED
+                    Log.d("FUENTE_DATOS", "✅ DATOS RECIBIDOS - Total: " + entities.size());
+
                     saveToDatabase(entities);
+                    Log.d("FUENTE_DATOS", "💾 Datos guardados en ROOM");
+
                     callback.onSuccess(mapper.toDomainList(entities));
                 });
             }
 
             @Override
             public void onError(Throwable error) {
-                // MEJORA OPCIONAL: Si falla la red (incluso en Mock), intentamos mostrar caché vieja
-                // en lugar de error vacío.
+                // 2. FALLO DE RED -> INTENTAR CACHÉ (Fallback)
+                Log.e("FUENTE_DATOS", "❌ FALLO RETROFIT: " + error.getMessage());
+                Log.d("FUENTE_DATOS", "🔄 Intentando recuperar de ROOM (Caché de emergencia)...");
+
                 executor.execute(() -> {
                     List<InvoiceEntity> localData = localDataSource.getAllList();
                     if (localData != null && !localData.isEmpty()) {
+
+                        Log.d("FUENTE_DATOS", "✅ DATOS RECUPERADOS DE ROOM (Caché emergencia) - Total: " + localData.size());
                         callback.onSuccess(mapper.toDomainList(localData));
+
                     } else {
-                        callback.onError(error);
+                        Log.e("FUENTE_DATOS", "❌ ROOM ESTÁ VACÍO. No hay datos que mostrar.");
+                        callback.onError(error); // Ahora sí devolvemos el error porque no tenemos nada
                     }
                 });
             }

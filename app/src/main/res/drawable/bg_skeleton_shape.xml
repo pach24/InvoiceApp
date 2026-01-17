@@ -6,6 +6,6 @@
     <solid android:color="#E0E0E0" />
 
     <!-- El radio de las esquinas (4dp suele ser ideal para texto) -->
-    <corners android:radius="4dp" />
+    <corners android:radius="6dp" />
 
 </shape>

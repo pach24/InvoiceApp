@@ -5,8 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="0dp"
     android:background="@android:color/white"
+    android:clipToPadding="false"
     tools:context=".ui.invoices.InvoiceListActivity">
 
     <!-- 1. TOOLBAR -->
@@ -14,8 +14,10 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:layout_alignParentTop="true"
+        android:paddingTop="40dp"
+        android:paddingBottom="8dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         android:background="?attr/colorOnPrimary"
         android:elevation="4dp">
 
@@ -51,7 +53,7 @@
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- 2. RECYCLERVIEW (Oculto al inicio) -->
+    <!-- 2. RECYCLERVIEW (Lista de Facturas) -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
@@ -60,7 +62,7 @@
         android:padding="4dp"
         android:visibility="gone"/>
 
-    <!-- 3. LOADING SKELETON (Nuevo) -->
+    <!-- 3. LOADING SKELETON (Shimmer) -->
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmerViewContainer"
         android:layout_width="match_parent"
@@ -72,11 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <!-- Skeletons para la carga -->
-            <include layout="@layout/item_invoice_skeleton" />
-            <include layout="@layout/item_invoice_skeleton" />
-            <include layout="@layout/item_invoice_skeleton" />
-            <include layout="@layout/item_invoice_skeleton" />
+            <!-- Items de ejemplo para el esqueleto -->
             <include layout="@layout/item_invoice_skeleton" />
             <include layout="@layout/item_invoice_skeleton" />
             <include layout="@layout/item_invoice_skeleton" />
@@ -86,34 +84,52 @@
         </LinearLayout>
     </com.facebook.shimmer.ShimmerFrameLayout>
 
-    <!-- 4. ERROR STATE -->
+    <!-- 4. NUEVO EMPTY STATE / ERROR OFFLINE (Unificado) -->
+    <!-- Usamos layout_centerInParent="true" porque estamos en RelativeLayout -->
     <LinearLayout
-        android:id="@+id/layoutError"
+        android:id="@+id/layoutErrorState"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
         android:visibility="gone"
-        tools:visibility="gone">
+        android:padding="32dp"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/ic_wifi_off_24"
+            app:tint="#757575" />
 
         <TextView
-            android:id="@+id/tvError"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/error_carga"
+            android:layout_marginTop="16dp"
+            android:text="Sin conexión y sin datos"
             android:textSize="18sp"
-            android:textColor="@android:color/holo_red_dark"
-            android:layout_marginBottom="16dp"/>
+            android:textStyle="bold"
+            android:textColor="@android:color/black"/>
 
-        <Button
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="No se pudieron cargar las facturas."
+            android:gravity="center"
+            android:textColor="#757575"/>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRetry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/reintentar" />
+            app:cornerRadius="20dp"
+            android:layout_marginTop="16dp"
+            android:text="Reintentar" />
     </LinearLayout>
 
-    <!-- 5. EMPTY STATE -->
+    <!-- 5. EMPTY STATE (Sin resultados por filtros) -->
+    <!-- Mantenemos este separado por si quieres distinguir "Error de red" de "Filtro sin resultados" -->
     <LinearLayout
         android:id="@+id/layoutEmptyState"
         android:layout_width="match_parent"
