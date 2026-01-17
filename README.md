@@ -45,32 +45,32 @@ Key technical highlights include:
 
 ## 🎥 Live Demo
 
-<!-- 2. LOS 4 GIFs -->
-<!-- Los ponemos en una tabla de 2x2 para que no ocupen 4 pantallas de scroll -->
+
 <table>
   <tr>
-    <td align="center" width="25%">
+    <td align="center" width="25%" valign="top">
       <img src="https://github.com/user-attachments/assets/497b91f8-24c3-4103-94e2-4c200a2b422a" width="100%" alt="Invoice Navigation">
       <br>
       <p><em>Quick overview of the invoice navigation and filtering system.</em></p>
     </td>
-    <td align="center" width="25%">
+    <td align="center" width="25%" valign="top">
       <img src="https://github.com/user-attachments/assets/cd00de11-d74f-4db6-a49b-1a61eec1ab1e" width="100%" alt="Smart Solar Dashboard">
       <br>
       <p><em>Overview of Smart Solar Dashboard flow.</em></p>
     </td>
-    <td align="center" width="25%">
+    <td align="center" width="25%" valign="top">
       <img src="https://github.com/user-attachments/assets/854a1b33-58a7-453b-9605-24acbc3e3147" width="100%" alt="Circular Mock">
       <br>
-      <p><em>Custom Annotation Mocking & Decoupled Data Source .</em></p>
+      <p><em>Custom Annotation Mocking & Decoupled Data Source.</em></p>
     </td>
-    <td align="center" width="25%">
+    <td align="center" width="25%" valign="top">
       <img src="https://github.com/user-attachments/assets/f3dd4e41-7dad-464a-968c-5622167cf313" width="100%" alt="Error Handling">
       <br>
-      <p><em>Resilient Offline-First UI & Robust error management</em></p>
-      
+      <p><em>Resilient Offline-First UI & Robust error management.</em></p>
+    </td> <!-- Recuerda cerrar este td -->
   </tr>
 </table>
+
 
 
 <details>
@@ -79,17 +79,17 @@ Key technical highlights include:
   <br>
 
   
-  <!-- FILA 1: Flujo de Facturas (Requisito 3.1) -->
+  
   | **Main Dashboard** | **Invoice List** | **Smart Filters** | **Invoice Details** |
   |:---:|:---:|:---:|:---:|
   | <img src="https://github.com/user-attachments/assets/8e03da9b-a1fe-4e1e-bc53-65e68532e992" width="200"> | <img src="https://github.com/user-attachments/assets/6301795f-c0a4-421f-bd83-3a3bfe34a4d9" width="200"> | <img src="https://github.com/user-attachments/assets/74a509cb-e8dc-44f2-84ba-0fbfc6add234" width="200"> | <img width="200"  alt="Image" src="https://github.com/user-attachments/assets/5749e226-d7b7-4a0d-8859-f527d5bbd4fe" />|
 
-  <!-- FILA 2: Smart Solar (Requisito 3.2) -->
+  
   | **Smart Solar Main** | **Installation Tab** | **Details Tab** | **Info Popup** |
   |:---:|:---:|:---:|:---:|
   | <img src="https://github.com/user-attachments/assets/69e20763-9377-4666-9f56-8105d37e585f" width="200"> | <img src="https://github.com/user-attachments/assets/6ea24b2b-460e-4508-b2b1-5a7dfbc97a9e" width="200"> | <img src="https://github.com/user-attachments/assets/f87b6b65-ce7e-4ddc-9586-0676b3e38dde" width="200"> | <img src="https://github.com/user-attachments/assets/0ddaec94-cc39-4ff2-9abb-57fdc098dc86" width="200"> |
 
-  <!-- FILA 3: Estados Técnicos y Extras -->
+ 
   | **Skeleton Loading** | **Empty State** | **Offline Error** | **Date Picker** |
   |:---:|:---:|:---:|:---:|
   | <img src="https://github.com/user-attachments/assets/6f0705c2-5663-493d-a100-7484931c3569" width="200"> | <img src="https://github.com/user-attachments/assets/0a6f53c7-373d-429a-8651-e8c833ac6d54" width="200"> | <img src="https://github.com/user-attachments/assets/3228e120-0c57-4cc0-855e-840d70783010" width="200"> | <img width="200" src="https://github.com/user-attachments/assets/5d9c5fa1-0647-4773-9f9e-9ec2c0623c24" /> |
