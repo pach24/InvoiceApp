@@ -41,24 +41,60 @@ Key technical highlights include:
 
 ## 🖼️ Visual Showcase
 
-<img width="1084" height="884" alt="Image" src="https://github.com/user-attachments/assets/46060c84-848a-4473-ac0d-4dd869fbb5da" />
+<img width="1000" height="967" alt="Image" src="https://github.com/user-attachments/assets/12e0d3f9-a96b-4efa-9e22-1126daffb42b" />
 
-### App Demo
+## 🎥 Live Demo
 
-<div align="center">
-<img src="https://github.com/user-attachments/assets/34b71390-8bb1-4beb-b220-61250f1019e7" width="300">
 
-  <p><em>Quick overview of the invoice navigation and filtering flow.</em></p>
-</div>
+<table>
+  <tr>
+    <td align="center" width="25%" valign="top">
+      <img src="https://github.com/user-attachments/assets/497b91f8-24c3-4103-94e2-4c200a2b422a" width="100%" alt="Invoice Navigation">
+      <br>
+      <p><em>Quick overview of the invoice navigation and filtering system.</em></p>
+    </td>
+    <td align="center" width="25%" valign="top">
+      <img src="https://github.com/user-attachments/assets/cd00de11-d74f-4db6-a49b-1a61eec1ab1e" width="100%" alt="Smart Solar Dashboard">
+      <br>
+      <p><em>Overview of Smart Solar Dashboard flow.</em></p>
+    </td>
+    <td align="center" width="25%" valign="top">
+      <img src="https://github.com/user-attachments/assets/854a1b33-58a7-453b-9605-24acbc3e3147" width="100%" alt="Circular Mock">
+      <br>
+      <p><em>Custom Annotation Mocking & Decoupled Data Source.</em></p>
+    </td>
+    <td align="center" width="25%" valign="top">
+      <img src="https://github.com/user-attachments/assets/f3dd4e41-7dad-464a-968c-5622167cf313" width="100%" alt="Error Handling">
+      <br>
+      <p><em>Resilient Offline-First UI & Robust error management.</em></p>
+    </td> <!-- Recuerda cerrar este td -->
+  </tr>
+</table>
 
-### Gallery
 
-| Login | Main Activity | Invoice List | Skeleton Shimmer |
-|:---:|:---:|:---:|:---:|
-| <img width="200" alt="Image" src="https://github.com/user-attachments/assets/c07cf24f-d442-4def-a367-cc242f6905df" /> | <img width="200"  alt="Image" src="https://github.com/user-attachments/assets/ac727795-bdaf-48c0-9b48-725e1ef6c3ce" /> | <img width= "200" alt="Image" src="https://github.com/user-attachments/assets/1372326a-36bd-446f-8744-bb3725714f0e" />      | <img width="200" alt="Image" src="https://github.com/user-attachments/assets/74af082a-6f32-40ab-bf64-35b166329ccb" />
- | <img width="200" alt="Image" src="https://github.com/user-attachments/assets/c27f9aea-66c5-480a-b93f-c33c014658ea" /> | <img width="200" alt="Image" src="https://github.com/user-attachments/assets/b34e1597-b4f9-481c-8212-d9e45991cc5f" /> | <img width="200" alt="Image" src="https://github.com/user-attachments/assets/63776004-d4b9-4e49-8f32-51077922fb2e" /> | <img width="200" alt="Image" src="https://github.com/user-attachments/assets/977b6e80-6056-4f90-9246-3b6f55848dc4" />
-| Filters | Date Picker Calendar | Empty State | Invoice Details View |
 
+<details>
+  <summary><strong>📸 View All Required Screens (Click to expand)</strong></summary>
+  
+  <br>
+
+  
+  
+  | **Main Dashboard** | **Invoice List** | **Smart Filters** | **Invoice Details** |
+  |:---:|:---:|:---:|:---:|
+  | <img src="https://github.com/user-attachments/assets/8e03da9b-a1fe-4e1e-bc53-65e68532e992" width="200"> | <img src="https://github.com/user-attachments/assets/6301795f-c0a4-421f-bd83-3a3bfe34a4d9" width="200"> | <img src="https://github.com/user-attachments/assets/74a509cb-e8dc-44f2-84ba-0fbfc6add234" width="200"> | <img width="200"  alt="Image" src="https://github.com/user-attachments/assets/5749e226-d7b7-4a0d-8859-f527d5bbd4fe" />|
+
+  
+  | **Smart Solar Main** | **Installation Tab** | **Details Tab** | **Info Popup** |
+  |:---:|:---:|:---:|:---:|
+  | <img src="https://github.com/user-attachments/assets/69e20763-9377-4666-9f56-8105d37e585f" width="200"> | <img src="https://github.com/user-attachments/assets/6ea24b2b-460e-4508-b2b1-5a7dfbc97a9e" width="200"> | <img src="https://github.com/user-attachments/assets/f87b6b65-ce7e-4ddc-9586-0676b3e38dde" width="200"> | <img src="https://github.com/user-attachments/assets/0ddaec94-cc39-4ff2-9abb-57fdc098dc86" width="200"> |
+
+ 
+  | **Skeleton Loading** | **Empty State** | **Offline Error** | **Date Picker** |
+  |:---:|:---:|:---:|:---:|
+  | <img src="https://github.com/user-attachments/assets/6f0705c2-5663-493d-a100-7484931c3569" width="200"> | <img src="https://github.com/user-attachments/assets/0a6f53c7-373d-429a-8651-e8c833ac6d54" width="200"> | <img src="https://github.com/user-attachments/assets/3228e120-0c57-4cc0-855e-840d70783010" width="200"> | <img width="200" src="https://github.com/user-attachments/assets/5d9c5fa1-0647-4773-9f9e-9ec2c0623c24" /> |
+
+</details>
 
 ---
 
