@@ -39,12 +39,12 @@
         <!-- EL ICONO DE USUARIO -->
         <ImageView
             android:id="@+id/ivAvatar"
-            android:layout_width="27dp"
-            android:layout_height="27dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_gravity="center"
             android:contentDescription="@null"
             android:src="@drawable/ic_user_outline"
-            app:tint="#555555" />
+            app:tint="@color/my_theme_green_light" />
     </com.google.android.material.card.MaterialCardView>
 
     <!-- RETROMOCK SWITCH -->
@@ -94,13 +94,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="24dp"
-        android:text="@string/avenida_de_la_constituci_n_45"
-        android:textSize="15sp"
-        android:textColor="#333333"
         android:ellipsize="end"
         android:maxLines="1"
-        app:layout_constraintStart_toStartOf="@id/tvGreeting"
+        android:text="@string/avenida_de_la_constituci_n_45"
+        android:textColor="#333333"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvGreeting"
         app:layout_constraintTop_toBottomOf="@id/tvGreeting" />
 
     <!-- TÍTULO SECCIÓN -->
@@ -136,13 +136,15 @@
             android:orientation="vertical"
             android:padding="20dp">
 
+
             <!-- ICONO BOMBILLA -->
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:contentDescription="@null"
                 android:src="@drawable/ic_lightbulb_outline"
-                app:tint="#7CB342"/>
+
+                />
 
             <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"/>
 
@@ -203,8 +205,8 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:contentDescription="@null"
-                android:src="@drawable/ic_sun"
-                app:tint="#FFA000"/>
+                android:src="@drawable/twotone_doc_24"
+                />
 
             <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"/>
 

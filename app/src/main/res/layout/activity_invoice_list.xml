@@ -106,7 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Sin conexión y sin datos"
+            android:text="¡Vaya! Sin conexión"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@android:color/black"/>
@@ -115,7 +115,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="No se pudieron cargar las facturas."
+            android:text=" La información no está disponible en este momento. Por favor, verifica tu conexión de red."
             android:gravity="center"
             android:textColor="#757575"/>
 
@@ -142,8 +142,8 @@
         tools:visibility="gone">
 
         <ImageView
-            android:layout_width="360dp"
-            android:layout_height="360dp"
+            android:layout_width="560dp"
+            android:layout_height="560dp"
             android:src="@drawable/ic_empty_list"
             android:importantForAccessibility="no"/>
 

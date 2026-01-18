@@ -1,38 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:aapt="http://schemas.android.com/aapt"
     android:width="412dp"
     android:height="460dp"
     android:viewportWidth="412"
     android:viewportHeight="360">
 
-    <!-- CAPA 1: Base Verde Vibrante con Degradado -->
-    <path android:pathData="M0,0h412v360h-412z">
-        <aapt:attr name="android:fillColor">
-            <gradient android:startY="0" android:endY="250" android:type="linear">
-                <item android:offset="0" android:color="#4C6F09"/> <!-- Verde iOS Brillante -->
-                <item android:offset="1" android:color="#99CC00"/> <!-- Verde Profundo -->
-            </gradient>
-        </aapt:attr>
-    </path>
-
-    <!-- CAPA 2: Formas Abstractas (Curvas Suaves) -->
+    <!-- FONDO BASE: Color #1 (70% del espacio visual) -->
+    <!-- Este color domina la mayor parte de la pantalla superior -->
     <path
-        android:pathData="M0,200 Q100,280 206,200 T412,180 V0 H0 Z"
-        android:fillColor="#15FFFFFF"/>
+        android:pathData="M0,0h412v360h-412z"
+        android:fillColor="#7DA935"/>
 
+    <!-- CAPA MEDIA: Color #2 (20% del espacio visual) -->
+    <!-- Empieza aprox en Y=220 (el 70% de la altura) -->
     <path
-        android:pathData="M0,140 Q150,80 300,160 T412,120 V0 H0 Z"
-        android:fillColor="#20FFFFFF"/>
+        android:pathData="M0,220 Q103,235 206,220 T412,225 V360 H0 Z"
+        android:fillColor="#99BB62"/>
 
-    <!-- CAPA 3: EL TRUCO DEL FADE OUT (Degradado a Transparente/Blanco) -->
-    <!-- Esto hace que el verde se funda con el fondo de la app -->
-    <path android:pathData="M0,250h412v110h-412z">
-        <aapt:attr name="android:fillColor">
-            <gradient android:startY="250" android:endY="360" android:type="linear">
-                <item android:offset="0" android:color="#00F2F2F7"/> <!-- Transparente -->
-                <item android:offset="1" android:color="#FFF2F2F7"/> <!-- Color de fondo de tu app (Gris claro) -->
-            </gradient>
-        </aapt:attr>
-    </path>
+    <!-- CAPA FRONTAL: Color #3 (10% del espacio visual) -->
+    <!-- Empieza aprox en Y=285 (el 90% acumulado de la altura) -->
+    <path
+        android:pathData="M0,285 Q103,275 206,285 T412,290 V360 H0 Z"
+        android:fillColor="#BAD296"/>
+
+    <!-- CORTE FINAL: Fondo de la App -->
+    <!-- Empieza en Y=320 para cerrar la última franja del 10% -->
+    <path
+        android:pathData="M0,320 Q103,330 206,320 T412,320 V360 H0 Z"
+        android:fillColor="#F2F2F7"/>
+
 </vector>

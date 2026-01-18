@@ -85,6 +85,7 @@
     <string name="hist_rico">Histórico</string>
     <string name="paneles">Paneles</string>
     <string name="avenida_de_la_constituci_n_45">Avenida de la Constitución, 45...</string>
+    <string name="direccion_con_formato">Estás viendo &lt;b&gt;%1$s&lt;/b&gt;</string>
 
     <!-- Textos de Información / Dialogs -->
     <string name="titulo_informacion">Información</string>

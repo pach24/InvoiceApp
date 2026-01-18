@@ -32,11 +32,21 @@ public class MainActivity extends AppCompatActivity {
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        String nombreUsuario = "Usuario"; //Hardcodeado porque no tengo lógica para un login y poder extraer los datos
+        String nombreUsuario = "USUARIO"; //Hardcodeado porque no tengo lógica para un login y poder extraer los datos
         String saludoCompleto = getString(R.string.greeting_user, nombreUsuario);
         binding.tvGreeting.setText(saludoCompleto);
 
-        // Configurar insets (Importante para que no se corte el fondo verde arriba)
+        String direccionGuardada = getString(R.string.avenida_de_la_constituci_n_45);
+
+        String miDireccion = getString(R.string.direccion_con_formato, direccionGuardada);
+
+
+        binding.tvAddress.setText(androidx.core.text.HtmlCompat.fromHtml(
+                miDireccion,
+                androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
+        ));
+
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             // Aplicamos padding solo abajo para no cortar el header verde en la status bar
@@ -45,23 +55,22 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Configurar el listener en la TARJETA DE FACTURAS
-        // Usamos el ID de la vista clickable que pusimos en el XML
         binding.btFacturasClick.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, InvoiceListActivity.class);
             intent.putExtra("USE_RETROMOCK", useMock);
             startActivity(intent);
         });
 
+        // Configurar el listener en la TARJETA DE SMART SOLAR
         binding.btSmartSolarClick.setOnClickListener(v -> {
-            // Asegúrate de importar la clase SmartSolarActivity cuando la crees
             Intent intent = new Intent(MainActivity.this, SmartSolarActivity.class);
             startActivity(intent);
         });
 
-        // 1. PRIMERO establece el valor inicial
+
         binding.btToggleApi.setChecked(useMock);
 
-        // 2. DESPUÉS configura el listener para cambios futuros
+
         binding.btToggleApi.setOnCheckedChangeListener((buttonView, isChecked) -> {
             useMock = isChecked;
             String mode = useMock ? "Using RetroMock" : "Using RetroFit";
