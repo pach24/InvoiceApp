@@ -1,57 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="3dp"
-    app:cardElevation="44dp"
-    app:cardBackgroundColor="@android:color/white">
+    app:cardCornerRadius="@dimen/dialog_card_corner_radius"
+    app:cardElevation="@dimen/dialog_card_elevation"
+    app:cardBackgroundColor="@color/dialog_card_background">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:padding="24dp">
-
+        android:padding="@dimen/dialog_content_padding">
 
         <!-- TÍTULO -->
         <TextView
-            android:layout_marginTop="24dp"
-            android:layout_width="254dp"
+            android:id="@+id/tvDialogTitle"
+            android:layout_width="@dimen/dialog_title_width"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginTop="@dimen/dialog_title_margin_top"
+            android:layout_marginBottom="@dimen/dialog_title_margin_bottom"
             android:gravity="center"
-            android:text="Estado solicitud autoconsumo"
-            android:textColor="#333333"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:text="@string/autoconsumo_status_title"
+            android:textColor="@color/dialog_title_color"
+            android:textSize="@dimen/dialog_title_text_size"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- MENSAJE -->
-
-        <!-- BOTÓN VERDE PERSONALIZADO -->
         <TextView
-            android:layout_width="263dp"
+            android:layout_marginTop="@dimen/spacing_medium"
+            android:id="@+id/tvDialogMessage"
+            android:layout_width="@dimen/dialog_message_width"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="@dimen/dialog_message_margin_bottom"
             android:gravity="center"
-            android:lineSpacingExtra="4dp"
-            android:text="El tiempo estimado de activación de tu autoconsumo es de 1 a 2 meses, éste variará en función de tu comunidad autónoma y distribuidora"
-            android:textColor="#666666"
-            android:textSize="14sp" />
+            android:lineSpacingExtra="@dimen/dialog_message_line_spacing_extra"
+            android:text="@string/autoconsumo_status_message"
+            android:textColor="@color/dialog_message_color"
+            android:textSize="@dimen/dialog_message_text_size"
+            app:layout_constraintTop_toBottomOf="@id/tvDialogTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- BOTÓN -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAceptar"
-            android:layout_width="217dp"
-            android:layout_height="59dp"
-            android:layout_marginBottom="24dp"
+            android:layout_width="@dimen/dialog_button_width"
+            android:layout_height="@dimen/dialog_button_height"
+            android:layout_marginBottom="@dimen/dialog_button_margin_bottom"
             android:stateListAnimator="@null"
-            android:text="Aceptar"
+            android:text="@string/accept"
             android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textSize="12sp"
+            android:textColor="@color/dialog_button_text_color"
+            android:textSize="@dimen/dialog_button_text_size"
             app:backgroundTint="@color/my_theme_green_light"
-            app:cornerRadius="28dp" />
+            app:cornerRadius="@dimen/dialog_button_corner_radius"
+            android:layout_marginTop="@dimen/spacing_medium"
+            app:layout_constraintTop_toBottomOf="@id/tvDialogMessage"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

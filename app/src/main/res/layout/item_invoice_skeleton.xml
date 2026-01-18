@@ -4,65 +4,58 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="8dp"
-    android:paddingTop="8dp">
+    android:paddingHorizontal="@dimen/invoice_skeleton_padding_horizontal"
+    android:paddingTop="@dimen/invoice_skeleton_padding_top">
 
-    <!-- 1. FECHA FALSA (Coincide con txtFecha) -->
+    <!-- 1. FECHA FALSA -->
     <View
         android:id="@+id/viewFechaSkeleton"
-        android:layout_width="160dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="23dp"
+        android:layout_width="@dimen/invoice_skeleton_date_width"
+        android:layout_height="@dimen/invoice_skeleton_date_height"
+        android:layout_marginStart="@dimen/invoice_skeleton_date_margin_start"
+        android:layout_marginTop="@dimen/invoice_skeleton_date_margin_top"
         android:background="@drawable/bg_skeleton_shape"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- 2. IMPORTE FALSO (Coincide con txtImporte) -->
-    <!-- Alineado a la derecha, igual que tu TextView real -->
+    <!-- 2. IMPORTE FALSO -->
     <View
         android:id="@+id/viewImporteSkeleton"
-        android:layout_width="80dp"
-        android:layout_height="23dp"
-        android:layout_marginEnd="44dp"
+        android:layout_width="@dimen/invoice_skeleton_amount_width"
+        android:layout_height="@dimen/invoice_skeleton_amount_height"
+        android:layout_marginEnd="@dimen/invoice_skeleton_amount_margin_end"
         android:background="@drawable/bg_skeleton_shape"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <!-- 3. ESTADO FALSO (Coincide con txtEstado) -->
-    <!-- Debajo de la fecha -->
+    <!-- 3. ESTADO FALSO -->
     <View
         android:id="@+id/viewEstadoSkeleton"
-        android:layout_width="100dp"
-        android:layout_height="17dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="@dimen/invoice_skeleton_state_width"
+        android:layout_height="@dimen/invoice_skeleton_state_height"
+        android:layout_marginStart="@dimen/invoice_skeleton_state_margin_start"
+        android:layout_marginTop="@dimen/invoice_skeleton_state_margin_top"
         android:background="@drawable/bg_skeleton_shape"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/viewFechaSkeleton" />
 
-    <!-- (Opcional) FLECHA FALSA - Un cuadradito gris pequeño -->
+    <!-- 4. FLECHA FALSA -->
     <View
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="12dp"
+        android:layout_width="@dimen/invoice_skeleton_arrow_size"
+        android:layout_height="@dimen/invoice_skeleton_arrow_size"
+        android:layout_marginEnd="@dimen/invoice_skeleton_arrow_margin_end"
         android:background="@drawable/bg_skeleton_shape"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <!-- LÍNEA SEPARADORA (Igual que la real) -->
+    <!-- 5. LÍNEA SEPARADORA -->
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#E0E0E0"
-        android:layout_marginTop="16dp"
-
+        android:layout_height="@dimen/invoice_skeleton_divider_height"
+        android:layout_marginTop="@dimen/invoice_skeleton_divider_margin_top"
+        android:background="@color/invoice_skeleton_divider_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/viewEstadoSkeleton"

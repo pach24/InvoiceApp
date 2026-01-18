@@ -1,22 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
-    <LinearLayout
 
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
-        android:elevation="4dp">
+        android:background="@color/white"
+        android:elevation="@dimen/filter_screen_elevation">
 
+        <!-- TOOLBAR / CABECERA -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_filter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="28dp"
-            android:paddingEnd="20dp"
-            android:paddingStart="0dp">
+            android:paddingTop="@dimen/filter_toolbar_padding_top"
+            android:paddingEnd="@dimen/filter_toolbar_padding_end"
+            android:paddingStart="@dimen/filter_toolbar_padding_start">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -25,8 +28,8 @@
 
                 <ImageButton
                     android:id="@+id/btnCerrar"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="@dimen/filter_close_size"
+                    android:layout_height="@dimen/filter_close_size"
                     android:layout_gravity="end"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/cerrar"
@@ -38,114 +41,125 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/filtrar_facturas"
-                    android:textColor="@android:color/black"
-                    android:textSize="40sp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/filter_title_text_size"
                     android:textStyle="bold" />
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
 
+        <!-- CONTENIDO -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="@dimen/filter_screen_padding">
 
+            <!-- FECHA EMISIÓN -->
             <TextView
                 android:id="@+id/fechaEmision"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/con_fecha_de_emision"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
 
+            <!-- Bloque fechas Desde / Hasta -->
             <LinearLayout
-                style="?android:attr/buttonBarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp">
+                android:layout_marginTop="@dimen/filter_section_margin_top"
+                android:layout_marginBottom="@dimen/filter_section_margin_bottom">
+
+                <!-- Columna DESDE -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <TextView
                         android:id="@+id/fechaDesde"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textColor="@android:color/darker_gray"
+                        android:textColor="@color/text_secondary"
                         android:text="@string/desde" />
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnSelectDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/filter_chip_margin_top"
+                        android:layout_marginEnd="@dimen/filter_chip_margin_end"
                         android:text="@string/dia_mes_ano"
                         android:textAllCaps="false"
                         android:textColor="@color/black"
+                        android:paddingStart="@dimen/filter_chip_padding_horizontal"
+                        android:paddingEnd="@dimen/filter_chip_padding_horizontal"
                         app:backgroundTint="@color/light_gray"
-                        app:cornerRadius="8dp"
-                        app:strokeColor="@color/black"
-                        android:paddingStart="24dp"
-                        android:paddingEnd="24dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginTop="8dp"/>
+                        app:cornerRadius="@dimen/filter_chip_corner_radius"
+                        app:strokeColor="@color/black" />
                 </LinearLayout>
+
+                <!-- Columna HASTA -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginStart="@dimen/filter_date_block_spacing">
+
                     <TextView
                         android:id="@+id/fechaHasta"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textColor="@android:color/darker_gray"
+                        android:textColor="@color/text_secondary"
                         android:text="@string/hasta" />
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnSelectDateUntil"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/filter_chip_margin_top"
                         android:text="@string/dia_mes_ano"
                         android:textAllCaps="false"
                         android:textColor="@color/black"
+                        android:paddingStart="@dimen/filter_chip_padding_horizontal"
+                        android:paddingEnd="@dimen/filter_chip_padding_horizontal"
                         app:backgroundTint="@color/light_gray"
-                        app:cornerRadius="8dp"
-                        app:strokeColor="@color/black"
-                        android:paddingStart="24dp"
-                        android:paddingEnd="24dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginTop="8dp"/>
+                        app:cornerRadius="@dimen/filter_chip_corner_radius"
+                        app:strokeColor="@color/black" />
                 </LinearLayout>
-
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@android:color/darker_gray" />
+                android:layout_height="@dimen/filter_divider_height"
+                android:layout_marginTop="@dimen/filter_divider_margin_vertical"
+                android:layout_marginBottom="@dimen/filter_divider_margin_vertical"
+                android:background="@color/filter_divider_color" />
 
+            <!-- IMPORTE -->
             <TextView
                 android:id="@+id/porImporte"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/por_un_importe"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
+
+            <!-- Min / Max -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="center"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="@dimen/filter_amount_header_margin_top">
+
                 <TextView
                     android:id="@+id/tvMinValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/_0"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/filter_amount_text_size"
                     android:textColor="@color/my_theme_green_light"/>
 
                 <TextView
@@ -153,9 +167,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/separation"
-                    android:textSize="16sp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
+                    android:textSize="@dimen/filter_amount_text_size"
+                    android:layout_marginStart="@dimen/filter_amount_separator_margin_horizontal"
+                    android:layout_marginEnd="@dimen/filter_amount_separator_margin_horizontal"
                     android:textColor="@color/my_theme_green_light"/>
 
                 <TextView
@@ -163,122 +177,127 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
-                    android:textSize="16sp"
+                    android:textSize="@dimen/filter_amount_text_size"
                     android:textColor="@color/my_theme_green_light"/>
             </LinearLayout>
+
+            <!-- 0€ ... max€ -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/filter_amount_footer_margin_top">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@color/text_secondary"
                     android:text="@string/_0eur"/>
+
                 <TextView
                     android:id="@+id/tvMaxImporte"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@color/text_secondary"
                     android:text=""
                     android:gravity="end"/>
             </LinearLayout>
-            <com.google.android.material.slider.RangeSlider
 
-                android:contentDescription="@string/rango_importe"
+            <com.google.android.material.slider.RangeSlider
                 android:id="@+id/rangeSlider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/rango_importe"
                 android:valueFrom="0"
                 android:valueTo="100"
                 android:stepSize="0"
                 app:tickVisible="false"
-                app:thumbRadius="15dp"
+                app:thumbRadius="@dimen/filter_slider_thumb_radius"
                 app:thumbColor="@color/my_theme_green_light"
-                app:height="1dp"/>
-
-
+                app:height="@dimen/filter_slider_track_height"/>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@android:color/darker_gray" />
+                android:layout_height="@dimen/filter_divider_height"
+                android:layout_marginTop="@dimen/filter_divider_margin_vertical"
+                android:layout_marginBottom="@dimen/filter_divider_margin_vertical"
+                android:background="@color/filter_divider_color" />
 
+            <!-- ESTADO -->
             <TextView
                 android:id="@+id/porEstado"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/por_estado"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
 
             <CheckBox
-                android:buttonTint="@color/selector_checkbox"
                 android:id="@+id/checkPagadas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:text="@string/pagadas"/>
+                android:text="@string/pagadas"
+                android:buttonTint="@color/selector_checkbox"/>
 
             <CheckBox
-                android:buttonTint="@color/selector_checkbox"
                 android:id="@+id/checkAnuladas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:text="@string/anuladas"/>
+                android:text="@string/anuladas"
+                android:buttonTint="@color/selector_checkbox"/>
 
             <CheckBox
-                android:buttonTint="@color/selector_checkbox"
                 android:id="@+id/checkCuotaFija"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:text="@string/cuota_fija" />
+                android:text="@string/cuota_fija"
+                android:buttonTint="@color/selector_checkbox"/>
 
             <CheckBox
-                android:buttonTint="@color/selector_checkbox"
                 android:id="@+id/checkPendientesPago"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:text="@string/pendientes_de_pago"/>
+                android:text="@string/pendientes_de_pago"
+                android:buttonTint="@color/selector_checkbox"/>
 
             <CheckBox
-                android:buttonTint="@color/selector_checkbox"
                 android:id="@+id/checkPlanPago"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:text="@string/plan_de_pago"/>
+                android:text="@string/plan_de_pago"
+                android:buttonTint="@color/selector_checkbox"/>
+
+            <!-- BOTONES -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="30dp"
+                android:padding="@dimen/filter_bottom_buttons_padding"
                 android:layout_gravity="center">
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnAplicar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAllCaps="false"
-                    app:cornerRadius="24dp"
-                    android:text="@string/aplicar_filtros" />
+                    android:text="@string/aplicar_filtros"
+                    app:cornerRadius="@dimen/filter_bottom_button_corner_radius" />
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnBorrar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAllCaps="false"
-                    android:textColor="#BBB"
-                    app:cornerRadius="24dp"
                     android:text="@string/borrar_filtros"
+                    android:textColor="@color/filter_clear_text_color"
                     android:background="@android:color/transparent"
                     app:backgroundTint="@android:color/transparent"
-                    android:backgroundTint="@android:color/transparent"
-                    app:background="@android:color/transparent"
-                    android:layout_gravity="center"/>
+                    app:cornerRadius="@dimen/filter_bottom_button_corner_radius" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

@@ -81,14 +81,13 @@
         android:textSize="@dimen/main_greeting_text_size"
         android:textStyle="bold"
         android:textColor="@color/black"
-
         app:layout_constraintTop_toBottomOf="@id/containerAvatar"
         app:layout_constraintStart_toStartOf="parent" />
 
     <!-- 5. DIRECCIÓN -->
     <TextView
         android:id="@+id/tvAddress"
-        android:layout_width="@dimen/spacing_zero"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/main_address_margin_top"
         android:layout_marginEnd="@dimen/main_address_margin_end"
@@ -120,6 +119,9 @@
         android:layout_width="@dimen/main_action_card_width"
         android:layout_height="@dimen/main_action_card_height"
         android:layout_marginTop="@dimen/main_action_card_margin_top"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
         app:cardCornerRadius="@dimen/main_action_card_corner_radius"
         app:cardElevation="@dimen/main_action_card_elevation"
         app:cardBackgroundColor="@color/white"
@@ -133,7 +135,6 @@
             android:layout_height="match_parent"
             android:padding="@dimen/main_action_card_padding">
 
-            <!-- ICONO BOMBILLA -->
             <ImageView
                 android:id="@+id/ivFacturas"
                 android:layout_width="@dimen/main_action_icon_size"
@@ -143,10 +144,9 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
-            <!-- Texto Grande -->
             <TextView
                 android:id="@+id/tvFacturasTitle"
-                android:layout_width="@dimen/spacing_zero"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/ver_nconsumo"
                 android:textSize="@dimen/main_action_title_text_size"
@@ -160,7 +160,7 @@
 
             <TextView
                 android:id="@+id/tvFacturasSubtitle"
-                android:layout_width="@dimen/spacing_zero"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/hist_rico"
                 android:textSize="@dimen/main_action_subtitle_text_size"
@@ -170,29 +170,19 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <!-- Clickable Overlay -->
-            <View
-                android:id="@+id/btFacturasClick"
-                android:layout_width="@dimen/spacing_zero"
-                android:layout_height="@dimen/spacing_zero"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:contentDescription="@string/abrir_listado_de_facturas"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- 7. TARJETA SMART SOLAR -->
+
+    <!-- 6. TARJETA SMART SOLAR -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardSmartSolar"
         android:layout_width="@dimen/main_action_card_width"
         android:layout_height="@dimen/main_action_card_height"
         android:layout_marginStart="@dimen/main_action_card_margin_start"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
         app:cardCornerRadius="@dimen/main_action_card_corner_radius"
         app:cardElevation="@dimen/main_action_card_elevation"
         app:cardBackgroundColor="@color/white"
@@ -206,7 +196,6 @@
             android:layout_height="match_parent"
             android:padding="@dimen/main_action_card_padding">
 
-            <!-- ICONO SOLAR -->
             <ImageView
                 android:id="@+id/ivSmartSolar"
                 android:layout_width="@dimen/main_action_icon_size"
@@ -216,10 +205,9 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
-            <!-- Texto Grande -->
             <TextView
                 android:id="@+id/tvSmartSolarTitle"
-                android:layout_width="@dimen/spacing_zero"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/smart_nsolar"
                 android:textSize="@dimen/main_action_title_text_size"
@@ -233,7 +221,7 @@
 
             <TextView
                 android:id="@+id/tvSmartSolarSubtitle"
-                android:layout_width="@dimen/spacing_zero"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/paneles"
                 android:textSize="@dimen/main_action_subtitle_text_size"
@@ -243,21 +231,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <!-- Clickable Overlay -->
-            <View
-                android:id="@+id/btSmartSolarClick"
-                android:layout_width="@dimen/spacing_zero"
-                android:layout_height="@dimen/spacing_zero"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:contentDescription="@string/abrir_smart_solar"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

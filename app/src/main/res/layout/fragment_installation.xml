@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
+    android:padding="@dimen/energy_detail_screen_padding"
     android:background="@color/white">
 
     <!-- 1. TEXTO DESCRIPTIVO -->
@@ -12,24 +12,23 @@
         android:id="@+id/tvDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/aqu_tienes_los_datos_de_tu_instalaci_n_fotovoltaica_en_tiempo_real"
-        android:textColor="#555555"
-        android:textSize="14sp"
+        android:text="@string/desc_energy_detail"
+        android:textColor="@color/energy_detail_text_color"
+        android:textSize="@dimen/energy_detail_text_size"
         android:lineSpacingMultiplier="1.2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- 2. TEXTO AUTOCONSUMO -->
-    <!-- Este texto está FUERA del gráfico en tu captura, así que lo mantenemos -->
     <TextView
         android:id="@+id/tvAutoconsumoLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="@dimen/energy_detail_autoconsumo_margin_top"
         android:text="@string/autoconsumo"
-        android:textColor="#9E9E9E"
-        android:textSize="14sp"
+        android:textColor="@color/energy_detail_label_color"
+        android:textSize="@dimen/energy_detail_label_text_size"
         app:layout_constraintTop_toBottomOf="@id/tvDescription"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -39,28 +38,23 @@
         android:layout_height="wrap_content"
         android:text="@string/_92"
         android:textStyle="bold"
-        android:textColor="#000000"
-        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/energy_detail_value_text_size"
         app:layout_constraintStart_toEndOf="@id/tvAutoconsumoLabel"
         app:layout_constraintBaseline_toBaselineOf="@id/tvAutoconsumoLabel"/>
 
     <!-- 3. IMAGEN DEL GRÁFICO COMPLETO -->
     <ImageView
         android:id="@+id/imgFullChart"
-
-        android:layout_width="326dp"
-        android:layout_height="348dp"
-
-        android:layout_marginTop="24dp"
+        android:layout_width="@dimen/energy_detail_chart_width"
+        android:layout_height="@dimen/energy_detail_chart_height"
+        android:layout_marginTop="@dimen/energy_detail_chart_margin_top"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         android:src="@drawable/grafico1"
-
-        app:layout_constraintEnd_toEndOf="parent"
-
-
+        android:contentDescription="@null"
+        app:layout_constraintTop_toBottomOf="@id/tvAutoconsumoLabel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvAutoconsumoLabel" />
-
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
