@@ -9,33 +9,48 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.nexosolar.android.databinding.ActivitySmartSolarBinding;
 
+/**
+ * Pantalla principal del módulo SmartSolar.
+ * Gestiona la navegación entre las pestañas de información de la instalación
+ * mediante ViewPager2 y TabLayout.
+ */
 public class SmartSolarActivity extends AppCompatActivity {
 
+    // ===== Variables de instancia =====
+
     private ActivitySmartSolarBinding binding;
+
+    // ===== Métodos del ciclo de vida =====
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // 1. Inflar layout
         binding = ActivitySmartSolarBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // 2. Configurar el botón de volver atrás
-        binding.backButton.setOnClickListener(v -> {
-            getOnBackPressedDispatcher().onBackPressed();
-        });
+        setupBackButton();
+        setupTabs();
+    }
 
-        // ---------------------------------------------------------------
-        // 3. CONFIGURACIÓN DE PESTAÑAS
-        // ---------------------------------------------------------------
+    // ===== Métodos privados =====
 
-        // A. Asignar el adaptador al ViewPager2
+    /**
+     * Configura el comportamiento del botón de navegación hacia atrás.
+     */
+    private void setupBackButton() {
+        binding.backButton.setOnClickListener(v ->
+                getOnBackPressedDispatcher().onBackPressed()
+        );
+    }
+
+    /**
+     * Inicializa el ViewPager2 y sincroniza las pestañas con TabLayoutMediator.
+     * Se definen tres pestañas: Mi instalación, Energía y Detalles.
+     */
+    private void setupTabs() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(this);
         binding.viewPager.setAdapter(adapter);
 
-        // B. Conectar TabLayout con ViewPager2 usando TabLayoutMediator
-        // Esto crea las pestañas automáticamente y sincroniza el scroll
         new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
             switch (position) {
                 case 0:
@@ -51,9 +66,15 @@ public class SmartSolarActivity extends AppCompatActivity {
         }).attach();
     }
 
-    // 4. CLASE INTERNA: ADAPTADOR
-    // Esta clase gestiona qué Fragment se muestra en cada posición
+    // ===== Clases internas =====
+
+    /**
+     * Adaptador que gestiona la creación de fragments para cada pestaña del ViewPager2.
+     */
     private static class ViewPagerAdapter extends FragmentStateAdapter {
+
+        private static final int TAB_COUNT = 3;
+
         public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
             super(fragmentActivity);
         }
@@ -61,14 +82,13 @@ public class SmartSolarActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-            // Devuelve el Fragment correspondiente a cada pestaña
             switch (position) {
                 case 0:
-                    return new InstallationFragment(); // Pestaña 1
+                    return new InstallationFragment();
                 case 1:
-                    return new EnergyFragment(); //Pestaña 2
+                    return new EnergyFragment();
                 case 2:
-                    return  new DetailsFragment();
+                    return new DetailsFragment();
                 default:
                     return new InstallationFragment();
             }
@@ -76,7 +96,7 @@ public class SmartSolarActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return 3; // Número total de pestañas
+            return TAB_COUNT;
         }
     }
 }
