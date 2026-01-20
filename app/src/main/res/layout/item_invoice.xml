@@ -1,88 +1,85 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="8dp"
+    android:paddingHorizontal="@dimen/invoice_item_padding_horizontal"
     android:background="@android:color/transparent">
 
-    <!-- Guía para mantener la alineación -->
+    <!-- Guía -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        app:layout_constraintGuide_percent="0.1" /> <!-- Ajusta este valor según sea necesario -->
+        app:layout_constraintGuide_percent="@dimen/invoice_item_guideline_percent" />
 
     <!-- Fecha -->
     <TextView
         android:id="@+id/txtFecha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="23dp"
+        android:layout_marginStart="@dimen/invoice_item_date_margin_start"
+        android:layout_marginTop="@dimen/invoice_item_date_margin_top"
         android:text=""
-        android:textColor="@android:color/black"
-        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/invoice_item_date_text_size"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/guideline" /> <!-- Alinea a la guía -->
+        app:layout_constraintEnd_toStartOf="@id/guideline" />
 
     <!-- Importe -->
-
-
     <TextView
         android:id="@+id/txtImporte"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="44dp"
+        android:layout_marginEnd="@dimen/invoice_item_amount_margin_end"
         android:text=""
-        android:textColor="@android:color/black"
-        android:textSize="23sp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/invoice_item_amount_text_size"
+        android:gravity="end"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:gravity="end"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Estado (Ej: Pendiente de pago) -->
-
+    <!-- Estado -->
     <TextView
         android:id="@+id/txtEstado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="@dimen/invoice_item_state_margin_start"
         android:text=""
         android:textColor="@color/texto_alerta"
-        android:textSize="17sp"
+        android:textSize="@dimen/invoice_item_state_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtFecha"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0" />
 
-    <!-- Flecha a la derecha -->
+    <!-- Flecha -->
     <ImageView
         android:id="@+id/imgArrow"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="12dp"
-        android:contentDescription="@null"
+        android:layout_width="@dimen/invoice_item_arrow_size"
+        android:layout_height="@dimen/invoice_item_arrow_size"
+        android:layout_marginEnd="@dimen/invoice_item_arrow_margin_end"
+        android:contentDescription="@string/icono_flecha_item_factura"
         android:scaleType="centerCrop"
-        app:tint="@android:color/darker_gray"
         android:src="@drawable/ic_arrow_back_24"
         android:scaleX="-1"
+        app:tint="@color/darker_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.512"
-        android:gravity="end" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Línea separadora -->
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
+        android:layout_height="@dimen/invoice_item_divider_height"
+        android:layout_marginTop="@dimen/invoice_item_divider_margin_top"
+        android:background="@color/invoice_item_divider_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtEstado"
-        android:layout_marginTop="16dp" /> <!-- Agregar margen superior para más espacio -->
+        app:layout_constraintTop_toBottomOf="@id/txtEstado" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

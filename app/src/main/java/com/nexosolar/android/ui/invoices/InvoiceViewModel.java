@@ -26,6 +26,14 @@ public class InvoiceViewModel extends ViewModel {
 
     private List<Invoice> facturasOriginales = new ArrayList<>();
 
+    public enum ErrorType {
+        NONE,
+        NETWORK,        // Fallo de conexión (Wifi/Datos)
+        SERVER_GENERIC  // Fallo del servidor (404, 500, JSON malformado)
+    }
+
+    private final MutableLiveData<ErrorType> errorTypeState = new MutableLiveData<>(ErrorType.NONE);
+    public LiveData<ErrorType> getErrorTypeState() { return errorTypeState; }
     private final GetInvoicesUseCase getInvoicesUseCase;
     private final FilterInvoicesUseCase filterInvoicesUseCase;
     private boolean isFirstLoad = true;
@@ -43,45 +51,76 @@ public class InvoiceViewModel extends ViewModel {
     }
 
     public void cargarFacturas() {
+        // 1. Estado inicial de carga
         isLoading.setValue(true);
-        showEmptyError.setValue(false); // Reseteamos error al empezar
+        errorTypeState.setValue(ErrorType.NONE); // Limpiamos errores previos
 
         getInvoicesUseCase.invoke(new RepositoryCallback<List<Invoice>>() {
             @Override
             public void onSuccess(List<Invoice> result) {
-                isLoading.postValue(false);
-                if (result != null && !result.isEmpty()) {
-                    facturasOriginales = result;
-                    facturas.postValue(result);
-                    // Si recargamos y ahora sí hay datos, quitamos el error
-                    showEmptyError.postValue(false);
-                } else {
-                    // Si viene vacío y tampoco teníamos datos viejos...
-                    if (facturasOriginales == null || facturasOriginales.isEmpty()) {
-                        showEmptyError.postValue(true);
+                // PostDelayed para evitar parpadeos visuales rápidos
+                new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+
+                    if (result != null && !result.isEmpty()) {
+                        // ÉXITO REAL: Hay datos nuevos
+                        facturasOriginales = result;
+                        facturas.setValue(result);
+                        errorTypeState.setValue(ErrorType.NONE);
+                    } else {
+                        // ÉXITO VACÍO: El servidor respondió OK pero sin facturas
+                        // (Esto es un "Empty State", no un error)
+                        if (facturasOriginales == null || facturasOriginales.isEmpty()) {
+                            facturas.setValue(new ArrayList<>());
+                            // Ojo: Esto NO es un error de red/servidor.
+                            // La UI lo manejará chequeando si la lista está vacía y errorType == NONE
+                            errorTypeState.setValue(ErrorType.NONE);
+                        } else {
+                            // Si teníamos datos viejos, los mantenemos (opcional)
+                            facturas.setValue(facturasOriginales);
+                        }
                     }
-                    facturas.postValue(new ArrayList<>());
-                }
+                    // IMPORTANTE: Apagar loading AL FINAL
+                    isLoading.setValue(false);
+                }, 500);
             }
 
             @Override
             public void onError(Throwable error) {
-                // AQUÍ ESTÁ LA SOLUCIÓN AL PARPADEO
-                // Forzamos esperar 500ms o 1s antes de mostrar el error de nuevo
                 new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
-                    isLoading.postValue(false);
                     error.printStackTrace();
 
-                    if (facturasOriginales != null && !facturasOriginales.isEmpty()) {
-                        facturas.postValue(facturasOriginales);
-                        showEmptyError.postValue(false);
+                    // 1. CLASIFICAR EL ERROR
+                    ErrorType tipoDetectado;
+                    if (esErrorDeRed(error)) {
+                        tipoDetectado = ErrorType.NETWORK;
                     } else {
-                        facturas.postValue(new ArrayList<>());
-                        showEmptyError.postValue(true);
+                        tipoDetectado = ErrorType.SERVER_GENERIC;
                     }
-                }, 1000); // 1 segundo de espera para que el usuario vea que "pensó"
+
+                    // 2. DECIDIR QUÉ MOSTRAR
+                    if (facturasOriginales != null && !facturasOriginales.isEmpty()) {
+                        // Si ya tenemos datos, preferimos mostrarlos aunque estén "viejos"
+                        // en vez de tapar todo con una pantalla de error.
+                        // Podrías lanzar un SingleLiveEvent para un Toast aquí.
+                        facturas.setValue(facturasOriginales);
+                        errorTypeState.setValue(ErrorType.NONE); // No mostramos pantalla de error full-screen
+                    } else {
+                        // No tenemos nada que mostrar -> Pantalla de Error Full Screen
+                        facturas.setValue(new ArrayList<>());
+                        errorTypeState.setValue(tipoDetectado);
+                    }
+
+                    // 3. APAGAR CARGA
+                    isLoading.setValue(false);
+                }, 1000);
             }
         });
+    }
+
+    private boolean esErrorDeRed(Throwable t) {
+        return t instanceof java.net.UnknownHostException ||
+                t instanceof java.net.ConnectException ||
+                t instanceof java.net.SocketTimeoutException;
     }
 
 

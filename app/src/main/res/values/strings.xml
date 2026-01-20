@@ -1,4 +1,12 @@
 <resources>
+
+
+    <!-- TODO: Tengo que revisar y renombrar claves de strings poco descriptivas
+     (por ejemplo: _0, _92, separation, mi_energ_a…).
+     Usar nombres más semánticos y consistentes con la pantalla/contexto
+     (p.ej. date_range_separator, amount_zero_default, autoconsumption_sample_percentage). -->
+
+
     <!-- ============================================================ -->
     <!-- GENERAL / APP -->
     <!-- ============================================================ -->
@@ -9,32 +17,35 @@
     <string name="usuario">usuario</string>
     <string name="hola_usuario">hola usuario</string>
     <string name="greeting_user">Hola, %1$s</string>
+    <string name="empty_value"></string>
 
     <!-- ============================================================ -->
-    <!-- PANTALLA PRINCIPAL (Listado) -->
+    <!-- PANTALLA PRINCIPAL (Listado de facturas) -->
     <!-- ============================================================ -->
     <string name="facturas">Facturas</string>
-    <string name="cambiar_a_retromock">Cambiar a Retromock</string>
-    <string name="retromock">RetroMock</string>
     <string name="abrir_listado_de_facturas">Abrir listado de facturas</string>
     <string name="abrir_smart_solar">Abrir Smart Solar</string>
-
-    <!-- Empty States y Errores -->
     <string name="cargando_datos">Cargando facturas...</string>
-    <string name="error_carga">Ha ocurrido un error al cargar los datos</string>
-    <string name="error_conexion">No hay conexión a internet</string>
-    <string name="sin_resultados">No se encontraron resultados</string>
+    <string name="sin_resultados">Sin resultados</string>
+
+    <string name="error_conexion">¡Vaya! Sin Conexión</string>
+    <string name="error_conexion_description_message">La información no está disponible en este momento. Por favor, revisa tu conexión de red</string>
+
+    <string name="error_conexion_servidor">¡Vaya! Sin Conexión</string>
+    <string name="error_conexion_servidor_description_message">¡Vaya! Sin Conexión</string>
+
     <string name="change_filters">Intenta con otros criterios de búsqueda</string>
     <string name="reintentar">Reintentar</string>
 
     <!-- ============================================================ -->
-    <!-- ADAPTER / ITEM FACTURA (Singular) -->
+    <!-- ADAPTER / ITEM FACTURA -->
     <!-- ============================================================ -->
     <string name="fecha">Fecha</string>
     <string name="estado">Estado</string>
     <string name="importe">Importe</string>
     <string name="sin_fecha">Sin fecha</string>
     <string name="icono_de_flecha_para_item_factura">Icono de flecha para item factura</string>
+    <string name="icono_flecha_item_factura">Icono de flecha para item factura</string>
 
     <!-- Estados de Factura (Singular) -->
     <string name="estado_pendiente">Pendiente de pago</string>
@@ -45,7 +56,7 @@
     <string name="estado_desconocido">Desconocido</string>
 
     <!-- ============================================================ -->
-    <!-- PANTALLA DE FILTROS (Plural / Categorías) -->
+    <!-- PANTALLA DE FILTROS -->
     <!-- ============================================================ -->
     <string name="filtros">Filtros</string>
     <string name="filtrar_facturas">Filtrar facturas</string>
@@ -66,17 +77,16 @@
     <string name="_0">0</string>
     <string name="_0eur">0 €</string>
 
-    <!-- Checkboxes de Filtro (Mapeados a fragment_filter.xml) -->
+    <!-- Checkboxes de Filtro -->
     <string name="por_estado">Por estado</string>
-    <string name="pagadas">Pagadas</string>             <!-- Plural -->
-    <string name="anuladas">Anuladas</string>            <!-- Plural -->
-    <string name="pendientes_de_pago">Pendientes de pago</string> <!-- Plural -->
-    <!-- Reutilizamos los singulares cuando no cambian en plural -->
+    <string name="pagadas">Pagadas</string>
+    <string name="anuladas">Anuladas</string>
+    <string name="pendientes_de_pago">Pendientes de pago</string>
     <string name="cuota_fija">@string/estado_cuota_fija</string>
     <string name="plan_de_pago">@string/estado_plan_pago</string>
 
     <!-- ============================================================ -->
-    <!-- SMART SOLAR / DETALLES -->
+    <!-- SMART SOLAR (HOME / NAV) -->
     <!-- ============================================================ -->
     <string name="smart_solar">Smart Solar</string>
     <string name="smart_nsolar">Smart\nSolar</string>
@@ -87,7 +97,7 @@
     <string name="avenida_de_la_constituci_n_45">Avenida de la Constitución, 45...</string>
     <string name="direccion_con_formato">Estás viendo &lt;b&gt;%1$s&lt;/b&gt;</string>
 
-    <!-- Textos de Información / Dialogs -->
+    <!-- SMART SOLAR / DETALLES E INFO -->
     <string name="titulo_informacion">Información</string>
     <string name="mensaje_funcionalidad_no_disponible">Esta funcionalidad aún no está disponible</string>
     <string name="estado_solicitud_alta_autoconsumidor">Estado solicitud alta autoconsumidor</string>
@@ -97,11 +107,23 @@
     <string name="potencia_de_instalaci_n">Potencia de instalación</string>
     <string name="trabajo_en_progreso">Trabajo en progreso</string>
     <string name="desc_energy_fragment">Estamos trabajando en mejorar la App. Tus paneles solares siguen produciendo, en breve podrás seguir viendo tu producción solar. Sentimos las molestias.</string>
-    <string name="aqu_tienes_los_datos_de_tu_instalaci_n_fotovoltaica_en_tiempo_real">Aquí tienes los datos de tu instalación fotovoltaica en tiempo real.</string>
+    <string name="desc_energy_detail">Aquí tienes los datos de tu instalación fotovoltaica en tiempo real.</string>
     <string name="autoconsumo">Autoconsumo:</string>
     <string name="_92">92%</string>
 
+    <string name="autoconsumo_status_title">Estado solicitud autoconsumo</string>
+    <string name="autoconsumo_status_message">
+        El tiempo estimado de activación de tu autoconsumo es de 1 a 2 meses, éste variará
+        en función de tu comunidad autónoma y distribuidora
+    </string>
+    <string name="accept">Aceptar</string>
+    <string name="cau_label">CAU (Código Autoconsumo)</string>
 
+    <!-- ============================================================ -->
+    <!-- DEV / DEBUG -->
+    <!-- ============================================================ -->
+    <string name="cambiar_a_retromock">Cambiar a Retromock</string>
+    <string name="retromock">RetroMock</string>
 
 
 </resources>

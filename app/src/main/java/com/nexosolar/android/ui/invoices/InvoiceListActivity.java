@@ -59,6 +59,11 @@ public class InvoiceListActivity extends AppCompatActivity {
             }
         });
 
+        // 3. OBSERVER DE TIPO DE ERROR
+        invoiceViewModel.getErrorTypeState().observe(this, errorType -> {
+            actualizarEstadoUI();
+        });
+
 
         invoiceViewModel.getShowEmptyError().observe(this, showError -> {
                     actualizarEstadoUI();
@@ -85,51 +90,80 @@ public class InvoiceListActivity extends AppCompatActivity {
     private void actualizarEstadoUI() {
         Boolean isLoading = invoiceViewModel.getIsLoading().getValue();
         List<Invoice> facturas = invoiceViewModel.getFacturas().getValue();
+        InvoiceViewModel.ErrorType errorType = invoiceViewModel.getErrorTypeState().getValue();
 
-        // NUEVO: Obtenemos el estado de error de red
-        Boolean isError = invoiceViewModel.getShowEmptyError().getValue();
-        if (isError == null) isError = false;
+        // Null safety
+        if (isLoading == null) isLoading = false;
+        if (errorType == null) errorType = InvoiceViewModel.ErrorType.NONE;
 
-        // 1. Si estamos cargando -> Manda el SHIMMER
-        if (isLoading != null && isLoading) {
+        // --- 1. ESTADO DE CARGA (PRIORIDAD ALTA) ---
+        if (isLoading) {
             if (bindingInvoiceList.shimmerViewContainer.getVisibility() != View.VISIBLE) {
                 bindingInvoiceList.shimmerViewContainer.setVisibility(View.VISIBLE);
                 bindingInvoiceList.shimmerViewContainer.startShimmer();
             }
             bindingInvoiceList.recyclerView.setVisibility(View.GONE);
+            bindingInvoiceList.layoutErrorState.setVisibility(View.GONE);
             bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);
-            bindingInvoiceList.layoutErrorState.setVisibility(View.GONE); // Ocultar error también
             return;
         }
 
-        // 2. Si NO estamos cargando -> Apagar Shimmer
+        // Apagar shimmer si no carga
         bindingInvoiceList.shimmerViewContainer.stopShimmer();
         bindingInvoiceList.shimmerViewContainer.setVisibility(View.GONE);
 
-        // 3. DECISIÓN FINAL (Prioridad: Error > Datos > Empty)
+        // --- 2. ESTADO DE ERROR (PRIORIDAD MEDIA) ---
+        if (errorType != InvoiceViewModel.ErrorType.NONE) {
+            // Configurar UI según el tipo de error
+            configurarVistaError(errorType);
 
-        if (isError) {
-            // CASO A: Error de Red (Sin Wifi)
-            bindingInvoiceList.layoutErrorState.setVisibility(View.VISIBLE);
+            bindingInvoiceList.layoutErrorState.setVisibility(View.VISIBLE); // Mostrar Error
 
             bindingInvoiceList.recyclerView.setVisibility(View.GONE);
             bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);
+            return;
+        }
 
-        } else if (facturas != null && !facturas.isEmpty()) {
-            // CASO B: Hay datos normales
+        // --- 3. ESTADO DE DATOS O VACÍO (PRIORIDAD BAJA) ---
+        if (facturas != null && !facturas.isEmpty()) {
+            // Hay facturas -> Mostrar Lista
             bindingInvoiceList.recyclerView.setVisibility(View.VISIBLE);
 
-            bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);
             bindingInvoiceList.layoutErrorState.setVisibility(View.GONE);
-
+            bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);
         } else {
-            // CASO C: Lista vacía pero sin error (Filtro sin resultados)
-            bindingInvoiceList.layoutEmptyState.setVisibility(View.VISIBLE);
+            // No hay error y lista vacía -> Mostrar Empty State (Lupa)
+            // Solo si no estamos en un limbo nulo (defensivo)
+            if (facturas != null) {
+                bindingInvoiceList.layoutEmptyState.setVisibility(View.VISIBLE);
+            }
 
             bindingInvoiceList.recyclerView.setVisibility(View.GONE);
             bindingInvoiceList.layoutErrorState.setVisibility(View.GONE);
         }
     }
+
+    /**
+     * Configura textos e imagen del layout de error dinámicamente al ser prácticamente iguales
+     */
+    private void configurarVistaError(InvoiceViewModel.ErrorType tipo) {
+        if (tipo == InvoiceViewModel.ErrorType.NETWORK) {
+            // CASO: Sin Internet (Wifi off) o error de conexión genérico
+            bindingInvoiceList.ivError.setImageResource(R.drawable.ic_wifi_off_24);
+            bindingInvoiceList.tvError.setText(R.string.error_conexion);
+            bindingInvoiceList.tvErrorDescription.setText(R.string.error_conexion_description_message);
+
+
+        } else if (tipo == InvoiceViewModel.ErrorType.SERVER_GENERIC) {
+            // CASO: Error Servidor (Nube rota / Warning)
+            bindingInvoiceList.ivError.setImageResource(R.drawable.ic_server_off_24);
+
+            bindingInvoiceList.tvError.setText(R.string.error_conexion_servidor);
+            bindingInvoiceList.tvErrorDescription.setText(R.string.error_conexion_servidor_description_message);
+        }
+    }
+
+
 
 
     @Override

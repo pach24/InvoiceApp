@@ -1,187 +1,277 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 1. LA RAÍZ DEBE SER FRAMELAYOUT PARA APILAR VISTAS -->
+<!-- Root: FrameLayout para apilar contenido real + shimmer -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <!-- 2. TU CONTENIDO REAL (Inicialmente oculto) -->
-    <!-- Solo un NestedScrollView aquí para el contenido -->
+    <!-- 1) CONTENIDO REAL (inicialmente oculto) -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/contentLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:fillViewport="true">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/contentContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="@dimen/detail_content_padding">
 
             <!-- 1. CAU -->
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/tvCauLabel"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="CAU (Código Autoconsumo)"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="12sp" />
+                android:text="@string/cau_label"
+                android:textColor="@color/detail_label_color"
+                android:textSize="@dimen/detail_label_text_size"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
                 android:id="@+id/tvCau"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text=""
-                android:textColor="#000000"
-                android:textSize="16sp" />
+                android:layout_marginTop="@dimen/detail_value_margin_top"
+                android:text="@string/empty_value"
+                android:textColor="@color/detail_value_color"
+                android:textSize="@dimen/detail_value_text_size"
+                app:layout_constraintTop_toBottomOf="@id/tvCauLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="8dp"
-                android:background="#E0E0E0" />
+                android:id="@+id/divider1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/detail_divider_height"
+                android:layout_marginTop="@dimen/detail_divider_margin_top"
+                android:background="@color/detail_divider_color"
+                app:layout_constraintTop_toBottomOf="@id/tvCau"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <!-- 2. ESTADO SOLICITUD -->
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/tvStatusLabel"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="@dimen/detail_section_margin_top"
                 android:text="@string/estado_solicitud_alta_autoconsumidor"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="12sp" />
+                android:textColor="@color/detail_label_color"
+                android:textSize="@dimen/detail_label_text_size"
+                app:layout_constraintTop_toBottomOf="@id/divider1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_marginTop="@dimen/detail_value_margin_top"
+                android:text="@string/empty_value"
+                android:textColor="@color/detail_value_color"
+                android:textSize="@dimen/detail_value_text_size"
+                app:layout_constraintTop_toBottomOf="@id/tvStatusLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ivInfo"/>
 
-                <TextView
-                    android:id="@+id/tvStatus"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text=""
-                    android:textColor="#000000"
-                    android:textSize="16sp" />
-
-                <ImageView
-                    android:id="@+id/ivInfo"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:clickable="true"
-                    android:contentDescription="@string/m_s_informaci_n"
-                    android:focusable="true"
-                    android:src="@drawable/tooltip_azul_estados"
-                    app:tint="#2196F3" />
-            </LinearLayout>
+            <ImageView
+                android:id="@+id/ivInfo"
+                android:layout_width="@dimen/detail_info_icon_size"
+                android:layout_height="@dimen/detail_info_icon_size"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="@string/m_s_informaci_n"
+                android:src="@drawable/tooltip_azul_estados"
+                app:tint="@color/detail_info_tint"
+                app:layout_constraintTop_toTopOf="@id/tvStatus"
+                app:layout_constraintBottom_toBottomOf="@id/tvStatus"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="8dp"
-                android:background="#E0E0E0" />
+                android:id="@+id/divider2"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/detail_divider_height"
+                android:layout_marginTop="@dimen/detail_divider_margin_top"
+                android:background="@color/detail_divider_color"
+                app:layout_constraintTop_toBottomOf="@id/tvStatus"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <!-- 3. TIPO AUTOCONSUMO -->
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/tvTypeLabel"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="@dimen/detail_section_margin_top"
                 android:text="@string/tipo_autoconsumo"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="12sp" />
+                android:textColor="@color/detail_label_color"
+                android:textSize="@dimen/detail_label_text_size"
+                app:layout_constraintTop_toBottomOf="@id/divider2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
                 android:id="@+id/tvType"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text=""
-                android:textColor="#000000"
-                android:textSize="16sp" />
+                android:layout_marginTop="@dimen/detail_value_margin_top"
+                android:text="@string/empty_value"
+                android:textColor="@color/detail_value_color"
+                android:textSize="@dimen/detail_value_text_size"
+                app:layout_constraintTop_toBottomOf="@id/tvTypeLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="8dp"
-                android:background="#E0E0E0" />
+                android:id="@+id/divider3"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/detail_divider_height"
+                android:layout_marginTop="@dimen/detail_divider_margin_top"
+                android:background="@color/detail_divider_color"
+                app:layout_constraintTop_toBottomOf="@id/tvType"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <!-- 4. COMPENSACIÓN -->
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/tvCompLabel"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="@dimen/detail_section_margin_top"
                 android:text="@string/compensaci_n_de_excedentes"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="12sp" />
+                android:textColor="@color/detail_label_color"
+                android:textSize="@dimen/detail_label_text_size"
+                app:layout_constraintTop_toBottomOf="@id/divider3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
                 android:id="@+id/tvCompensation"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text=""
-                android:textColor="#000000"
-                android:textSize="16sp" />
+                android:layout_marginTop="@dimen/detail_value_margin_top"
+                android:text="@string/empty_value"
+                android:textColor="@color/detail_value_color"
+                android:textSize="@dimen/detail_value_text_size"
+                app:layout_constraintTop_toBottomOf="@id/tvCompLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="8dp"
-                android:background="#E0E0E0" />
+                android:id="@+id/divider4"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/detail_divider_height"
+                android:layout_marginTop="@dimen/detail_divider_margin_top"
+                android:background="@color/detail_divider_color"
+                app:layout_constraintTop_toBottomOf="@id/tvCompensation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <!-- 5. POTENCIA -->
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/tvPowerLabel"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="@dimen/detail_section_margin_top"
                 android:text="@string/potencia_de_instalaci_n"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="12sp" />
+                android:textColor="@color/detail_label_color"
+                android:textSize="@dimen/detail_label_text_size"
+                app:layout_constraintTop_toBottomOf="@id/divider4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
                 android:id="@+id/tvPower"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text=""
-                android:textColor="#000000"
-                android:textSize="16sp" />
+                android:layout_marginTop="@dimen/detail_value_margin_top"
+                android:text="@string/empty_value"
+                android:textColor="@color/detail_value_color"
+                android:textSize="@dimen/detail_value_text_size"
+                app:layout_constraintTop_toBottomOf="@id/tvPowerLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="8dp"
-                android:background="#E0E0E0" />
+                android:id="@+id/divider5"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/detail_divider_height"
+                android:layout_marginTop="@dimen/detail_divider_margin_top"
+                android:background="@color/detail_divider_color"
+                app:layout_constraintTop_toBottomOf="@id/tvPower"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- 3. EL SHIMMER (Visible por defecto) -->
+    <!-- 2) SHIMMER (visible por defecto) -->
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmerViewContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="visible"
+        android:importantForAccessibility="no">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="@dimen/detail_content_padding">
 
-            <!-- 5 items skeleton para simular tus 5 campos -->
-            <include layout="@layout/item_detail_skeleton" />
-            <include layout="@layout/item_detail_skeleton" />
-            <include layout="@layout/item_detail_skeleton" />
-            <include layout="@layout/item_detail_skeleton" />
-            <include layout="@layout/item_detail_skeleton" />
+            <include
+                android:id="@+id/skeleton1"
+                layout="@layout/item_detail_skeleton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
-        </LinearLayout>
+            <include
+                android:id="@+id/skeleton2"
+                layout="@layout/item_detail_skeleton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/skeleton1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <include
+                android:id="@+id/skeleton3"
+                layout="@layout/item_detail_skeleton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/skeleton2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <include
+                android:id="@+id/skeleton4"
+                layout="@layout/item_detail_skeleton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/skeleton3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <include
+                android:id="@+id/skeleton5"
+                layout="@layout/item_detail_skeleton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/skeleton4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </com.facebook.shimmer.ShimmerFrameLayout>
 
 </FrameLayout>

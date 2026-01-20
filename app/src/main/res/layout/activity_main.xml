@@ -6,14 +6,14 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F2F2F7"
+    android:background="@color/main_background"
     tools:context=".ui.main.MainActivity">
 
     <!-- 1. FONDO ABSTRACTO -->
     <ImageView
         android:id="@+id/headerBackground"
         android:layout_width="match_parent"
-        android:layout_height="420dp"
+        android:layout_height="@dimen/main_header_height"
         android:contentDescription="@null"
         android:scaleType="fitXY"
         android:src="@drawable/bg_header_abstract"
@@ -21,26 +21,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 2. AVATAR (Estructura corregida: CardView > ImageView) -->
-    <!-- Este es el contenedor circular blanco de 58dp -->
+    <!-- 2. AVATAR -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/containerAvatar"
-        android:layout_width="41dp"
-        android:layout_height="41dp"
-        android:layout_marginTop="46dp"
-        android:layout_marginEnd="30dp"
-        app:cardCornerRadius="29dp"
-        app:cardElevation="10dp"
+        android:layout_width="@dimen/main_avatar_container_size"
+        android:layout_height="@dimen/main_avatar_container_size"
+        android:layout_marginTop="@dimen/main_avatar_margin_top"
+        android:layout_marginEnd="@dimen/main_avatar_margin_end"
+        app:cardCornerRadius="@dimen/main_avatar_corner_radius"
+        app:cardElevation="@dimen/main_avatar_elevation"
         app:cardBackgroundColor="@color/white"
-        app:strokeWidth="0dp"
+        app:strokeWidth="@dimen/spacing_zero"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- EL ICONO DE USUARIO -->
         <ImageView
             android:id="@+id/ivAvatar"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/main_avatar_icon_size"
+            android:layout_height="@dimen/main_avatar_icon_size"
             android:layout_gravity="center"
             android:contentDescription="@null"
             android:src="@drawable/ic_user_outline"
@@ -52,7 +50,7 @@
         android:id="@+id/btToggleApi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="@dimen/main_retromock_switch_margin_end"
         app:thumbTint="@color/switch_thumb_color"
         app:trackTint="@color/selector_thumb_color"
         app:useMaterialThemeColors="false"
@@ -62,28 +60,27 @@
 
     <!-- "RetroMock" -->
     <TextView
+        android:id="@+id/tvRetroMock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/retromock"
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:layout_marginEnd="4dp"
+        android:layout_marginEnd="@dimen/main_retromock_label_margin_end"
         app:layout_constraintEnd_toStartOf="@id/btToggleApi"
         app:layout_constraintTop_toTopOf="@id/btToggleApi"
         app:layout_constraintBottom_toBottomOf="@id/btToggleApi"/>
-
 
     <!-- 4. SALUDO -->
     <TextView
         android:id="@+id/tvGreeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="24dp"
-        android:textSize="32sp"
+        android:layout_marginTop="@dimen/main_greeting_margin_top"
+        android:layout_marginStart="@dimen/main_greeting_margin_start"
+        android:textSize="@dimen/main_greeting_text_size"
         android:textStyle="bold"
         android:textColor="@color/black"
-        android:letterSpacing="-0.02"
         app:layout_constraintTop_toBottomOf="@id/containerAvatar"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -92,13 +89,13 @@
         android:id="@+id/tvAddress"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginTop="@dimen/main_address_margin_top"
+        android:layout_marginEnd="@dimen/main_address_margin_end"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="@string/avenida_de_la_constituci_n_45"
-        android:textColor="#333333"
-        android:textSize="15sp"
+        android:textColor="@color/darker_gray"
+        android:textSize="@dimen/main_address_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/tvGreeting"
         app:layout_constraintTop_toBottomOf="@id/tvGreeting" />
@@ -108,138 +105,134 @@
         android:id="@+id/tvSectionTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="@dimen/main_section_title_margin_top"
         android:text="@string/mi_energ_a"
         android:textStyle="bold"
-        android:textColor="#212121"
-        android:textSize="17sp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/main_section_title_text_size"
         app:layout_constraintStart_toStartOf="@id/tvGreeting"
         app:layout_constraintTop_toBottomOf="@id/tvAddress" />
 
     <!-- 6. TARJETA FACTURAS -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardFacturas"
-        android:layout_width="160dp"
-        android:layout_height="190dp"
-        android:layout_marginTop="16dp"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="8dp"
+        android:layout_width="@dimen/main_action_card_width"
+        android:layout_height="@dimen/main_action_card_height"
+        android:layout_marginTop="@dimen/main_action_card_margin_top"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardCornerRadius="@dimen/main_action_card_corner_radius"
+        app:cardElevation="@dimen/main_action_card_elevation"
         app:cardBackgroundColor="@color/white"
-        app:strokeColor="#F0F0F0"
-        app:strokeWidth="1dp"
+        app:strokeColor="@color/card_border"
+        app:strokeWidth="@dimen/main_action_card_stroke_width"
         app:layout_constraintStart_toStartOf="@id/tvSectionTitle"
         app:layout_constraintTop_toBottomOf="@id/tvSectionTitle">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="@dimen/main_action_card_padding">
 
-
-            <!-- ICONO BOMBILLA -->
             <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:id="@+id/ivFacturas"
+                android:layout_width="@dimen/main_action_icon_size"
+                android:layout_height="@dimen/main_action_icon_size"
                 android:contentDescription="@null"
                 android:src="@drawable/ic_lightbulb_outline"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
-                />
-
-            <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"/>
-
-            <!-- Texto Grande -->
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tvFacturasTitle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/ver_nconsumo"
-                android:textSize="22sp"
+                android:textSize="@dimen/main_action_title_text_size"
                 android:textStyle="bold"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:letterSpacing="-0.02"
-                android:lines="2"/>
+                android:lines="2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tvFacturasSubtitle"/>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tvFacturasSubtitle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/hist_rico"
-                android:textSize="14sp"
-                android:textColor="#8E8E93"
-                android:layout_marginTop="4dp"/>
-        </LinearLayout>
+                android:textSize="@dimen/main_action_subtitle_text_size"
+                android:textColor="@color/dark_gray"
+                android:layout_marginTop="@dimen/main_action_subtitle_margin_top"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <!-- Clickable Overlay -->
-        <View
-            android:id="@+id/btFacturasClick"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:contentDescription="@string/abrir_listado_de_facturas"/>
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- 7. TARJETA SMART SOLAR -->
+
+    <!-- 6. TARJETA SMART SOLAR -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardSmartSolar"
-        android:layout_width="160dp"
-        android:layout_height="190dp"
-        android:layout_marginStart="16dp"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="8dp"
+        android:layout_width="@dimen/main_action_card_width"
+        android:layout_height="@dimen/main_action_card_height"
+        android:layout_marginStart="@dimen/main_action_card_margin_start"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardCornerRadius="@dimen/main_action_card_corner_radius"
+        app:cardElevation="@dimen/main_action_card_elevation"
         app:cardBackgroundColor="@color/white"
-        app:strokeColor="#F0F0F0"
-        app:strokeWidth="1dp"
+        app:strokeColor="@color/card_border"
+        app:strokeWidth="@dimen/main_action_card_stroke_width"
         app:layout_constraintStart_toEndOf="@id/cardFacturas"
         app:layout_constraintTop_toTopOf="@id/cardFacturas">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="@dimen/main_action_card_padding">
 
-            <!-- ICONO SOLAR -->
             <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:id="@+id/ivSmartSolar"
+                android:layout_width="@dimen/main_action_icon_size"
+                android:layout_height="@dimen/main_action_icon_size"
                 android:contentDescription="@null"
                 android:src="@drawable/twotone_doc_24"
-                />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
-            <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"/>
-
-            <!-- Texto Grande -->
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tvSmartSolarTitle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/smart_nsolar"
-                android:textSize="22sp"
+                android:textSize="@dimen/main_action_title_text_size"
                 android:textStyle="bold"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:letterSpacing="-0.02"
-                android:lines="2"/>
+                android:lines="2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tvSmartSolarSubtitle"/>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tvSmartSolarSubtitle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/paneles"
-                android:textSize="14sp"
-                android:textColor="#8E8E93"
-                android:layout_marginTop="4dp"/>
-        </LinearLayout>
+                android:textSize="@dimen/main_action_subtitle_text_size"
+                android:textColor="@color/dark_gray"
+                android:layout_marginTop="@dimen/main_action_subtitle_margin_top"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <!-- Clickable Overlay -->
-        <View
-            android:id="@+id/btSmartSolarClick"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:contentDescription="@string/abrir_smart_solar"/>
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

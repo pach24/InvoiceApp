@@ -1,31 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- ============================================= -->
-    <!-- Colores Base / Sistema -->
-    <!-- ============================================= -->
+
+    <!-- TODO: Tengo que unificar colores que son muy similares.
+     Ahora hay varios (#E0E0E0, #EEEEEE, @android:color/darker_gray, etc.).
+     Elegir 2–3 tonos máximos y reemplazar el resto para tener una paleta más consistente. -->
+
+
+    <!-- ================= BASE ================= -->
     <color name="white">#FFFFFFFF</color>
     <color name="black">#FF000000</color>
 
+    <!-- Grises genéricos -->
+    <color name="light_gray">#e8e8e8</color>
+    <color name="dark_gray">#78787A</color>
+    <color name="darker_gray">#333333</color>
+
+    <!-- ================= PALETA DE MARCA ================= -->
     <color name="my_theme_green_light">#95bb4e</color>
     <color name="my_theme_green_dark">#FF669900</color>
 
-    <!-- ============================================= -->
-    <!-- Estados de Facturas  -->
-    <!-- ============================================= -->
+    <!-- Smart Solar / acentos -->
+    <color name="smart_solar_accent_green">#7CB342</color>
 
+    <!-- ================= MAIN HEADER ================= -->
+    <color name="main_header_layer_back">#7DA935</color>
+    <color name="main_header_layer_mid">#99BB62</color>
+    <color name="main_header_layer_front">#BAD296</color>
+
+    <!-- ================= ESTADOS FACTURAS ================= -->
     <!-- Rojo para Pendiente/Anulada -->
     <color name="texto_alerta">#F46565</color>
     <!-- Negro para Pagada, Cuota Fija, Plan de Pago -->
     <color name="texto_normal">#000000</color>
 
-
-
-    <!-- ============================================= -->
-    <!-- Componentes UI (Sliders, Switches) -->
-    <!-- ============================================= -->
+    <!-- ================= COMPONENTES GENÉRICOS ================= -->
+    <!-- Sliders, switches, bordes, fondos generales -->
     <color name="inactiveThumbColor">#BDBDBD</color>
     <color name="activeThumbColor">#FF03DAC5</color>
-    <color name="light_gray">#e8e8e8</color>
+    <color name="card_border">#F0F0F0</color>
+    <color name="main_background">#F2F2F7</color>
+
+    <!-- Texto secundario / divisores genéricos -->
+    <color name="text_secondary">@android:color/darker_gray</color>
+    <color name="filter_divider_color">@android:color/darker_gray</color>
+    <color name="filter_clear_text_color">#BBBBBB</color>
+
+    <!-- ================= DIÁLOGOS ================= -->
+    <color name="dialog_card_background">#FFFFFF</color>
+    <color name="dialog_title_color">#333333</color>
+    <color name="dialog_message_color">#666666</color>
+    <color name="dialog_button_text_color">#FFFFFF</color>
+
+    <!-- ================= DETAIL (pantalla detalle) ================= -->
+    <color name="detail_label_color">@android:color/darker_gray</color>
+    <color name="detail_value_color">@color/black</color>
+    <color name="detail_divider_color">#E0E0E0</color>
+    <color name="detail_info_tint">#2196F3</color>
+
+    <!-- Empty state de energía -->
+    <color name="empty_energy_text_color">#424242</color>
+
+    <!-- ================= ENERGY DETAIL (gráfico) ================= -->
+    <color name="energy_detail_text_color">#555555</color>
+    <color name="energy_detail_label_color">#9E9E9E</color>
+
+    <!-- ================= SKELETONS / INVOICE ================= -->
+    <color name="detail_skeleton_divider_color">#EEEEEE</color>
+    <color name="invoice_item_divider_color">@android:color/darker_gray</color>
+    <color name="invoice_skeleton_divider_color">#E0E0E0</color>
 
 </resources>

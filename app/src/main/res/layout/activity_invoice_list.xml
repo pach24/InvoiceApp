@@ -1,31 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:clipToPadding="false"
     tools:context=".ui.invoices.InvoiceListActivity">
 
-    <!-- 1. TOOLBAR -->
+    <!-- TOOLBAR -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/spacing_zero"
         android:layout_height="wrap_content"
-        android:paddingTop="40dp"
-        android:paddingBottom="8dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
+        android:padding="@dimen/spacing_small"
         android:background="?attr/colorOnPrimary"
-        android:elevation="4dp">
+        android:elevation="@dimen/card_elevation"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnVolver"
@@ -33,13 +31,15 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:text="@string/back_button"
-                android:textColor="@android:color/holo_green_light"
+                android:textColor="@color/my_theme_green_dark"
                 android:textAllCaps="false"
-                android:textSize="20sp"
+                android:textSize="@dimen/text_size_title"
                 app:icon="@drawable/ic_arrow_back_24"
-                app:iconTint="@android:color/holo_green_light"
+                app:iconTint="@color/my_theme_green_dark"
                 app:iconGravity="textStart"
-                app:iconPadding="0dp" />
+                app:iconPadding="@dimen/spacing_zero"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
                 android:id="@+id/toolbarTitle"
@@ -47,133 +47,281 @@
                 android:layout_height="wrap_content"
                 android:text="@string/facturas"
                 android:textColor="@android:color/black"
-                android:textSize="40sp"
+                android:textSize="@dimen/text_size_hero_title"
                 android:textStyle="bold"
-                android:layout_marginTop="8dp"/>
-        </LinearLayout>
+                android:layout_marginTop="@dimen/spacing_small"
+                app:layout_constraintTop_toBottomOf="@id/btnVolver"
+                app:layout_constraintStart_toStartOf="@id/btnVolver"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- 2. RECYCLERVIEW (Lista de Facturas) -->
+    <!-- RECYCLERVIEW -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        android:padding="4dp"
-        android:visibility="gone"/>
+        android:layout_width="@dimen/spacing_zero"
+        android:layout_height="@dimen/spacing_zero"
+        android:padding="@dimen/spacing_tiny"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- 3. LOADING SKELETON (Shimmer) -->
+    <!-- SHIMMER -->
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmerViewContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        android:visibility="visible">
+        android:layout_width="@dimen/spacing_zero"
+        android:layout_height="@dimen/spacing_zero"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <LinearLayout
+
+        <androidx.core.widget.NestedScrollView
+            android:importantForAccessibility="no"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <!-- Items de ejemplo para el esqueleto -->
-            <include layout="@layout/item_invoice_skeleton" />
-            <include layout="@layout/item_invoice_skeleton" />
-            <include layout="@layout/item_invoice_skeleton" />
-            <include layout="@layout/item_invoice_skeleton" />
-            <include layout="@layout/item_invoice_skeleton" />
-            <include layout="@layout/item_invoice_skeleton" />
-        </LinearLayout>
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:overScrollMode="never">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include
+                    android:id="@+id/skeleton1"
+                    layout="@layout/item_invoice_skeleton"
+                    android:layout_width="@dimen/spacing_zero"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <include
+                    android:id="@+id/skeleton2"
+                    layout="@layout/item_invoice_skeleton"
+                    android:layout_width="@dimen/spacing_zero"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/skeleton1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <include
+                    android:id="@+id/skeleton3"
+                    layout="@layout/item_invoice_skeleton"
+                    android:layout_width="@dimen/spacing_zero"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/skeleton2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <include
+                    android:id="@+id/skeleton4"
+                    layout="@layout/item_invoice_skeleton"
+                    android:layout_width="@dimen/spacing_zero"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/skeleton3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <include
+                    android:id="@+id/skeleton5"
+                    layout="@layout/item_invoice_skeleton"
+                    android:layout_width="@dimen/spacing_zero"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/skeleton4"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <include
+                    android:id="@+id/skeleton6"
+                    layout="@layout/item_invoice_skeleton"
+                    android:layout_width="@dimen/spacing_zero"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/skeleton5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <include
+                    android:id="@+id/skeleton7"
+                    layout="@layout/item_invoice_skeleton"
+                    android:layout_width="@dimen/spacing_zero"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/skeleton6"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <include
+                    android:id="@+id/skeleton8"
+                    layout="@layout/item_invoice_skeleton"
+                    android:layout_width="@dimen/spacing_zero"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/skeleton7"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <include
+                    android:id="@+id/skeleton9"
+                    layout="@layout/item_invoice_skeleton"
+                    android:layout_width="@dimen/spacing_zero"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/skeleton8"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <include
+                    android:id="@+id/skeleton10"
+                    layout="@layout/item_invoice_skeleton"
+                    android:layout_width="@dimen/spacing_zero"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/skeleton9"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
     </com.facebook.shimmer.ShimmerFrameLayout>
 
-    <!-- 4. NUEVO EMPTY STATE / ERROR OFFLINE (Unificado) -->
-    <!-- Usamos layout_centerInParent="true" porque estamos en RelativeLayout -->
-    <LinearLayout
+    <!-- ERROR STATE -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutErrorState"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:visibility="gone"
-        android:padding="32dp"
-        android:layout_centerInParent="true">
+        android:background="@android:color/white"
+        android:padding="@dimen/spacing_medium"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:id="@+id/ivError"
+            android:layout_width="@dimen/error_state_img_size"
+            android:layout_height="@dimen/error_state_img_size"
             android:src="@drawable/ic_wifi_off_24"
-            app:tint="#757575" />
+            app:tint="@color/darker_gray"
+            android:importantForAccessibility="no"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tvError"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"/>
 
         <TextView
+            android:id="@+id/tvError"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="¡Vaya! Sin conexión"
-            android:textSize="18sp"
+            android:text="@string/error_conexion"
+            android:textSize="@dimen/text_size_subtitle_large"
             android:textStyle="bold"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black"
+            android:layout_marginTop="@dimen/spacing_medium"
+            app:layout_constraintTop_toBottomOf="@id/ivError"
+            app:layout_constraintBottom_toTopOf="@id/tvErrorDescription"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/tvErrorDescription"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text=" La información no está disponible en este momento. Por favor, verifica tu conexión de red."
+            android:layout_marginTop="@dimen/spacing_small"
+            android:text="@string/error_conexion_description_message"
             android:gravity="center"
-            android:textColor="#757575"/>
+            android:textColor="@color/darker_gray"
+            app:layout_constraintTop_toBottomOf="@id/tvError"
+            app:layout_constraintBottom_toTopOf="@id/btnRetry"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_percent="0.8"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRetry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cornerRadius="20dp"
-            android:layout_marginTop="16dp"
-            android:text="Reintentar" />
-    </LinearLayout>
+            android:text="@string/reintentar"
+            android:layout_marginTop="@dimen/spacing_medium"
+            app:cornerRadius="@dimen/button_corner_radius_20"
+            app:layout_constraintTop_toBottomOf="@id/tvErrorDescription"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- 5. EMPTY STATE (Sin resultados por filtros) -->
-    <!-- Mantenemos este separado por si quieres distinguir "Error de red" de "Filtro sin resultados" -->
-    <LinearLayout
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- EMPTY STATE -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutEmptyState"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        android:orientation="vertical"
-        android:paddingBottom="200dp"
-        android:gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:visibility="gone"
-        tools:visibility="gone">
+        android:background="@android:color/white"
+        android:padding="@dimen/spacing_medium"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:layout_width="560dp"
-            android:layout_height="560dp"
+            android:id="@+id/ivEmpty"
+            android:layout_width="@dimen/empty_state_img_size"
+            android:layout_height="@dimen/empty_state_img_size"
             android:src="@drawable/ic_empty_list"
-            android:importantForAccessibility="no"/>
+            android:importantForAccessibility="no"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tvEmptyTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"/>
 
         <TextView
+            android:id="@+id/tvEmptyTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sin_resultados"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_title"
             android:textStyle="bold"
             android:textColor="#757575"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="@dimen/spacing_medium"
+            app:layout_constraintTop_toBottomOf="@id/ivEmpty"
+            app:layout_constraintBottom_toTopOf="@id/tvEmptySubtitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
+            android:id="@+id/tvEmptySubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/change_filters"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_subtitle"
             android:textColor="#9E9E9E"
-            android:layout_marginTop="8dp"/>
-    </LinearLayout>
+            android:layout_marginTop="@dimen/spacing_small"
+            app:layout_constraintTop_toBottomOf="@id/tvEmptyTitle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- 6. FRAGMENT CONTAINER -->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!-- FRAGMENT CONTAINER -->
     <FrameLayout
         android:id="@+id/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="10dp"
+        android:layout_width="@dimen/spacing_zero"
+        android:layout_height="@dimen/spacing_zero"
         android:visibility="gone"
         android:background="@android:color/white"
         android:clickable="true"
-        android:focusable="true"/>
+        android:focusable="true"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

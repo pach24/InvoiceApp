@@ -7,6 +7,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
+import androidx.core.text.HtmlCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
@@ -41,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
         String miDireccion = getString(R.string.direccion_con_formato, direccionGuardada);
 
 
-        binding.tvAddress.setText(androidx.core.text.HtmlCompat.fromHtml(
+        binding.tvAddress.setText(HtmlCompat.fromHtml(
                 miDireccion,
-                androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
+                HtmlCompat.FROM_HTML_MODE_LEGACY
         ));
 
 
@@ -55,14 +56,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Configurar el listener en la TARJETA DE FACTURAS
-        binding.btFacturasClick.setOnClickListener(v -> {
+        binding.cardFacturas.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, InvoiceListActivity.class);
             intent.putExtra("USE_RETROMOCK", useMock);
             startActivity(intent);
         });
 
         // Configurar el listener en la TARJETA DE SMART SOLAR
-        binding.btSmartSolarClick.setOnClickListener(v -> {
+        binding.cardSmartSolar.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, SmartSolarActivity.class);
             startActivity(intent);
         });
