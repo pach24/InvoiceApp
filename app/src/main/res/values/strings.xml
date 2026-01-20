@@ -27,8 +27,13 @@
     <string name="abrir_smart_solar">Abrir Smart Solar</string>
     <string name="cargando_datos">Cargando facturas...</string>
     <string name="sin_resultados">Sin resultados</string>
-    <string name="error_carga">¡Vaya! Sin Conexión</string>
-    <string name="error_state_description_message">La información no está disponible en este momento. Por favor, revisa tu conexión de red</string>
+
+    <string name="error_conexion">¡Vaya! Sin Conexión</string>
+    <string name="error_conexion_description_message">La información no está disponible en este momento. Por favor, revisa tu conexión de red</string>
+
+    <string name="error_conexion_servidor">¡Vaya! Sin Conexión</string>
+    <string name="error_conexion_servidor_description_message">¡Vaya! Sin Conexión</string>
+
     <string name="change_filters">Intenta con otros criterios de búsqueda</string>
     <string name="reintentar">Reintentar</string>
 
