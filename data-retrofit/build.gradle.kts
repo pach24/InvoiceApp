@@ -26,7 +26,7 @@ android {
             buildConfigField(
                 "String",
                 "API_BASE_URL_2",
-                "\"https://viewnextandroid.mocklab.io/\""
+                "\"https://francisco-pacheco.com/api2/\""
             )
         }
 
@@ -36,7 +36,7 @@ android {
             buildConfigField(
                 "String",
                 "API_BASE_URL_2",
-                "\"https://viewnextandroid.mocklab.io/\""
+                "\"https://francisco-pacheco.com/api2/\""
             )
         }
     }

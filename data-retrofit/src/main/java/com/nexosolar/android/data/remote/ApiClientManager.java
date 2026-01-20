@@ -58,7 +58,7 @@ public class ApiClientManager {
                             .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
                             .create();
                     retrofitClient = new Retrofit.Builder()
-                            .baseUrl(BuildConfig.API_BASE_URL_2)
+                            .baseUrl(BuildConfig.API_BASE_URL)
                             .addConverterFactory(GsonConverterFactory.create(gson))
                             .build();
                 }
@@ -80,7 +80,7 @@ public class ApiClientManager {
 
                     // Usamos la misma configuración de Retrofit base
                     Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(BuildConfig.API_BASE_URL_2)
+                            .baseUrl(BuildConfig.API_BASE_URL)
                             .addConverterFactory(GsonConverterFactory.create(gson))
                             .build();
 
