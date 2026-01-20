@@ -17,67 +17,92 @@ import com.nexosolar.android.domain.models.Invoice;
 
 import java.util.List;
 
+/**
+ * InvoiceListActivity
+ *
+ * Pantalla principal de gestión de facturas.
+ * Muestra un RecyclerView con la lista de facturas, shimmer de carga,
+ * pantallas de error diferenciadas (red/servidor) y estados vacíos.
+ * Permite aplicar filtros mediante un fragmento modal (FilterFragment).
+ */
 public class InvoiceListActivity extends AppCompatActivity {
 
-    private ActivityInvoiceListBinding bindingInvoiceList;
+    // ===== Variables de instancia =====
+
+    private ActivityInvoiceListBinding binding;
     private InvoiceAdapter invoiceAdapter;
     private InvoiceViewModel invoiceViewModel;
+
+    // ===== Ciclo de vida =====
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        bindingInvoiceList = ActivityInvoiceListBinding.inflate(getLayoutInflater());
-        setContentView(bindingInvoiceList.getRoot());
-        setSupportActionBar(bindingInvoiceList.toolbar);
+        binding = ActivityInvoiceListBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setSupportActionBar(binding.toolbar);
 
-        // Configurar RecyclerView
+        setupRecyclerView();
+        setupViewModel();
+        setupObservers();
+        setupListeners();
+        setupBackStackListener();
+    }
+
+    // ===== Configuración inicial =====
+
+    /**
+     * Configura el RecyclerView con su adaptador y layout manager.
+     */
+    private void setupRecyclerView() {
         invoiceAdapter = new InvoiceAdapter();
-        bindingInvoiceList.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        bindingInvoiceList.recyclerView.setAdapter(invoiceAdapter);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setAdapter(invoiceAdapter);
+    }
 
-        // Configurar ViewModel
+    /**
+     * Inicializa el ViewModel con la factory apropiada según el modo (Mock/Real API).
+     */
+    private void setupViewModel() {
         boolean useMock = getIntent().getBooleanExtra("USE_RETROMOCK", false);
-        InvoiceViewModelFactory invoiceViewModelFactory = new InvoiceViewModelFactory(useMock, this);
-        invoiceViewModel = new ViewModelProvider(this, invoiceViewModelFactory).get(InvoiceViewModel.class);
+        InvoiceViewModelFactory factory = new InvoiceViewModelFactory(useMock, this);
+        invoiceViewModel = new ViewModelProvider(this, factory).get(InvoiceViewModel.class);
+    }
 
-        // --- 1. OBSERVER DE CARGA (SHIMMER) ---
-        invoiceViewModel.getIsLoading().observe(this, isLoading -> {
-            // Siempre que cambie el estado de carga, recalculamos qué se debe ver
-            actualizarEstadoUI();
-        });
+    /**
+     * Configura los observadores de LiveData del ViewModel.
+     * Observa estados de carga, datos, errores y estado vacío.
+     */
+    private void setupObservers() {
+        invoiceViewModel.getIsLoading().observe(this, isLoading -> actualizarEstadoUI());
 
-        // --- 2. OBSERVER DE DATOS ---
         invoiceViewModel.getFacturas().observe(this, facturas -> {
             invalidateOptionsMenu();
             if (facturas != null) {
                 invoiceAdapter.setFacturas(facturas);
-                // Cuando llegan datos nuevos, recalculamos qué se debe ver
                 actualizarEstadoUI();
             } else {
-                Toast.makeText(InvoiceListActivity.this, "Error al cargar datos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Error al cargar datos", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // 3. OBSERVER DE TIPO DE ERROR
-        invoiceViewModel.getErrorTypeState().observe(this, errorType -> {
-            actualizarEstadoUI();
-        });
+        invoiceViewModel.getErrorTypeState().observe(this, errorType -> actualizarEstadoUI());
+        invoiceViewModel.getShowEmptyError().observe(this, showError -> actualizarEstadoUI());
+    }
 
+    /**
+     * Configura listeners de botones de acción (Volver, Reintentar).
+     */
+    private void setupListeners() {
+        binding.btnVolver.setOnClickListener(v -> finish());
+        binding.btnRetry.setOnClickListener(v -> invoiceViewModel.cargarFacturas());
+    }
 
-        invoiceViewModel.getShowEmptyError().observe(this, showError -> {
-                    actualizarEstadoUI();
-        });
-
-        bindingInvoiceList.btnVolver.setOnClickListener(v -> finish());
-
-        // --- AÑADIR ESTO ---
-        // Configurar el botón "Reintentar" del Empty State
-        bindingInvoiceList.btnRetry.setOnClickListener(v -> {
-            invoiceViewModel.cargarFacturas();
-        });
-
-
+    /**
+     * Escucha cambios en el BackStack para restaurar la vista principal al cerrar fragmentos.
+     */
+    private void setupBackStackListener() {
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                 restoreMainView();
@@ -85,86 +110,93 @@ public class InvoiceListActivity extends AppCompatActivity {
         });
     }
 
-    // En InvoiceListActivity.java
+    // ===== Gestión de estados de UI =====
 
+    /**
+     * Actualiza la UI según el estado actual (carga, error, datos, vacío).
+     * Prioridad: Loading > Error > Datos > Empty State
+     */
     private void actualizarEstadoUI() {
         Boolean isLoading = invoiceViewModel.getIsLoading().getValue();
         List<Invoice> facturas = invoiceViewModel.getFacturas().getValue();
         InvoiceViewModel.ErrorType errorType = invoiceViewModel.getErrorTypeState().getValue();
 
-        // Null safety
         if (isLoading == null) isLoading = false;
         if (errorType == null) errorType = InvoiceViewModel.ErrorType.NONE;
 
-        // --- 1. ESTADO DE CARGA (PRIORIDAD ALTA) ---
+        // Estado de carga (shimmer)
         if (isLoading) {
-            if (bindingInvoiceList.shimmerViewContainer.getVisibility() != View.VISIBLE) {
-                bindingInvoiceList.shimmerViewContainer.setVisibility(View.VISIBLE);
-                bindingInvoiceList.shimmerViewContainer.startShimmer();
-            }
-            bindingInvoiceList.recyclerView.setVisibility(View.GONE);
-            bindingInvoiceList.layoutErrorState.setVisibility(View.GONE);
-            bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);
+            mostrarShimmer();
             return;
         }
 
-        // Apagar shimmer si no carga
-        bindingInvoiceList.shimmerViewContainer.stopShimmer();
-        bindingInvoiceList.shimmerViewContainer.setVisibility(View.GONE);
+        ocultarShimmer();
 
-        // --- 2. ESTADO DE ERROR (PRIORIDAD MEDIA) ---
+        // Estado de error (red o servidor)
         if (errorType != InvoiceViewModel.ErrorType.NONE) {
-            // Configurar UI según el tipo de error
-            configurarVistaError(errorType);
-
-            bindingInvoiceList.layoutErrorState.setVisibility(View.VISIBLE); // Mostrar Error
-
-            bindingInvoiceList.recyclerView.setVisibility(View.GONE);
-            bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);
+            mostrarError(errorType);
             return;
         }
 
-        // --- 3. ESTADO DE DATOS O VACÍO (PRIORIDAD BAJA) ---
+        // Estado con datos o vacío
         if (facturas != null && !facturas.isEmpty()) {
-            // Hay facturas -> Mostrar Lista
-            bindingInvoiceList.recyclerView.setVisibility(View.VISIBLE);
-
-            bindingInvoiceList.layoutErrorState.setVisibility(View.GONE);
-            bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);
+            mostrarLista();
         } else {
-            // No hay error y lista vacía -> Mostrar Empty State (Lupa)
-            // Solo si no estamos en un limbo nulo (defensivo)
-            if (facturas != null) {
-                bindingInvoiceList.layoutEmptyState.setVisibility(View.VISIBLE);
-            }
-
-            bindingInvoiceList.recyclerView.setVisibility(View.GONE);
-            bindingInvoiceList.layoutErrorState.setVisibility(View.GONE);
+            mostrarEmptyState();
         }
+    }
+
+    private void mostrarShimmer() {
+        if (binding.shimmerViewContainer.getVisibility() != View.VISIBLE) {
+            binding.shimmerViewContainer.setVisibility(View.VISIBLE);
+            binding.shimmerViewContainer.startShimmer();
+        }
+        binding.recyclerView.setVisibility(View.GONE);
+        binding.layoutErrorState.setVisibility(View.GONE);
+        binding.layoutEmptyState.setVisibility(View.GONE);
+    }
+
+    private void ocultarShimmer() {
+        binding.shimmerViewContainer.stopShimmer();
+        binding.shimmerViewContainer.setVisibility(View.GONE);
+    }
+
+    private void mostrarError(InvoiceViewModel.ErrorType tipo) {
+        configurarVistaError(tipo);
+        binding.layoutErrorState.setVisibility(View.VISIBLE);
+        binding.recyclerView.setVisibility(View.GONE);
+        binding.layoutEmptyState.setVisibility(View.GONE);
+    }
+
+    private void mostrarLista() {
+        binding.recyclerView.setVisibility(View.VISIBLE);
+        binding.layoutErrorState.setVisibility(View.GONE);
+        binding.layoutEmptyState.setVisibility(View.GONE);
+    }
+
+    private void mostrarEmptyState() {
+        binding.layoutEmptyState.setVisibility(View.VISIBLE);
+        binding.recyclerView.setVisibility(View.GONE);
+        binding.layoutErrorState.setVisibility(View.GONE);
     }
 
     /**
-     * Configura textos e imagen del layout de error dinámicamente al ser prácticamente iguales
+     * Configura la vista de error según el tipo (red o servidor).
+     * Ajusta icono, título y descripción dinámicamente.
      */
     private void configurarVistaError(InvoiceViewModel.ErrorType tipo) {
         if (tipo == InvoiceViewModel.ErrorType.NETWORK) {
-            // CASO: Sin Internet (Wifi off) o error de conexión genérico
-            bindingInvoiceList.ivError.setImageResource(R.drawable.ic_wifi_off_24);
-            bindingInvoiceList.tvError.setText(R.string.error_conexion);
-            bindingInvoiceList.tvErrorDescription.setText(R.string.error_conexion_description_message);
-
-
+            binding.ivError.setImageResource(R.drawable.ic_wifi_off_24);
+            binding.tvError.setText(R.string.error_conexion);
+            binding.tvErrorDescription.setText(R.string.error_conexion_description_message);
         } else if (tipo == InvoiceViewModel.ErrorType.SERVER_GENERIC) {
-            // CASO: Error Servidor (Nube rota / Warning)
-            bindingInvoiceList.ivError.setImageResource(R.drawable.ic_server_off_24);
-
-            bindingInvoiceList.tvError.setText(R.string.error_conexion_servidor);
-            bindingInvoiceList.tvErrorDescription.setText(R.string.error_conexion_servidor_description_message);
+            binding.ivError.setImageResource(R.drawable.ic_server_off_24);
+            binding.tvError.setText(R.string.error_conexion_servidor);
+            binding.tvErrorDescription.setText(R.string.error_conexion_servidor_description_message);
         }
     }
 
-
-
+    // ===== Menú y filtros =====
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -191,13 +223,17 @@ public class InvoiceListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Muestra el fragmento de filtros en modo modal.
+     * Oculta la toolbar y el RecyclerView durante la edición de filtros.
+     */
     private void mostrarFiltroFragment() {
         FilterFragment filterFragment = new FilterFragment();
-        bindingInvoiceList.fragmentContainer.setVisibility(View.VISIBLE);
-        bindingInvoiceList.toolbar.setVisibility(View.GONE);
-        bindingInvoiceList.recyclerView.setVisibility(View.GONE);
-        // Ocultamos empty state por si acaso estaba visible
-        bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);
+
+        binding.fragmentContainer.setVisibility(View.VISIBLE);
+        binding.toolbar.setVisibility(View.GONE);
+        binding.recyclerView.setVisibility(View.GONE);
+        binding.layoutEmptyState.setVisibility(View.GONE);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -206,12 +242,13 @@ public class InvoiceListActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+    /**
+     * Restaura la vista principal al cerrar el fragmento de filtros.
+     * Recalcula el estado de UI para reflejar cambios en los datos.
+     */
     public void restoreMainView() {
-        bindingInvoiceList.toolbar.setVisibility(View.VISIBLE);
-        bindingInvoiceList.fragmentContainer.setVisibility(View.GONE);
-
-        // Al volver, simplemente forzamos una actualización de UI
-        // para que decida si muestra Shimmer, Lista o Empty State según el estado actual.
+        binding.toolbar.setVisibility(View.VISIBLE);
+        binding.fragmentContainer.setVisibility(View.GONE);
         actualizarEstadoUI();
     }
 }
