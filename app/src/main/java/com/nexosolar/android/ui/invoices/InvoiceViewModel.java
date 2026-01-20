@@ -1,48 +1,62 @@
 package com.nexosolar.android.ui.invoices;
 
+import android.util.Log;
 import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.nexosolar.android.domain.models.Invoice;
 import com.nexosolar.android.domain.models.InvoiceFilters;
+import com.nexosolar.android.domain.repository.RepositoryCallback;
 import com.nexosolar.android.domain.usecase.invoice.FilterInvoicesUseCase;
 import com.nexosolar.android.domain.usecase.invoice.GetInvoicesUseCase;
-import com.nexosolar.android.domain.models.Invoice;
-import com.nexosolar.android.domain.repository.RepositoryCallback;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * InvoiceViewModel
+ *
+ * ViewModel que gestiona el estado de la lista de facturas y filtros aplicados.
+ * Coordina la carga de datos desde el repositorio, maneja estados de error diferenciados
+ * (red vs servidor), y ejecuta filtros sobre los datos originales sin modificarlos.
+ *
+ * Estados gestionados:
+ * - isLoading: indica si hay una operación de carga en curso (shimmer)
+ * - errorTypeState: clasifica errores en NETWORK, SERVER_GENERIC o NONE
+ * - facturas: lista visible en la UI (puede ser filtrada)
+ * - facturasOriginales: copia inmutable de los datos originales
+ * - filtrosActuales: estado actual de los filtros aplicados
+ */
 public class InvoiceViewModel extends ViewModel {
 
-    // LiveData para la lista de facturas que observa la UI
-    private final MutableLiveData<List<Invoice>> facturas = new MutableLiveData<>();
+    private static final String TAG = "InvoiceViewModel";
 
-    // Nuevo LiveData para mostrar error vacío
-    private final MutableLiveData<Boolean> showEmptyError = new MutableLiveData<>(false);
-    public LiveData<Boolean> getShowEmptyError() { return showEmptyError; }
-
-    private List<Invoice> facturasOriginales = new ArrayList<>();
+    // ===== Enumeración de tipos de error =====
 
     public enum ErrorType {
         NONE,
-        NETWORK,        // Fallo de conexión (Wifi/Datos)
-        SERVER_GENERIC  // Fallo del servidor (404, 500, JSON malformado)
+        NETWORK,
+        SERVER_GENERIC
     }
 
-    private final MutableLiveData<ErrorType> errorTypeState = new MutableLiveData<>(ErrorType.NONE);
-    public LiveData<ErrorType> getErrorTypeState() { return errorTypeState; }
+    // ===== Variables de instancia =====
+
     private final GetInvoicesUseCase getInvoicesUseCase;
     private final FilterInvoicesUseCase filterInvoicesUseCase;
-    private boolean isFirstLoad = true;
 
-    // --- LIVE DATA ---
+    private List<Invoice> facturasOriginales = new ArrayList<>();
+
+    private final MutableLiveData<List<Invoice>> facturas = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(true);
+    private final MutableLiveData<Boolean> showEmptyError = new MutableLiveData<>(false);
+    private final MutableLiveData<ErrorType> errorTypeState = new MutableLiveData<>(ErrorType.NONE);
     private final MutableLiveData<InvoiceFilters> filtrosActuales = new MutableLiveData<>(new InvoiceFilters());
     private final MutableLiveData<String> errorValidacion = new MutableLiveData<>();
-    // Inicializamos en TRUE para que la primera carga ya muestre shimmer
-    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(true);
+
+    // ===== Constructor =====
 
     public InvoiceViewModel(GetInvoicesUseCase getInvoicesUseCase, FilterInvoicesUseCase filterInvoicesUseCase) {
         this.getInvoicesUseCase = getInvoicesUseCase;
@@ -50,36 +64,58 @@ public class InvoiceViewModel extends ViewModel {
         cargarFacturas();
     }
 
+    // ===== Getters de LiveData =====
+
+    public LiveData<List<Invoice>> getFacturas() {
+        return facturas;
+    }
+
+    public LiveData<Boolean> getIsLoading() {
+        return isLoading;
+    }
+
+    public LiveData<Boolean> getShowEmptyError() {
+        return showEmptyError;
+    }
+
+    public LiveData<ErrorType> getErrorTypeState() {
+        return errorTypeState;
+    }
+
+    public LiveData<InvoiceFilters> getFiltrosActuales() {
+        return filtrosActuales;
+    }
+
+    public LiveData<String> getErrorValidacion() {
+        return errorValidacion;
+    }
+
+    // ===== Métodos públicos de carga =====
+
+    /**
+     * Carga las facturas desde el repositorio.
+     * Gestiona estados de carga, éxito y error de manera diferenciada.
+     */
     public void cargarFacturas() {
-        // 1. Estado inicial de carga
         isLoading.setValue(true);
-        errorTypeState.setValue(ErrorType.NONE); // Limpiamos errores previos
+        errorTypeState.setValue(ErrorType.NONE);
 
         getInvoicesUseCase.invoke(new RepositoryCallback<List<Invoice>>() {
             @Override
             public void onSuccess(List<Invoice> result) {
-                // PostDelayed para evitar parpadeos visuales rápidos
                 new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
-
                     if (result != null && !result.isEmpty()) {
-                        // ÉXITO REAL: Hay datos nuevos
                         facturasOriginales = result;
                         facturas.setValue(result);
                         errorTypeState.setValue(ErrorType.NONE);
                     } else {
-                        // ÉXITO VACÍO: El servidor respondió OK pero sin facturas
-                        // (Esto es un "Empty State", no un error)
                         if (facturasOriginales == null || facturasOriginales.isEmpty()) {
                             facturas.setValue(new ArrayList<>());
-                            // Ojo: Esto NO es un error de red/servidor.
-                            // La UI lo manejará chequeando si la lista está vacía y errorType == NONE
                             errorTypeState.setValue(ErrorType.NONE);
                         } else {
-                            // Si teníamos datos viejos, los mantenemos (opcional)
                             facturas.setValue(facturasOriginales);
                         }
                     }
-                    // IMPORTANTE: Apagar loading AL FINAL
                     isLoading.setValue(false);
                 }, 500);
             }
@@ -87,69 +123,53 @@ public class InvoiceViewModel extends ViewModel {
             @Override
             public void onError(Throwable error) {
                 new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
-                    error.printStackTrace();
+                    Log.e(TAG, "Error cargando facturas: " + error.getMessage(), error);
 
-                    // 1. CLASIFICAR EL ERROR
-                    ErrorType tipoDetectado;
-                    if (esErrorDeRed(error)) {
-                        tipoDetectado = ErrorType.NETWORK;
-                    } else {
-                        tipoDetectado = ErrorType.SERVER_GENERIC;
-                    }
+                    ErrorType tipoDetectado = esErrorDeRed(error)
+                            ? ErrorType.NETWORK
+                            : ErrorType.SERVER_GENERIC;
 
-                    // 2. DECIDIR QUÉ MOSTRAR
                     if (facturasOriginales != null && !facturasOriginales.isEmpty()) {
-                        // Si ya tenemos datos, preferimos mostrarlos aunque estén "viejos"
-                        // en vez de tapar todo con una pantalla de error.
-                        // Podrías lanzar un SingleLiveEvent para un Toast aquí.
                         facturas.setValue(facturasOriginales);
-                        errorTypeState.setValue(ErrorType.NONE); // No mostramos pantalla de error full-screen
+                        errorTypeState.setValue(ErrorType.NONE);
                     } else {
-                        // No tenemos nada que mostrar -> Pantalla de Error Full Screen
                         facturas.setValue(new ArrayList<>());
                         errorTypeState.setValue(tipoDetectado);
                     }
 
-                    // 3. APAGAR CARGA
                     isLoading.setValue(false);
                 }, 1000);
             }
         });
     }
 
-    private boolean esErrorDeRed(Throwable t) {
-        return t instanceof java.net.UnknownHostException ||
-                t instanceof java.net.ConnectException ||
-                t instanceof java.net.SocketTimeoutException;
+
+    // ===== Gestión de filtros =====
+
+    /**
+     * Inicializa los filtros con valores predeterminados basados en los datos cargados.
+     * Solo se ejecuta si no hay filtros ya establecidos.
+     */
+    public void inicializarFiltros() {
+        if (filtrosActuales.getValue() != null &&
+                !filtrosActuales.getValue().getEstadosSeleccionados().isEmpty()) {
+            return;
+        }
+
+        InvoiceFilters filtros = new InvoiceFilters();
+        filtros.setFechaInicio(null);
+        filtros.setFechaFin(null);
+        filtros.setImporteMin(0.0);
+        filtros.setImporteMax((double) getMaxImporte());
+        filtros.setEstadosSeleccionados(new ArrayList<>());
+
+        filtrosActuales.postValue(filtros);
     }
 
-
-    public LiveData<List<Invoice>> getFacturas() { return facturas; }
-    public LiveData<Boolean> getIsLoading() { return isLoading; }
-    public LiveData<InvoiceFilters> getFiltrosActuales() { return filtrosActuales; }
-    public LiveData<String> getErrorValidacion() { return errorValidacion; }
-
-    public void forzarRecarga() {
-        isLoading.setValue(true); // Activar shimmer al recargar
-        getInvoicesUseCase.refresh(new RepositoryCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean success) {
-                if (Boolean.TRUE.equals(success)) {
-                    cargarFacturas(); // cargarFacturas gestionará el isLoading(false)
-                } else {
-                    isLoading.postValue(false);
-                }
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                t.printStackTrace();
-                isLoading.postValue(false);
-                facturas.postValue(facturasOriginales != null ? facturasOriginales : new ArrayList<>());
-            }
-        });
-    }
-
+    /**
+     * Actualiza los filtros y los aplica a los datos originales.
+     * Valida que las fechas sean coherentes antes de aplicar.
+     */
     public void actualizarFiltros(InvoiceFilters filtros) {
         if (filtros.isValid()) {
             filtrosActuales.setValue(filtros);
@@ -160,19 +180,18 @@ public class InvoiceViewModel extends ViewModel {
         }
     }
 
-    private void aplicarFiltros() {
-        InvoiceFilters filtros = filtrosActuales.getValue();
-        if (filtros != null) {
-            filtrarFacturas(
-                    filtros.getEstadosSeleccionados(),
-                    filtros.getFechaInicio(),
-                    filtros.getFechaFin(),
-                    filtros.getImporteMin(),
-                    filtros.getImporteMax()
-            );
-        }
+    /**
+     * Actualiza el estado de los filtros sin aplicarlos de inmediato.
+     * Útil para sincronizar UI con el estado del ViewModel.
+     */
+    public void actualizarEstadoFiltros(InvoiceFilters filtros) {
+        this.filtrosActuales.setValue(filtros);
     }
 
+    /**
+     * Resetea los filtros a valores por defecto (sin restricciones).
+     * Restaura la lista completa de facturas originales.
+     */
     public void resetearFiltros() {
         InvoiceFilters nuevosFiltros = new InvoiceFilters();
         nuevosFiltros.setFechaInicio(null);
@@ -188,79 +207,118 @@ public class InvoiceViewModel extends ViewModel {
         }
     }
 
-    public void inicializarFiltros() {
-        if (filtrosActuales.getValue() != null && !filtrosActuales.getValue().getEstadosSeleccionados().isEmpty()) {
-            return;
-        }
-        InvoiceFilters filtros = new InvoiceFilters();
-        LocalDate fechaAntigua = getOldestDate();
-        if (fechaAntigua != null) {
-            filtros.setFechaInicio(null);
-            filtros.setFechaFin(null);
-        }
-        filtros.setImporteMin(0.0);
-        filtros.setImporteMax((double) getMaxImporte());
-        filtros.setEstadosSeleccionados(new ArrayList<>());
-        filtrosActuales.postValue(filtros);
+    /**
+     * Aplica los filtros actuales sobre los datos originales.
+     * Ejecuta el filtrado en segundo plano para evitar bloquear la UI.
+     */
+    private void aplicarFiltros() {
+        InvoiceFilters filtros = filtrosActuales.getValue();
+        if (filtros == null) return;
+
+        filtrarFacturas(
+                filtros.getEstadosSeleccionados(),
+                filtros.getFechaInicio(),
+                filtros.getFechaFin(),
+                filtros.getImporteMin(),
+                filtros.getImporteMax()
+        );
     }
 
-    private void filtrarFacturas(List<String> estadosSeleccionados, LocalDate fechaInicio, LocalDate fechaFin, Double importeMin, Double importeMax) {
-        // 1. Activar carga
+    /**
+     * Filtra las facturas según los criterios especificados.
+     * La operación se ejecuta en hilo secundario para mantener la fluidez de la UI.
+     */
+    private void filtrarFacturas(List<String> estadosSeleccionados,
+                                 LocalDate fechaInicio,
+                                 LocalDate fechaFin,
+                                 Double importeMin,
+                                 Double importeMax) {
         isLoading.setValue(true);
 
         new Thread(() -> {
-            // Retardo para efecto visual suave
-            //try { Thread.sleep(700); } catch (InterruptedException e) {}
+            List<Invoice> listaBase = (facturasOriginales != null)
+                    ? facturasOriginales
+                    : new ArrayList<>();
 
-            List<Invoice> listaBase = (facturasOriginales != null) ? facturasOriginales : new ArrayList<>();
-            List<Invoice> facturasFiltradas = filterInvoicesUseCase.execute(listaBase, estadosSeleccionados, fechaInicio, fechaFin, importeMin, importeMax);
+            List<Invoice> facturasFiltradas = filterInvoicesUseCase.execute(
+                    listaBase, estadosSeleccionados, fechaInicio, fechaFin, importeMin, importeMax
+            );
 
             facturas.postValue(facturasFiltradas);
-            // 2. Desactivar carga
             isLoading.postValue(false);
         }).start();
     }
 
-    // Métodos auxiliares
+    // ===== Métodos auxiliares =====
+
+    /**
+     * Determina si un error es de tipo red (sin conexión, timeout, etc.).
+     */
+    private boolean esErrorDeRed(Throwable t) {
+        return t instanceof java.net.UnknownHostException ||
+                t instanceof java.net.ConnectException ||
+                t instanceof java.net.SocketTimeoutException;
+    }
+
+    /**
+     * Retorna el importe máximo de todas las facturas originales.
+     * Útil para configurar el límite superior del slider de filtros.
+     */
     public float getMaxImporte() {
         if (facturasOriginales == null || facturasOriginales.isEmpty()) return 0f;
+
         float maxImporte = 0f;
         for (Invoice factura : facturasOriginales) {
-            if (factura.getImporteOrdenacion() > maxImporte) maxImporte = (float) factura.getImporteOrdenacion();
+            if (factura.getImporteOrdenacion() > maxImporte) {
+                maxImporte = factura.getImporteOrdenacion();
+            }
         }
         return maxImporte;
     }
 
+    /**
+     * Retorna la fecha más antigua de todas las facturas originales.
+     */
     public LocalDate getOldestDate() {
         if (facturasOriginales == null || facturasOriginales.isEmpty()) return null;
+
         LocalDate oldestDate = null;
         for (Invoice factura : facturasOriginales) {
             LocalDate currentDate = factura.getFecha();
             if (currentDate != null) {
-                if (oldestDate == null || currentDate.isBefore(oldestDate)) oldestDate = currentDate;
+                if (oldestDate == null || currentDate.isBefore(oldestDate)) {
+                    oldestDate = currentDate;
+                }
             }
         }
         return oldestDate;
     }
 
+    /**
+     * Retorna la fecha más reciente de todas las facturas originales.
+     */
     public LocalDate getNewestDate() {
         if (facturasOriginales == null || facturasOriginales.isEmpty()) return null;
+
         LocalDate newest = null;
-        for (Invoice f : facturasOriginales) {
-            if (f.getFecha() != null) {
-                if (newest == null || f.getFecha().isAfter(newest)) newest = f.getFecha();
+        for (Invoice factura : facturasOriginales) {
+            if (factura.getFecha() != null) {
+                if (newest == null || factura.getFecha().isAfter(newest)) {
+                    newest = factura.getFecha();
+                }
             }
         }
         return newest;
     }
 
+    /**
+     * Indica si hay datos cargados en el ViewModel.
+     */
     public boolean hayDatosCargados() {
         return facturasOriginales != null && !facturasOriginales.isEmpty();
     }
 
-    public void actualizarEstadoFiltros(InvoiceFilters filtros) {
-        this.filtrosActuales.setValue(filtros);
-    }
+    // ===== Métodos de testing =====
 
     @VisibleForTesting
     public void setFacturasOriginalesTest(List<Invoice> facturas) {
