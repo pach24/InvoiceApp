@@ -64,22 +64,30 @@ public class InvoiceViewModel extends ViewModel {
                 }
             }
 
+
             @Override
             public void onError(Throwable error) {
-                // AQUÍ ESTÁ LA SOLUCIÓN AL PARPADEO
-                // Forzamos esperar 500ms o 1s antes de mostrar el error de nuevo
+                // Forzamos esperar 1s para que el usuario vea que "pensó"
                 new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
-                    isLoading.postValue(false);
                     error.printStackTrace();
 
+                    // 1. PRIMERO determinamos qué mostrar (Datos viejos o Error)
                     if (facturasOriginales != null && !facturasOriginales.isEmpty()) {
-                        facturas.postValue(facturasOriginales);
-                        showEmptyError.postValue(false);
+                        // Si hay datos viejos, los mostramos y ocultamos el error
+                        facturas.setValue(facturasOriginales); // Usa setValue ya que estamos en MainLooper
+                        showEmptyError.setValue(false);
                     } else {
-                        facturas.postValue(new ArrayList<>());
-                        showEmptyError.postValue(true);
+                        // Si no hay nada, mostramos lista vacía y ACTIVAMOS el error
+                        facturas.setValue(new ArrayList<>());
+                        showEmptyError.setValue(true);
                     }
-                }, 1000); // 1 segundo de espera para que el usuario vea que "pensó"
+
+                    // 2. POR ÚLTIMO apagamos el loading
+                    // Al hacerlo al final, la UI ya tendrá el valor correcto de 'showEmptyError'
+                    // cuando 'isLoading' pase a false.
+                    isLoading.setValue(false);
+
+                }, 1000);
             }
         });
     }

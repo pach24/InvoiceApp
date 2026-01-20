@@ -190,13 +190,28 @@
     <!-- ERROR STATE -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutErrorState"
-        android:layout_width="@dimen/spacing_zero"
-        android:layout_height="@dimen/spacing_zero"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:visibility="gone"
+        android:background="@android:color/white"
+        android:padding="@dimen/spacing_medium"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/ivError"
+            android:layout_width="@dimen/error_state_img_size"
+            android:layout_height="@dimen/error_state_img_size"
+            android:src="@drawable/ic_wifi_off_24"
+            app:tint="@color/darker_gray"
+            android:importantForAccessibility="no"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tvError"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"/>
 
         <TextView
             android:id="@+id/tvError"
@@ -204,31 +219,50 @@
             android:layout_height="wrap_content"
             android:text="@string/error_carga"
             android:textSize="@dimen/text_size_subtitle_large"
-            android:textColor="@android:color/holo_red_dark"
-            android:layout_marginBottom="@dimen/spacing_medium"
-            app:layout_constraintTop_toTopOf="parent"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="@dimen/spacing_medium"
+            app:layout_constraintTop_toBottomOf="@id/ivError"
+            app:layout_constraintBottom_toTopOf="@id/tvErrorDescription"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvErrorDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:text="@string/error_state_description_message"
+            android:gravity="center"
+            android:textColor="@color/darker_gray"
+            app:layout_constraintTop_toBottomOf="@id/tvError"
             app:layout_constraintBottom_toTopOf="@id/btnRetry"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"/>
+            app:layout_constraintWidth_percent="0.8"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRetry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/reintentar"
-            app:layout_constraintTop_toBottomOf="@id/tvError"
+            android:layout_marginTop="@dimen/spacing_medium"
+            app:cornerRadius="@dimen/button_corner_radius_20"
+            app:layout_constraintTop_toBottomOf="@id/tvErrorDescription"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- EMPTY STATE -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutEmptyState"
-        android:layout_width="@dimen/spacing_zero"
-        android:layout_height="@dimen/spacing_zero"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:visibility="gone"
+        android:background="@android:color/white"
+        android:padding="@dimen/spacing_medium"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -256,6 +290,7 @@
             android:textColor="#757575"
             android:layout_marginTop="@dimen/spacing_medium"
             app:layout_constraintTop_toBottomOf="@id/ivEmpty"
+            app:layout_constraintBottom_toTopOf="@id/tvEmptySubtitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -271,7 +306,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <!-- FRAGMENT CONTAINER -->
     <FrameLayout

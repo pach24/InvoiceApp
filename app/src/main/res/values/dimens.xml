@@ -44,6 +44,8 @@
     <dimen name="empty_energy_text_width">248dp</dimen>
     <dimen name="empty_energy_text_size">16sp</dimen>
 
+    <dimen name="error_state_img_size">64dp</dimen>
+
     <!-- ========= MAIN (MainActivity) ========= -->
     <dimen name="main_header_height">420dp</dimen>
     <dimen name="main_header_vector_width">412dp</dimen>
@@ -210,5 +212,6 @@
     <dimen name="filter_bottom_button_corner_radius">24dp</dimen>
     <dimen name="filter_bottom_clear_margin_top">8dp</dimen>
     <dimen name="filter_bottom_spacer_height">16dp</dimen>
+    <dimen name="button_corner_radius_20">20dp</dimen>
 
 </resources>

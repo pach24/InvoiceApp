@@ -26,9 +26,9 @@
     <string name="abrir_listado_de_facturas">Abrir listado de facturas</string>
     <string name="abrir_smart_solar">Abrir Smart Solar</string>
     <string name="cargando_datos">Cargando facturas...</string>
-    <string name="error_carga">Ha ocurrido un error al cargar los datos</string>
-    <string name="error_conexion">No hay conexión a internet</string>
-    <string name="sin_resultados">No se encontraron resultados</string>
+    <string name="sin_resultados">Sin resultados</string>
+    <string name="error_carga">¡Vaya! Sin Conexión</string>
+    <string name="error_state_description_message">La información no está disponible en este momento. Por favor, revisa tu conexión de red</string>
     <string name="change_filters">Intenta con otros criterios de búsqueda</string>
     <string name="reintentar">Reintentar</string>
 
@@ -119,5 +119,6 @@
     <!-- ============================================================ -->
     <string name="cambiar_a_retromock">Cambiar a Retromock</string>
     <string name="retromock">RetroMock</string>
+
 
 </resources>

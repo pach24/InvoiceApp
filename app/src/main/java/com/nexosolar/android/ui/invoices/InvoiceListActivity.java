@@ -85,51 +85,59 @@ public class InvoiceListActivity extends AppCompatActivity {
     private void actualizarEstadoUI() {
         Boolean isLoading = invoiceViewModel.getIsLoading().getValue();
         List<Invoice> facturas = invoiceViewModel.getFacturas().getValue();
-
-        // NUEVO: Obtenemos el estado de error de red
         Boolean isError = invoiceViewModel.getShowEmptyError().getValue();
-        if (isError == null) isError = false;
 
-        // 1. Si estamos cargando -> Manda el SHIMMER
-        if (isLoading != null && isLoading) {
+        // Protecciones contra nulos
+        if (isError == null) isError = false;
+        if (isLoading == null) isLoading = false;
+
+        // 1. CARGA (Shimmer)
+        if (isLoading) {
             if (bindingInvoiceList.shimmerViewContainer.getVisibility() != View.VISIBLE) {
                 bindingInvoiceList.shimmerViewContainer.setVisibility(View.VISIBLE);
                 bindingInvoiceList.shimmerViewContainer.startShimmer();
             }
             bindingInvoiceList.recyclerView.setVisibility(View.GONE);
-            bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);
-            bindingInvoiceList.layoutErrorState.setVisibility(View.GONE); // Ocultar error también
+            bindingInvoiceList.layoutErrorState.setVisibility(View.GONE);
+            bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE); // ¡Ocultar Empty también!
             return;
         }
 
-        // 2. Si NO estamos cargando -> Apagar Shimmer
+        // 2. Apagar Shimmer
         bindingInvoiceList.shimmerViewContainer.stopShimmer();
         bindingInvoiceList.shimmerViewContainer.setVisibility(View.GONE);
 
-        // 3. DECISIÓN FINAL (Prioridad: Error > Datos > Empty)
-
+        // 3. ESTADOS FINALES
         if (isError) {
-            // CASO A: Error de Red (Sin Wifi)
-            bindingInvoiceList.layoutErrorState.setVisibility(View.VISIBLE);
+            // CASO A: Error de Red (Wifi off)
+            bindingInvoiceList.layoutErrorState.setVisibility(View.VISIBLE); // MOSTRAR ERROR
 
             bindingInvoiceList.recyclerView.setVisibility(View.GONE);
-            bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);
+            bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);    // OCULTAR EMPTY
 
         } else if (facturas != null && !facturas.isEmpty()) {
-            // CASO B: Hay datos normales
-            bindingInvoiceList.recyclerView.setVisibility(View.VISIBLE);
+            // CASO B: Hay datos (Lista normal)
+            bindingInvoiceList.recyclerView.setVisibility(View.VISIBLE);     // MOSTRAR LISTA
 
-            bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);
-            bindingInvoiceList.layoutErrorState.setVisibility(View.GONE);
+            bindingInvoiceList.layoutErrorState.setVisibility(View.GONE);    // OCULTAR ERROR
+            bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);    // OCULTAR EMPTY
 
-        } else {
-            // CASO C: Lista vacía pero sin error (Filtro sin resultados)
-            bindingInvoiceList.layoutEmptyState.setVisibility(View.VISIBLE);
+        }else {
+            // CASO C: Lista vacía
+            // Solo mostramos Empty State si NO hay error Y la lista de facturas NO es nula
+            // Esto evita que se muestre durante la inicialización o transiciones
+            if (!isError && facturas != null) {
+                bindingInvoiceList.layoutEmptyState.setVisibility(View.VISIBLE);
+            } else {
+                bindingInvoiceList.layoutEmptyState.setVisibility(View.GONE);
+            }
 
             bindingInvoiceList.recyclerView.setVisibility(View.GONE);
             bindingInvoiceList.layoutErrorState.setVisibility(View.GONE);
         }
     }
+
+
 
 
     @Override
