@@ -34,6 +34,8 @@ public class InvoiceViewModel extends ViewModel {
 
     private static final String TAG = "InvoiceViewModel";
 
+
+
     // ===== Enumeración de tipos de error =====
 
     public enum ErrorType {
@@ -44,6 +46,7 @@ public class InvoiceViewModel extends ViewModel {
 
     // ===== Variables de instancia =====
 
+    private boolean filtrosInicializados = false;
     private final GetInvoicesUseCase getInvoicesUseCase;
     private final FilterInvoicesUseCase filterInvoicesUseCase;
 
@@ -170,8 +173,15 @@ public class InvoiceViewModel extends ViewModel {
      * Solo se ejecuta si no hay filtros ya establecidos.
      */
     public void inicializarFiltros() {
+        // Solo inicializar si es la primera vez
+        if (filtrosInicializados) {
+            return;
+        }
+
+        // Si ya hay filtros válidos (doble chequeo defensivo), tampoco reinicializar
         if (filtrosActuales.getValue() != null &&
                 !filtrosActuales.getValue().getEstadosSeleccionados().isEmpty()) {
+            filtrosInicializados = true; // Marcar como inicializado por si acaso
             return;
         }
 
@@ -183,7 +193,9 @@ public class InvoiceViewModel extends ViewModel {
         filtros.setEstadosSeleccionados(new ArrayList<>());
 
         filtrosActuales.postValue(filtros);
+        filtrosInicializados = true; //
     }
+
 
     /**
      * Actualiza los filtros y los aplica a los datos originales.
@@ -220,11 +232,13 @@ public class InvoiceViewModel extends ViewModel {
         nuevosFiltros.setEstadosSeleccionados(new ArrayList<>());
 
         filtrosActuales.setValue(nuevosFiltros);
+        filtrosInicializados = false; // <--- IMPORTANTE: Resetear la bandera
 
         if (facturasOriginales != null) {
             facturas.setValue(new ArrayList<>(facturasOriginales));
         }
     }
+
 
     /**
      * Aplica los filtros actuales sobre los datos originales.

@@ -48,6 +48,7 @@ public class FilterFragment extends Fragment {
     private FragmentFilterBinding binding;
     private InvoiceViewModel viewModel;
 
+
     // ===== Ciclo de vida =====
 
     @Nullable
@@ -58,7 +59,7 @@ public class FilterFragment extends Fragment {
         binding = FragmentFilterBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(InvoiceViewModel.class);
 
-        viewModel.resetearFiltros();
+        //viewModel.resetearFiltros();
         viewModel.inicializarFiltros();
 
         setupObservers();
