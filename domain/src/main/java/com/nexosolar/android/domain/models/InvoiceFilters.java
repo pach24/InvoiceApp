@@ -7,14 +7,18 @@ import java.util.List;
 /**
  * Clase de datos que encapsula todos los criterios de filtrado de facturas.
  * Sigue el patrón MVVM manteniendo la lógica de validación separada de la UI.
+ * Centraliza el estado de los filtros para facilitar la comunicación entre ViewModel y UI
  */
 public class InvoiceFilters {
+
+    // ===== Variables de instancia =====
     private List<String> estadosSeleccionados;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
     private Double importeMin;
     private Double importeMax;
 
+    // ===== Constructores =====
     public InvoiceFilters() {
         this.estadosSeleccionados = new ArrayList<>();
         this.fechaInicio = null;
@@ -23,7 +27,7 @@ public class InvoiceFilters {
         this.importeMax = 0.0;
     }
 
-    // Getters
+    // Getters y Setters
     public List<String> getEstadosSeleccionados() {
         return estadosSeleccionados;
     }
@@ -65,6 +69,8 @@ public class InvoiceFilters {
         this.importeMax = importe;
     }
 
+
+    // ===== Métodos públicos =====
     /**
      * Valida que los filtros sean lógicamente correctos.
      * @return true si los filtros son válidos, false en caso contrario.

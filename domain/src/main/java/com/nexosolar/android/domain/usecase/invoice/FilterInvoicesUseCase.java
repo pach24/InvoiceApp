@@ -5,8 +5,29 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Caso de uso que aplica filtros múltiples al listado de facturas.
+ * Implementa la lógica de negocio de filtrado por estado, fecha e importe de forma combinada.
+ * Permite al ViewModel delegar la complejidad del filtrado y mantener la UI libre de lógica de negocio.
+ */
 public class FilterInvoicesUseCase {
 
+
+    // ===== Métodos públicos =====
+
+    /**
+     * Filtra el listado de facturas según los criterios proporcionados.
+     * Los filtros son acumulativos (AND lógico): una factura debe cumplir todos los criterios activos.
+     *
+     * @param facturasOriginales Lista completa de facturas sin filtrar
+     * @param estadosSeleccionados Estados permitidos (null = sin filtro de estado)
+     * @param fechaInicio Fecha mínima (inclusive)
+     * @param fechaFin Fecha máxima (inclusive)
+     * @param importeMin Importe mínimo (inclusive)
+     * @param importeMax Importe máximo (inclusive)
+     * @return Lista filtrada según los criterios aplicados
+     */
     public List<Invoice> execute(List<Invoice> facturasOriginales,
                                  List<String> estadosSeleccionados,
                                  LocalDate fechaInicio,
@@ -14,7 +35,7 @@ public class FilterInvoicesUseCase {
                                  Double importeMin,
                                  Double importeMax) {
 
-        // Si la lista original es nula o vacía, devolvemos lista vacía
+
         if (facturasOriginales == null || facturasOriginales.isEmpty()) {
             return new ArrayList<>();
         }
@@ -44,7 +65,6 @@ public class FilterInvoicesUseCase {
                 }
             } else {
                 // Si hay rango pero la factura no tiene fecha, ¿se descarta?
-                // Según tu lógica anterior:
                 if (fechaInicio != null || fechaFin != null) {
                     cumpleFecha = false;
                 }
@@ -69,4 +89,6 @@ public class FilterInvoicesUseCase {
 
         return facturasFiltradas;
     }
+
+
 }

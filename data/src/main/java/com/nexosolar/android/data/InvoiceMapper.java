@@ -2,26 +2,49 @@ package com.nexosolar.android.data;
 
 import com.nexosolar.android.data.local.InvoiceEntity;
 import com.nexosolar.android.domain.models.Invoice;
-
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Mapper bidireccional entre modelos de dominio y entidades de base de datos.
+ *
+ * Responsabilidades:
+ * - Transformar InvoiceEntity (capa data) ↔ Invoice (capa domain)
+ * - Aislar el dominio de detalles de persistencia y red
+ * - Permitir evolución independiente de los modelos en cada capa
+ *
+ * Ubicación en Clean Architecture: reside en la capa data porque necesita
+ * conocer tanto los modelos de dominio como las entidades de persistencia,
+ * y es responsabilidad de data preparar los datos para el dominio.
+ */
 public class InvoiceMapper {
 
-    // De Entidad (BD) a Dominio
+    // ===== Mapeo de Entidad a Dominio =====
+
+    /**
+     * Convierte una entidad de base de datos a modelo de dominio.
+     *
+     * @param entity Entidad de Room, o null
+     * @return Modelo de dominio, o null si entity es null
+     */
     public Invoice toDomain(InvoiceEntity entity) {
         if (entity == null) return null;
 
         Invoice invoice = new Invoice();
-        // Usamos los campos públicos directos ya que no tienes getters en la Entity
         invoice.setDescEstado(entity.estado);
         invoice.setImporteOrdenacion(entity.importe);
         invoice.setFecha(entity.fecha);
-        // invoice.setId(entity.id); // Descomenta si tu modelo de dominio tiene ID
+        // invoice.setId(entity.id); // Descomentar si el dominio requiere ID
 
         return invoice;
     }
 
+    /**
+     * Convierte una lista de entidades a lista de modelos de dominio.
+     *
+     * @param entities Lista de entidades de Room
+     * @return Lista de modelos de dominio (vacía si entities es null)
+     */
     public List<Invoice> toDomainList(List<InvoiceEntity> entities) {
         List<Invoice> list = new ArrayList<>();
         if (entities != null) {
@@ -32,7 +55,17 @@ public class InvoiceMapper {
         return list;
     }
 
-    // De Dominio a Entidad (BD)
+    // ===== Mapeo de Dominio a Entidad =====
+
+    /**
+     * Convierte un modelo de dominio a entidad de base de datos.
+     *
+     * Usado al persistir datos provenientes de la API (después de mapear
+     * desde InvoiceResponse) o al guardar cambios locales.
+     *
+     * @param domain Modelo de dominio, o null
+     * @return Entidad de Room, o null si domain es null
+     */
     public InvoiceEntity toEntity(Invoice domain) {
         if (domain == null) return null;
 
@@ -44,6 +77,12 @@ public class InvoiceMapper {
         return entity;
     }
 
+    /**
+     * Convierte una lista de modelos de dominio a lista de entidades.
+     *
+     * @param domains Lista de modelos de dominio
+     * @return Lista de entidades de Room (vacía si domains es null)
+     */
     public List<InvoiceEntity> toEntityList(List<Invoice> domains) {
         List<InvoiceEntity> list = new ArrayList<>();
         if (domains != null) {

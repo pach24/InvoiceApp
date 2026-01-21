@@ -4,9 +4,25 @@ import com.nexosolar.android.domain.models.Invoice;
 
 import java.util.List;
 
+/**
+ * Contrato de repositorio para la gestión de facturas.
+ * Define las operaciones de lectura y sincronización disponibles para los casos de uso.
+ */
 public interface InvoiceRepository {
+
+    // ===== Métodos públicos =====
+
+    /**
+     * Obtiene el listado de facturas.
+     * La implementación decidirá la estrategia de cache (Single Source of Truth).
+     */
     void getFacturas(RepositoryCallback<List<Invoice>> callback);
-    // Debe coincidir con la implementación:
+
+
+    /**
+     * Fuerza una actualización de datos desde la fuente remota.
+     */
+
     void refreshFacturas(RepositoryCallback<Boolean> callback);
 
 }

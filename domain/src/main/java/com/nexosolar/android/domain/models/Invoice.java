@@ -4,23 +4,24 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
- * Entidad de Dominio Pura.
- * No contiene anotaciones de Android (Room, Retrofit, etc.).
- * Representa una factura en la lógica de negocio.
+ * Entidad pura de Dominio que representa una factura.
+ * Mantiene la independencia de frameworks (sin anotaciones de Room/Retrofit).
+ * Incluye lógica de negocio para transformación de estados.
  */
 public class Invoice implements Serializable {
 
-    // Identificador (opcional en dominio, pero útil si lo necesitas para navegar a detalles)
+    // ===== Variables de instancia =====
     private int id;
-
-    private String descEstado;
+    private String descEstado; // Estado en texto crudo (origen API)
     private float importeOrdenacion;
     private LocalDate fecha;
 
-    // --- CONSTRUCTORES ---
+    // ===== Constructores =====
 
+    /**
+     * Constructor vacío requerido para herramientas de serialización.
+     */
     public Invoice() {
-        // Constructor vacío requerido por muchas herramientas de serialización
     }
 
     public Invoice(String descEstado, float importeOrdenacion, LocalDate fecha) {
@@ -29,7 +30,7 @@ public class Invoice implements Serializable {
         this.fecha = fecha;
     }
 
-    // --- GETTERS Y SETTERS ---
+    // ===== Getters y Setters =====
 
     public int getId() {
         return id;
@@ -63,16 +64,15 @@ public class Invoice implements Serializable {
         this.fecha = fecha;
     }
 
+    // ===== Métodos públicos =====
 
-    // --- NUEVO (LÓGICA DE DOMINIO) ---
     /**
-     * Convierte el texto del servidor a un Enum para que la UI trabaje
-     * con tipos seguros en lugar de Strings.
+     * Convierte el estado de texto (API) a un Enum de dominio seguro.
+     * Facilita la lógica de UI (colores, iconos) evitando comparaciones de strings.
      *
-     * @return El estado como Enum InvoiceState
+     * @return Enum {@link InvoiceState} correspondiente o DESCONOCIDO.
      */
     public InvoiceState getEstadoEnum() {
         return InvoiceState.fromTextoServidor(this.descEstado);
     }
-
 }
