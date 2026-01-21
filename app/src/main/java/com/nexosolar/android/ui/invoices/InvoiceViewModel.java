@@ -34,6 +34,8 @@ public class InvoiceViewModel extends ViewModel {
 
     private static final String TAG = "InvoiceViewModel";
 
+
+
     // ===== Enumeración de tipos de error =====
 
     public enum ErrorType {
@@ -44,6 +46,7 @@ public class InvoiceViewModel extends ViewModel {
 
     // ===== Variables de instancia =====
 
+    private boolean filtrosInicializados = false;
     private final GetInvoicesUseCase getInvoicesUseCase;
     private final FilterInvoicesUseCase filterInvoicesUseCase;
 
@@ -96,49 +99,68 @@ public class InvoiceViewModel extends ViewModel {
      * Carga las facturas desde el repositorio.
      * Gestiona estados de carga, éxito y error de manera diferenciada.
      */
+    /**
+     * Carga las facturas de manera optimizada.
+     * 1. Evita el parpadeo del shimmer si ya hay datos o si la respuesta es muy rápida.
+     * 2. Utiliza postValue para garantizar la seguridad entre hilos (Thread Safety).
+     * 3. Mantiene la arquitectura Clean al no depender de LiveData en el UseCase.
+     */
     public void cargarFacturas() {
-        isLoading.setValue(true);
         errorTypeState.setValue(ErrorType.NONE);
 
+        if (facturasOriginales != null && !facturasOriginales.isEmpty()) {
+            // Si ya tenemos datos en memoria, no mostramos loading
+            isLoading.setValue(false);
+        } else {
+            // Si no hay datos, esperamos un breve instante (40ms) antes de mostrar el shimmer.
+            // Si los datos llegan antes de ese tiempo (desde Room), el shimmer nunca se verá, en cambio, si viene de red, es probable que tarde algo más y por lo tanto se mostrará
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                if (facturasOriginales == null || facturasOriginales.isEmpty()) {
+                    isLoading.postValue(true);
+                }
+            }, 40);
+        }
+
+        // LLAMADA AL USE CASE
         getInvoicesUseCase.invoke(new RepositoryCallback<List<Invoice>>() {
             @Override
             public void onSuccess(List<Invoice> result) {
-                new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
-                    if (result != null && !result.isEmpty()) {
-                        facturasOriginales = result;
-                        facturas.setValue(result);
-                        errorTypeState.setValue(ErrorType.NONE);
-                    } else {
-                        if (facturasOriginales == null || facturasOriginales.isEmpty()) {
-                            facturas.setValue(new ArrayList<>());
-                            errorTypeState.setValue(ErrorType.NONE);
-                        } else {
-                            facturas.setValue(facturasOriginales);
-                        }
+                // Importante: Usamos postValue porque el callback viene de un hilo secundario del Repositorio
+                if (result != null && !result.isEmpty()) {
+                    facturasOriginales = result;
+                    facturas.postValue(result);
+                    errorTypeState.postValue(ErrorType.NONE);
+                } else {
+                    // Si la respuesta es vacía pero ya teníamos datos previos, mantenemos los previos
+                    if (facturasOriginales == null || facturasOriginales.isEmpty()) {
+                        facturas.postValue(new ArrayList<>());
                     }
-                    isLoading.setValue(false);
-                }, 500);
+                }
+
+                // Finalizamos el estado de carga
+                isLoading.postValue(false);
             }
 
             @Override
             public void onError(Throwable error) {
-                new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
-                    Log.e(TAG, "Error cargando facturas: " + error.getMessage(), error);
+                Log.e(TAG, "Error cargando facturas: " + error.getMessage());
 
-                    ErrorType tipoDetectado = esErrorDeRed(error)
-                            ? ErrorType.NETWORK
-                            : ErrorType.SERVER_GENERIC;
+                // Identificamos el tipo de error
+                ErrorType tipoDetectado = esErrorDeRed(error)
+                        ? ErrorType.NETWORK
+                        : ErrorType.SERVER_GENERIC;
 
-                    if (facturasOriginales != null && !facturasOriginales.isEmpty()) {
-                        facturas.setValue(facturasOriginales);
-                        errorTypeState.setValue(ErrorType.NONE);
-                    } else {
-                        facturas.setValue(new ArrayList<>());
-                        errorTypeState.setValue(tipoDetectado);
-                    }
+                // Si ya tenemos datos (caché), no mostramos pantalla de error, solo ocultamos loading
+                if (facturasOriginales != null && !facturasOriginales.isEmpty()) {
+                    facturas.postValue(facturasOriginales);
+                    errorTypeState.postValue(ErrorType.NONE);
+                } else {
+                    // Si no hay datos y hay error, mostramos el error correspondiente
+                    facturas.postValue(new ArrayList<>());
+                    errorTypeState.postValue(tipoDetectado);
+                }
 
-                    isLoading.setValue(false);
-                }, 1000);
+                isLoading.postValue(false);
             }
         });
     }
@@ -151,8 +173,15 @@ public class InvoiceViewModel extends ViewModel {
      * Solo se ejecuta si no hay filtros ya establecidos.
      */
     public void inicializarFiltros() {
+        // Solo inicializar si es la primera vez
+        if (filtrosInicializados) {
+            return;
+        }
+
+        // Si ya hay filtros válidos (doble chequeo defensivo), tampoco reinicializar
         if (filtrosActuales.getValue() != null &&
                 !filtrosActuales.getValue().getEstadosSeleccionados().isEmpty()) {
+            filtrosInicializados = true; // Marcar como inicializado por si acaso
             return;
         }
 
@@ -164,7 +193,9 @@ public class InvoiceViewModel extends ViewModel {
         filtros.setEstadosSeleccionados(new ArrayList<>());
 
         filtrosActuales.postValue(filtros);
+        filtrosInicializados = true; //
     }
+
 
     /**
      * Actualiza los filtros y los aplica a los datos originales.
@@ -201,11 +232,13 @@ public class InvoiceViewModel extends ViewModel {
         nuevosFiltros.setEstadosSeleccionados(new ArrayList<>());
 
         filtrosActuales.setValue(nuevosFiltros);
+        filtrosInicializados = false; // <--- IMPORTANTE: Resetear la bandera
 
         if (facturasOriginales != null) {
             facturas.setValue(new ArrayList<>(facturasOriginales));
         }
     }
+
 
     /**
      * Aplica los filtros actuales sobre los datos originales.
