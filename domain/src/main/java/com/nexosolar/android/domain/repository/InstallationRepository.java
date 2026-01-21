@@ -3,18 +3,24 @@ package com.nexosolar.android.domain.repository;
 import com.nexosolar.android.domain.models.Installation;
 
 /**
- * Contrato para obtener datos de instalación solar.
- * La implementación concreta estará en la capa de datos.
+ * Contrato de repositorio para la gestión de datos de instalaciones.
+ * Abstrae la fuente de datos (API/Cache) de la capa de dominio.
  */
 public interface InstallationRepository {
+
+    // ===== Métodos públicos =====
+
     /**
-     * Obtiene los detalles de la instalación.
-     * @param callback Callback para manejar respuesta o error
+     * Recupera los detalles técnicos de la instalación asociada al usuario.
+     * @param callback Mecanismo de retorno asíncrono.
      */
     void getInstallationDetails(InstallationCallback callback);
 
+    // ===== Interfaces internas =====
+
     /**
-     * Callback para respuesta asíncrona
+     * Contrato específico para la respuesta de detalles de instalación.
+     * Permite manejar casos de éxito y error de forma tipada.
      */
     interface InstallationCallback {
         void onSuccess(Installation installation);
