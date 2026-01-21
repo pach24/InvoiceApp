@@ -1,6 +1,5 @@
 package com.nexosolar.android.ui.smartsolar;
 
-
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -10,27 +9,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.nexosolar.android.R;
 import com.nexosolar.android.databinding.FragmentDetailsBinding;
 
-
-
-
-
+/**
+ * Fragment que muestra información detallada de la instalación solar.
+ * Responsabilidades:
+ * - Consumir datos del ViewModel mediante LiveData
+ * - Gestionar estados de carga con Shimmer
+ * - Mostrar diálogo informativo sobre los detalles de la instalación
+ */
 public class DetailsFragment extends Fragment {
+
+    // ===== Variables de instancia =====
 
     private FragmentDetailsBinding binding;
     private InstallationViewModel viewModel;
 
+    // ===== Métodos del ciclo de vida =====
+
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         binding = FragmentDetailsBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -39,13 +44,36 @@ public class DetailsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 1. Configurar ViewModel (Inyección manual simple)
+        setupViewModel();
+        observeLoadingState();
+        observeInstallationData();
+        observeErrors();
+        loadDataIfNeeded();
+        setupInfoButton();
+    }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    // ===== Métodos privados =====
+
+    /**
+     * Inicializa el ViewModel con su factory.
+     * TODO: Posible mejora: Reemplazar useMock=true por inyección de dependencias cuando esté disponible.
+     */
+    private void setupViewModel() {
         boolean useMock = true;
         InstallationViewModelFactory factory = new InstallationViewModelFactory(requireContext(), useMock);
         viewModel = new ViewModelProvider(this, factory).get(InstallationViewModel.class);
+    }
 
-        // 2. Observar estado de carga (Shimmer)
+    /**
+     * Observa el estado de carga para mostrar/ocultar el efecto Shimmer.
+     */
+    private void observeLoadingState() {
         viewModel.isLoading().observe(getViewLifecycleOwner(), isLoading -> {
             if (isLoading) {
                 binding.shimmerViewContainer.startShimmer();
@@ -57,8 +85,12 @@ public class DetailsFragment extends Fragment {
                 binding.contentLayout.setVisibility(View.VISIBLE);
             }
         });
+    }
 
-        // 3. Observar datos exitosos
+    /**
+     * Observa los datos de instalación y actualiza la UI cuando están disponibles.
+     */
+    private void observeInstallationData() {
         viewModel.getInstallation().observe(getViewLifecycleOwner(), installation -> {
             if (installation != null) {
                 binding.tvCau.setText(installation.getCau());
@@ -68,60 +100,61 @@ public class DetailsFragment extends Fragment {
                 binding.tvPower.setText(installation.getPower());
             }
         });
+    }
 
-        // 4. Observar errores
+    /**
+     * Observa errores del ViewModel y notifica al usuario.
+     */
+    private void observeErrors() {
         viewModel.getError().observe(getViewLifecycleOwner(), error -> {
-            Toast.makeText(getContext(), "Error: " + error, Toast.LENGTH_SHORT).show();
-            binding.tvStatus.setText(error); // Opcional
+            if (error != null) {
+                Toast.makeText(getContext(), "Error: " + error, Toast.LENGTH_SHORT).show();
+            }
         });
+    }
 
-        // 5. Pedir datos (si es la primera vez)
-        // Usamos una comprobación simple para no recargar al rotar si ya tenemos datos
+    /**
+     * Solicita la carga de datos solo si no están previamente disponibles.
+     * Evita recargas innecesarias durante rotaciones de pantalla.
+     */
+    private void loadDataIfNeeded() {
         if (viewModel.getInstallation().getValue() == null) {
             viewModel.loadInstallationDetails();
         }
+    }
 
-        // Listener del botón info
+    /**
+     * Configura el listener del botón de información.
+     */
+    private void setupInfoButton() {
         binding.ivInfo.setOnClickListener(v -> showInfoDialog());
     }
 
-
-
+    /**
+     * Muestra un diálogo modal con información adicional sobre los detalles mostrados.
+     * Configura fondo transparente para respetar las esquinas redondeadas del diseño.
+     */
     private void showInfoDialog() {
-        // 1. Inflar el diseño personalizado
         LayoutInflater inflater = LayoutInflater.from(requireContext());
-        View view = inflater.inflate(R.layout.dialog_info, null);
+        View dialogView = inflater.inflate(R.layout.dialog_info, null);
 
-        // 2. Crear el Dialog
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
-                .setView(view)
+                .setView(dialogView)
                 .setCancelable(false)
                 .create();
 
-        // 3. Configurar el fondo transparente (CRUCIAL para que se vean las esquinas redondeadas)
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
 
-        // 4. Configurar el botón del layout
-        Button btnAceptar = view.findViewById(R.id.btnAceptar);
+        Button btnAceptar = dialogView.findViewById(R.id.btnAceptar);
         btnAceptar.setOnClickListener(v -> dialog.dismiss());
-
 
         dialog.show();
 
         if (dialog.getWindow() != null) {
-            dialog.getWindow().setLayout(
-                    (int) (getResources().getDisplayMetrics().widthPixels * 0.85),
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            );
+            int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.85);
+            dialog.getWindow().setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT);
         }
-    }
-
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 }
