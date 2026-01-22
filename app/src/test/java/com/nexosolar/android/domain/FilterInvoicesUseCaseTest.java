@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.nexosolar.android.domain.models.Invoice;
-import com.nexosolar.android.domain.models.InvoiceFilters;
 import com.nexosolar.android.domain.usecase.invoice.FilterInvoicesUseCase;
 
 import org.junit.Before;
@@ -12,7 +11,6 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,7 +37,7 @@ public class FilterInvoicesUseCaseTest {
         List<Invoice> result = useCase.execute(listaBase, estados, null, null, null, null);
 
         assertEquals(1, result.size());
-        assertEquals("Pagada", result.get(0).getDescEstado());
+        assertEquals("Pagada", result.get(0).getInvoiceStatus());
     }
 
     @Test
@@ -48,7 +46,7 @@ public class FilterInvoicesUseCaseTest {
         List<Invoice> result = useCase.execute(listaBase, null, null, null, 150.0, 250.0);
 
         assertEquals(1, result.size());
-        assertEquals(200f, result.get(0).getImporteOrdenacion(), 0.01);
+        assertEquals(200f, result.get(0).getInvoiceAmount(), 0.01);
     }
 
     @Test
@@ -59,9 +57,9 @@ public class FilterInvoicesUseCaseTest {
 
     private Invoice crearFactura(float importe, String estado, LocalDate fecha) {
         Invoice invoice = new Invoice();
-        invoice.setImporteOrdenacion(importe);
-        invoice.setDescEstado(estado);
-        invoice.setFecha(fecha);
+        invoice.setInvoiceAmount(importe);
+        invoice.setInvoiceStatus(estado);
+        invoice.setInvoiceDate(fecha);
         return invoice;
     }
 }

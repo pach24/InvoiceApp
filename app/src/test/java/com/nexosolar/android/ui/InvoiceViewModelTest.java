@@ -20,9 +20,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -110,9 +108,9 @@ public class InvoiceViewModelTest {
 
     private Invoice crearFactura(float importe, String estado) {
         Invoice invoice = new Invoice();
-        invoice.setImporteOrdenacion(importe);
-        invoice.setDescEstado(estado);
-        invoice.setFecha(LocalDate.now());
+        invoice.setInvoiceAmount(importe);
+        invoice.setInvoiceStatus(estado);
+        invoice.setInvoiceDate(LocalDate.now());
         return invoice;
     }
 }

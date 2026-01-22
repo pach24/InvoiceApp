@@ -75,7 +75,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
      * Si no hay fecha válida, muestra un placeholder.
      */
     private void bindFecha(InvoiceViewHolder holder, Invoice factura, Context context) {
-        String fechaTexto = DateUtils.formatDate(factura.getFecha());
+        String fechaTexto = DateUtils.formatDate(factura.getInvoiceDate());
         if (!fechaTexto.isEmpty()) {
             holder.binding.txtFecha.setText(fechaTexto);
         } else {
@@ -88,7 +88,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
      */
     private void bindImporte(InvoiceViewHolder holder, Invoice factura) {
         holder.binding.txtImporte.setText(
-                String.format(Locale.getDefault(), "%.2f €", factura.getImporteOrdenacion())
+                String.format(Locale.getDefault(), "%.2f €", factura.getInvoiceAmount())
         );
     }
 
@@ -137,7 +137,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
                 break;
 
             default:
-                holder.binding.txtEstado.setText(factura.getDescEstado());
+                holder.binding.txtEstado.setText(factura.getInvoiceStatus());
                 holder.binding.txtEstado.setVisibility(View.VISIBLE);
                 break;
         }

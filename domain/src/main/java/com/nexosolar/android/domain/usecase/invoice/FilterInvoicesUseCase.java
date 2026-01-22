@@ -49,12 +49,12 @@ public class FilterInvoicesUseCase {
                 cumpleEstado = true;
             } else {
                 // Si la lista de estados seleccionados contiene el estado de la factura
-                cumpleEstado = estadosSeleccionados.contains(factura.getDescEstado());
+                cumpleEstado = estadosSeleccionados.contains(factura.getInvoiceStatus());
             }
 
             // 2. Filtro por Fecha
             boolean cumpleFecha = true;
-            LocalDate fechaFactura = factura.getFecha();
+            LocalDate fechaFactura = factura.getInvoiceDate();
 
             if (fechaFactura != null) {
                 if (fechaInicio != null) {
@@ -71,7 +71,7 @@ public class FilterInvoicesUseCase {
             }
 
             // 3. Filtro por Importe
-            double importe = factura.getImporteOrdenacion();
+            double importe = factura.getInvoiceAmount();
             boolean cumpleImporte = true;
 
             if (importeMin != null && importe < importeMin) {
