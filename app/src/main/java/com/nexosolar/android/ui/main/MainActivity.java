@@ -11,6 +11,7 @@ import androidx.core.text.HtmlCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.nexosolar.android.NexoSolarApplication;
 import com.nexosolar.android.R;
 import com.nexosolar.android.databinding.ActivityMainBinding;
 import com.nexosolar.android.ui.invoices.InvoiceListActivity;
@@ -90,6 +91,10 @@ public class MainActivity extends AppCompatActivity {
         binding.btToggleApi.setChecked(useMock);
         binding.btToggleApi.setOnCheckedChangeListener((buttonView, isChecked) -> {
             useMock = isChecked;
+
+            // ACTUALIZAMOS EL GRAFO DE DEPENDENCIAS GLOBAL
+            ((NexoSolarApplication) getApplication()).switchDataModule(useMock);
+
             String mode = useMock ? "Using RetroMock" : "Using RetroFit";
             Toast.makeText(MainActivity.this, mode, Toast.LENGTH_SHORT).show();
         });

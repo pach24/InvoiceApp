@@ -11,9 +11,11 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.nexosolar.android.NexoSolarApplication;
 import com.nexosolar.android.R;
 import com.nexosolar.android.databinding.ActivityInvoiceListBinding;
 import com.nexosolar.android.domain.models.Invoice;
+import com.nexosolar.android.domain.repository.InvoiceRepository;
 
 import java.util.List;
 
@@ -65,8 +67,15 @@ public class InvoiceListActivity extends AppCompatActivity {
      * Inicializa el ViewModel con la factory apropiada según el modo (Mock/Real API).
      */
     private void setupViewModel() {
-        boolean useMock = getIntent().getBooleanExtra("USE_RETROMOCK", false);
-        InvoiceViewModelFactory factory = new InvoiceViewModelFactory(useMock, this);
+        // 1. Obtener la instancia de Application (Casting seguro)
+        NexoSolarApplication app = (NexoSolarApplication) getApplication();
+
+        InvoiceRepository repository = app.getDataModule().provideInvoiceRepository();
+
+        // 3. Inyectar en la Factory
+        InvoiceViewModelFactory factory = new InvoiceViewModelFactory(repository);
+
+        // 4. Obtener ViewModel
         invoiceViewModel = new ViewModelProvider(this, factory).get(InvoiceViewModel.class);
     }
 
