@@ -93,9 +93,9 @@ public class DetailsFragment extends Fragment {
     private void observeInstallationData() {
         viewModel.getInstallation().observe(getViewLifecycleOwner(), installation -> {
             if (installation != null) {
-                binding.tvCau.setText(installation.getCau());
-                binding.tvStatus.setText(installation.getStatus());
-                binding.tvType.setText(installation.getType());
+                binding.tvCau.setText(installation.getSelfConsumptionCode());
+                binding.tvStatus.setText(installation.getInstallationStatus());
+                binding.tvType.setText(installation.getInstallationType());
                 binding.tvCompensation.setText(installation.getCompensation());
                 binding.tvPower.setText(installation.getPower());
             }

@@ -188,15 +188,15 @@
 
             <TextView
                 android:id="@+id/tvPower"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/detail_value_margin_top"
-                android:text="@string/empty_value"
-                android:textColor="@color/detail_value_color"
-                android:textSize="@dimen/detail_value_text_size"
-                app:layout_constraintTop_toBottomOf="@id/tvPowerLabel"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="0dp"
+            android:minHeight="0dp"
+            android:includeFontPadding="false"
+            android:textColor="@color/detail_value_color"
+            android:textSize="@dimen/detail_value_text_size"
+            app:layout_constraintTop_toBottomOf="@id/tvPowerLabel"
+            app:layout_constraintStart_toStartOf="parent"/>
 
             <View
                 android:id="@+id/divider5"
@@ -206,8 +206,7 @@
                 android:background="@color/detail_divider_color"
                 app:layout_constraintTop_toBottomOf="@id/tvPower"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

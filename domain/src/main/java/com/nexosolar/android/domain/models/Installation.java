@@ -8,9 +8,9 @@ package com.nexosolar.android.domain.models;
 public class Installation {
 
     // ===== Variables de instancia =====
-    private String cau;
-    private String status;
-    private String type;
+    private String selfConsumptionCode;
+    private String installationStatus;
+    private String installationType;
     private String compensation;
     private String power;
 
@@ -23,37 +23,37 @@ public class Installation {
     }
 
     public Installation(String cau, String status, String type, String compensation, String power) {
-        this.cau = cau;
-        this.status = status;
-        this.type = type;
+        this.selfConsumptionCode = cau;
+        this.installationStatus = status;
+        this.installationType = type;
         this.compensation = compensation;
         this.power = power;
     }
 
     // ===== Getters y Setters =====
 
-    public String getCau() {
-        return cau;
+    public String getSelfConsumptionCode() {
+        return selfConsumptionCode;
     }
 
-    public void setCau(String cau) {
-        this.cau = cau;
+    public void setSelfConsumptionCode(String selfConsumptionCode) {
+        this.selfConsumptionCode = selfConsumptionCode;
     }
 
-    public String getStatus() {
-        return status;
+    public String getInstallationStatus() {
+        return installationStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setInstallationStatus(String installationStatus) {
+        this.installationStatus = installationStatus;
     }
 
-    public String getType() {
-        return type;
+    public String getInstallationType() {
+        return installationType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setInstallationType(String installationType) {
+        this.installationType = installationType;
     }
 
     public String getCompensation() {
