@@ -51,7 +51,8 @@ public class InvoiceRemoteDataSourceImpl implements InvoiceRemoteDataSource {
             @Override
             public void onResponse(Call<InvoiceResponse> call, Response<InvoiceResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<InvoiceEntity> entities = mapper.toEntityList(response.body().getFacturas());
+                    // ✅ CAMBIA ESTA LÍNEA:
+                    List<InvoiceEntity> entities = mapper.toEntityListFromDto(response.body().getFacturas());
                     callback.onSuccess(entities);
                 } else {
                     callback.onError(new Exception("Error del servidor: " + response.code()));
@@ -60,8 +61,10 @@ public class InvoiceRemoteDataSourceImpl implements InvoiceRemoteDataSource {
 
             @Override
             public void onFailure(Call<InvoiceResponse> call, Throwable t) {
-                callback.onError(t);
+
             }
+            // ...
         });
     }
+
 }

@@ -302,8 +302,8 @@ public class InvoiceViewModel extends ViewModel {
 
         float maxImporte = 0f;
         for (Invoice factura : facturasOriginales) {
-            if (factura.getImporteOrdenacion() > maxImporte) {
-                maxImporte = factura.getImporteOrdenacion();
+            if (factura.getInvoiceAmount() > maxImporte) {
+                maxImporte = factura.getInvoiceAmount();
             }
         }
         return maxImporte;
@@ -317,7 +317,7 @@ public class InvoiceViewModel extends ViewModel {
 
         LocalDate oldestDate = null;
         for (Invoice factura : facturasOriginales) {
-            LocalDate currentDate = factura.getFecha();
+            LocalDate currentDate = factura.getInvoiceDate();
             if (currentDate != null) {
                 if (oldestDate == null || currentDate.isBefore(oldestDate)) {
                     oldestDate = currentDate;
@@ -335,9 +335,9 @@ public class InvoiceViewModel extends ViewModel {
 
         LocalDate newest = null;
         for (Invoice factura : facturasOriginales) {
-            if (factura.getFecha() != null) {
-                if (newest == null || factura.getFecha().isAfter(newest)) {
-                    newest = factura.getFecha();
+            if (factura.getInvoiceDate() != null) {
+                if (newest == null || factura.getInvoiceDate().isAfter(newest)) {
+                    newest = factura.getInvoiceDate();
                 }
             }
         }

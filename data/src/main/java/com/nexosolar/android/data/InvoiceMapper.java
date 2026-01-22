@@ -1,7 +1,11 @@
 package com.nexosolar.android.data;
 
 import com.nexosolar.android.data.local.InvoiceEntity;
+import com.nexosolar.android.data.remote.InvoiceDto;
 import com.nexosolar.android.domain.models.Invoice;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +35,9 @@ public class InvoiceMapper {
         if (entity == null) return null;
 
         Invoice invoice = new Invoice();
-        invoice.setDescEstado(entity.estado);
-        invoice.setImporteOrdenacion(entity.importe);
-        invoice.setFecha(entity.fecha);
+        invoice.setInvoiceStatus(entity.estado);
+        invoice.setInvoiceAmount(entity.importe);
+        invoice.setInvoiceDate(entity.fecha);
         // invoice.setId(entity.id); // Descomentar si el dominio requiere ID
 
         return invoice;
@@ -57,39 +61,44 @@ public class InvoiceMapper {
 
     // ===== Mapeo de Dominio a Entidad =====
 
-    /**
-     * Convierte un modelo de dominio a entidad de base de datos.
-     *
-     * Usado al persistir datos provenientes de la API (después de mapear
-     * desde InvoiceResponse) o al guardar cambios locales.
-     *
-     * @param domain Modelo de dominio, o null
-     * @return Entidad de Room, o null si domain es null
-     */
-    public InvoiceEntity toEntity(Invoice domain) {
-        if (domain == null) return null;
-
+    // InvoiceMapper.java
+    public InvoiceEntity toEntity(Invoice dto) {
         InvoiceEntity entity = new InvoiceEntity();
-        entity.estado = domain.getDescEstado();
-        entity.importe = domain.getImporteOrdenacion();
-        entity.fecha = domain.getFecha();
+        entity.estado = dto.getInvoiceStatus();
+        entity.importe = dto.getInvoiceAmount();
+        // Aquí conviertes String date (DTO) -> LocalDate (Entity)
+
+        entity.fecha = dto.getInvoiceDate();
 
         return entity;
     }
 
-    /**
-     * Convierte una lista de modelos de dominio a lista de entidades.
-     *
-     * @param domains Lista de modelos de dominio
-     * @return Lista de entidades de Room (vacía si domains es null)
-     */
-    public List<InvoiceEntity> toEntityList(List<Invoice> domains) {
+    public List<InvoiceEntity> toEntityListFromDto(List<InvoiceDto> dtos) {
         List<InvoiceEntity> list = new ArrayList<>();
-        if (domains != null) {
-            for (Invoice domain : domains) {
-                list.add(toEntity(domain));
+        if (dtos != null) {
+            for (InvoiceDto dto : dtos) {
+                list.add(toEntityFromDto(dto));
             }
         }
         return list;
     }
+    private InvoiceEntity toEntityFromDto(InvoiceDto dto) {
+        if (dto == null) return null;
+
+        InvoiceEntity entity = new InvoiceEntity();
+        entity.estado = dto.status;
+        entity.importe = dto.amount;
+
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            entity.fecha = LocalDate.parse(dto.date, formatter);
+        } catch (Exception e) {
+            // Manejo seguro en caso de error de parsing
+            entity.fecha = null; // o LocalDate.now(), según prefieras
+        }
+
+        return entity;
+    }
+
+
 }

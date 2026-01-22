@@ -11,10 +11,13 @@ import java.time.LocalDate;
 public class Invoice implements Serializable {
 
     // ===== Variables de instancia =====
-    private int id;
-    private String descEstado; // Estado en texto crudo (origen API)
-    private float importeOrdenacion;
-    private LocalDate fecha;
+    private int invoiceID;
+    private String invoiceStatus;
+    private float invoiceAmount;
+
+
+
+    private LocalDate invoiceDate;
 
     // ===== Constructores =====
 
@@ -24,44 +27,44 @@ public class Invoice implements Serializable {
     public Invoice() {
     }
 
-    public Invoice(String descEstado, float importeOrdenacion, LocalDate fecha) {
-        this.descEstado = descEstado;
-        this.importeOrdenacion = importeOrdenacion;
-        this.fecha = fecha;
+    public Invoice(String descEstado, float amountOrder, LocalDate invoiceDate) {
+        this.invoiceStatus = descEstado;
+        this.invoiceAmount = amountOrder;
+        this.invoiceDate = invoiceDate;
     }
 
     // ===== Getters y Setters =====
 
-    public int getId() {
-        return id;
+    public int getInvoiceID() {
+        return invoiceID;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setInvoiceID(int invoiceID) {
+        this.invoiceID = invoiceID;
     }
 
-    public String getDescEstado() {
-        return descEstado;
+    public String getInvoiceStatus() {
+        return invoiceStatus;
     }
 
-    public void setDescEstado(String descEstado) {
-        this.descEstado = descEstado;
+    public void setInvoiceStatus(String invoiceStatus) {
+        this.invoiceStatus = invoiceStatus;
     }
 
-    public float getImporteOrdenacion() {
-        return importeOrdenacion;
+    public float getInvoiceAmount() {
+        return invoiceAmount;
     }
 
-    public void setImporteOrdenacion(float importeOrdenacion) {
-        this.importeOrdenacion = importeOrdenacion;
+    public void setInvoiceAmount(float invoiceAmount) {
+        this.invoiceAmount = invoiceAmount;
     }
 
-    public LocalDate getFecha() {
-        return fecha;
+    public LocalDate getInvoiceDate() {
+        return invoiceDate;
     }
 
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
+    public void setInvoiceDate(LocalDate invoiceDate) {
+        this.invoiceDate = invoiceDate;
     }
 
     // ===== Métodos públicos =====
@@ -73,6 +76,6 @@ public class Invoice implements Serializable {
      * @return Enum {@link InvoiceState} correspondiente o DESCONOCIDO.
      */
     public InvoiceState getEstadoEnum() {
-        return InvoiceState.fromTextoServidor(this.descEstado);
+        return InvoiceState.fromTextoServidor(this.invoiceStatus);
     }
 }
