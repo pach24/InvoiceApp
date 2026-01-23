@@ -33,7 +33,7 @@ public class GetInvoicesUseCaseTest {
         useCase.invoke(null);
 
         // Then: Verificamos que el repositorio recibe la llamada pasando el argumento (null en este caso)
-        verify(repository, times(1)).getFacturas(any());
+        verify(repository, times(1)).getInvoices(any());
     }
 
     @Test
@@ -42,6 +42,6 @@ public class GetInvoicesUseCaseTest {
         useCase.refresh(null);
 
         // Then
-        verify(repository, times(1)).refreshFacturas(any());
+        verify(repository, times(1)).refreshInvoices(any());
     }
 }

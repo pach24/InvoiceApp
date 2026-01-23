@@ -1,6 +1,7 @@
 package com.nexosolar.android.data.source;
 
 import com.nexosolar.android.data.InvoiceMapper;
+import com.nexosolar.android.data.local.InvoiceDao;
 import com.nexosolar.android.data.local.InvoiceEntity;
 import com.nexosolar.android.data.remote.ApiService;
 import com.nexosolar.android.data.remote.InvoiceResponse;
@@ -34,6 +35,9 @@ public class InvoiceRemoteDataSourceImpl implements InvoiceRemoteDataSource {
         this.mapper = new InvoiceMapper();
     }
 
+
+
+
     // ===== Métodos públicos =====
 
     /**
@@ -51,7 +55,7 @@ public class InvoiceRemoteDataSourceImpl implements InvoiceRemoteDataSource {
             @Override
             public void onResponse(Call<InvoiceResponse> call, Response<InvoiceResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // ✅ CAMBIA ESTA LÍNEA:
+
                     List<InvoiceEntity> entities = mapper.toEntityListFromDto(response.body().getFacturas());
                     callback.onSuccess(entities);
                 } else {

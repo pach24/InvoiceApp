@@ -100,7 +100,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
         InvoiceState estadoEnum = factura.getEstadoEnum();
 
         switch (estadoEnum) {
-            case PENDIENTE:
+            case PENDING:
                 holder.binding.txtEstado.setText(R.string.estado_pendiente);
                 holder.binding.txtEstado.setTextColor(
                         ContextCompat.getColor(context, R.color.texto_alerta)
@@ -108,11 +108,11 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
                 holder.binding.txtEstado.setVisibility(View.VISIBLE);
                 break;
 
-            case PAGADA:
+            case PAID:
                 holder.binding.txtEstado.setVisibility(View.GONE);
                 break;
 
-            case ANULADA:
+            case CANCELLED:
                 holder.binding.txtEstado.setText(R.string.estado_anulada);
                 holder.binding.txtEstado.setTextColor(
                         ContextCompat.getColor(context, R.color.texto_alerta)
@@ -120,7 +120,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
                 holder.binding.txtEstado.setVisibility(View.VISIBLE);
                 break;
 
-            case CUOTA_FIJA:
+            case FIXED_FEE:
                 holder.binding.txtEstado.setText(R.string.estado_cuota_fija);
                 holder.binding.txtEstado.setTextColor(
                         ContextCompat.getColor(context, android.R.color.black)
@@ -128,7 +128,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
                 holder.binding.txtEstado.setVisibility(View.VISIBLE);
                 break;
 
-            case PLAN_PAGO:
+            case PAYMENT_PLAN:
                 holder.binding.txtEstado.setText(R.string.estado_plan_pago);
                 holder.binding.txtEstado.setTextColor(
                         ContextCompat.getColor(context, android.R.color.black)

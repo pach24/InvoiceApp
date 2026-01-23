@@ -75,10 +75,10 @@ public class InvoiceViewModelTest {
 
         // 2. WHEN: Configuramos filtro de importe > 80
         InvoiceFilters filtros = new InvoiceFilters();
-        filtros.setImporteMin(80.0);
-        filtros.setImporteMax(1000.0);
+        filtros.setMinAmount(80.0);
+        filtros.setMaxAmount(1000.0);
         // IMPORTANTE: Si tu lógica de filtro requiere estados seleccionados (no null), inicialízalos
-        filtros.setEstadosSeleccionados(null); // o una lista vacía si tu lógica lo pide
+        filtros.setFilteredStates(null); // o una lista vacía si tu lógica lo pide
 
         // Usamos CountDownLatch para esperar a que el LiveData emita valor
         CountDownLatch latch = new CountDownLatch(1);

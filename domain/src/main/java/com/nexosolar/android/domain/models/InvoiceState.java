@@ -6,26 +6,26 @@ package com.nexosolar.android.domain.models;
  */
 public enum InvoiceState {
 
-    PENDIENTE("Pendiente de pago"),
-    PAGADA("Pagada"),
-    ANULADA("Anulada"),
-    CUOTA_FIJA("Cuota fija"),
-    PLAN_PAGO("Plan de pago"),
-    DESCONOCIDO("");
+    PENDING("Pendiente de pago"),
+    PAID("Pagada"),
+    CANCELLED("Anulada"),
+    FIXED_FEE("Cuota fija"),
+    PAYMENT_PLAN("Plan de pago"),
+    UNKNONWN("");
 
     // ===== Variables de instancia =====
-    private final String textoServidor;
+    private final String serverValue;
 
     // ===== Constructores =====
 
-    InvoiceState(String textoServidor) {
-        this.textoServidor = textoServidor;
+    InvoiceState(String serverValue) {
+        this.serverValue = serverValue;
     }
 
     // ===== Getters y Setters =====
 
-    public String getTextoServidor() {
-        return textoServidor;
+    public String getServerValue() {
+        return serverValue;
     }
 
     // ===== Métodos públicos =====
@@ -34,14 +34,14 @@ public enum InvoiceState {
      * Mapea un string arbitrario del servidor al enum correspondiente.
      * Case-insensitive para mayor robustez ante cambios menores en API.
      */
-    public static InvoiceState fromTextoServidor(String texto) {
-        if (texto == null) return DESCONOCIDO;
+    public static InvoiceState fromServerValue(String value) {
+        if (value == null) return UNKNONWN;
 
-        for (InvoiceState estado : values()) {
-            if (estado.textoServidor.equalsIgnoreCase(texto)) {
-                return estado;
+        for (InvoiceState state : values()) {
+            if (state.serverValue.equalsIgnoreCase(value)) {
+                return state;
             }
         }
-        return DESCONOCIDO;
+        return UNKNONWN;
     }
 }

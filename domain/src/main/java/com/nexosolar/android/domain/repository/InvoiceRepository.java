@@ -16,13 +16,13 @@ public interface InvoiceRepository {
      * Obtiene el listado de facturas.
      * La implementación decidirá la estrategia de cache (Single Source of Truth).
      */
-    void getFacturas(RepositoryCallback<List<Invoice>> callback);
+    void getInvoices(RepositoryCallback<List<Invoice>> callback);
 
 
     /**
      * Fuerza una actualización de datos desde la fuente remota.
      */
 
-    void refreshFacturas(RepositoryCallback<Boolean> callback);
+    void refreshInvoices(RepositoryCallback<Boolean> callback);
 
 }

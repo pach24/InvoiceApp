@@ -80,8 +80,6 @@ public class FilterInvoicesUseCase {
             if (cumpleImporte && importeMax != null && importe > importeMax) {
                 cumpleImporte = false;
             }
-
-
             if (cumpleEstado && cumpleFecha && cumpleImporte) {
                 facturasFiltradas.add(factura);
             }
