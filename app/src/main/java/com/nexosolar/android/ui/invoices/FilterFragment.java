@@ -168,14 +168,14 @@ public class FilterFragment extends Fragment {
      * Si no hay fecha explícitamente seleccionada, muestra "día/mes/año" como placeholder.
      */
     private void actualizarFechas(InvoiceFilters filtros) {
-        if (filtros.getFechaInicio() != null) {
-            binding.btnSelectDate.setText(DateUtils.formatDateShort(filtros.getFechaInicio()));
+        if (filtros.getStartDate() != null) {
+            binding.btnSelectDate.setText(DateUtils.formatDateShort(filtros.getStartDate()));
         } else {
             binding.btnSelectDate.setText(R.string.dia_mes_ano);
         }
 
-        if (filtros.getFechaFin() != null) {
-            binding.btnSelectDateUntil.setText(DateUtils.formatDateShort(filtros.getFechaFin()));
+        if (filtros.getEndDate() != null) {
+            binding.btnSelectDateUntil.setText(DateUtils.formatDateShort(filtros.getEndDate()));
         } else {
             binding.btnSelectDateUntil.setText(R.string.dia_mes_ano);
         }
@@ -188,8 +188,8 @@ public class FilterFragment extends Fragment {
             binding.rangeSlider.setValueFrom(0f);
             binding.rangeSlider.setValueTo(maxImporte);
 
-            float minVal = Math.max(0f, filtros.getImporteMin().floatValue());
-            float maxVal = Math.min(maxImporte, filtros.getImporteMax().floatValue());
+            float minVal = Math.max(0f, filtros.getMinAmount().floatValue());
+            float maxVal = Math.min(maxImporte, filtros.getMaxAmount().floatValue());
 
             if (minVal > maxVal) minVal = maxVal;
 
@@ -201,7 +201,7 @@ public class FilterFragment extends Fragment {
     }
 
     private void actualizarCheckboxes(InvoiceFilters filtros) {
-        List<String> estados = filtros.getEstadosSeleccionados();
+        List<String> estados = filtros.getFilteredStates();
         if (estados == null) estados = new ArrayList<>();
 
         binding.checkPagadas.setChecked(estados.contains("Pagada"));
@@ -222,19 +222,19 @@ public class FilterFragment extends Fragment {
 
         // Recoger estados de los checkboxes
         List<String> estados = getStrings();
-        filtros.setEstadosSeleccionados(estados);
+        filtros.setFilteredStates(estados);
 
         // Recoger fechas del ViewModel (pueden ser null si no están seleccionadas explícitamente)
         InvoiceFilters filtrosActuales = viewModel.getFiltrosActuales().getValue();
         if (filtrosActuales != null) {
-            filtros.setFechaInicio(filtrosActuales.getFechaInicio());
-            filtros.setFechaFin(filtrosActuales.getFechaFin());
+            filtros.setStartDate(filtrosActuales.getStartDate());
+            filtros.setEndDate(filtrosActuales.getEndDate());
         }
 
         // Recoger importes del slider
         List<Float> valores = binding.rangeSlider.getValues();
-        filtros.setImporteMin((double) valores.get(0));
-        filtros.setImporteMax((double) valores.get(1));
+        filtros.setMinAmount((double) valores.get(0));
+        filtros.setMaxAmount((double) valores.get(1));
 
         return filtros;
     }
@@ -243,19 +243,19 @@ public class FilterFragment extends Fragment {
     private List<String> getStrings() {
         List<String> estados = new ArrayList<>();
         if (binding.checkPagadas.isChecked()) {
-            estados.add(InvoiceState.PAGADA.getTextoServidor());
+            estados.add(InvoiceState.PAID.getServerValue());
         }
         if (binding.checkPendientesPago.isChecked()) {
-            estados.add(InvoiceState.PENDIENTE.getTextoServidor());
+            estados.add(InvoiceState.PENDING.getServerValue());
         }
         if (binding.checkAnuladas.isChecked()) {
-            estados.add(InvoiceState.ANULADA.getTextoServidor());
+            estados.add(InvoiceState.CANCELLED.getServerValue());
         }
         if (binding.checkCuotaFija.isChecked()) {
-            estados.add(InvoiceState.CUOTA_FIJA.getTextoServidor());
+            estados.add(InvoiceState.FIXED_FEE.getServerValue());
         }
         if (binding.checkPlanPago.isChecked()) {
-            estados.add(InvoiceState.PLAN_PAGO.getTextoServidor());
+            estados.add(InvoiceState.PAYMENT_PLAN.getServerValue());
         }
         return estados;
     }
@@ -273,12 +273,12 @@ public class FilterFragment extends Fragment {
         InvoiceFilters nuevosFiltros = construirFiltrosDesdeUI();
 
         // Determinar fechas efectivas para el filtrado interno
-        LocalDate fechaInicioEfectiva = nuevosFiltros.getFechaInicio();
+        LocalDate fechaInicioEfectiva = nuevosFiltros.getStartDate();
         if (fechaInicioEfectiva == null) {
             fechaInicioEfectiva = viewModel.getOldestDate();
         }
 
-        LocalDate fechaFinEfectiva = nuevosFiltros.getFechaFin();
+        LocalDate fechaFinEfectiva = nuevosFiltros.getEndDate();
         if (fechaFinEfectiva == null) {
             fechaFinEfectiva = viewModel.getNewestDate();
             if (fechaFinEfectiva == null) fechaFinEfectiva = LocalDate.now();
@@ -294,8 +294,8 @@ public class FilterFragment extends Fragment {
         }
 
         // Aplicar las fechas efectivas al filtro antes de enviarlo al ViewModel
-        nuevosFiltros.setFechaInicio(fechaInicioEfectiva);
-        nuevosFiltros.setFechaFin(fechaFinEfectiva);
+        nuevosFiltros.setStartDate(fechaInicioEfectiva);
+        nuevosFiltros.setEndDate(fechaFinEfectiva);
 
         viewModel.actualizarFiltros(nuevosFiltros);
         cerrarFragmento();
@@ -308,7 +308,7 @@ public class FilterFragment extends Fragment {
     private void actualizarEstadoCheckbox(String estado, boolean isChecked) {
         InvoiceFilters filtros = viewModel.getFiltrosActuales().getValue();
         if (filtros != null) {
-            List<String> estados = new ArrayList<>(filtros.getEstadosSeleccionados());
+            List<String> estados = new ArrayList<>(filtros.getFilteredStates());
 
             if (isChecked) {
                 if (!estados.contains(estado)) estados.add(estado);
@@ -316,13 +316,13 @@ public class FilterFragment extends Fragment {
                 estados.remove(estado);
             }
 
-            filtros.setEstadosSeleccionados(estados);
+            filtros.setFilteredStates(estados);
 
             // Preservar valores del slider para evitar resets visuales
             List<Float> currentSliderValues = binding.rangeSlider.getValues();
             if (currentSliderValues.size() >= 2) {
-                filtros.setImporteMin((double) currentSliderValues.get(0));
-                filtros.setImporteMax((double) currentSliderValues.get(1));
+                filtros.setMinAmount((double) currentSliderValues.get(0));
+                filtros.setMaxAmount((double) currentSliderValues.get(1));
             }
 
             viewModel.actualizarEstadoFiltros(filtros);
@@ -342,8 +342,8 @@ public class FilterFragment extends Fragment {
         if (filtrosActuales == null) return;
 
         LocalDate fechaFiltro = esInicio
-                ? filtrosActuales.getFechaInicio()
-                : filtrosActuales.getFechaFin();
+                ? filtrosActuales.getStartDate()
+                : filtrosActuales.getEndDate();
 
         long selection;
         if (fechaFiltro != null) {
@@ -379,9 +379,9 @@ public class FilterFragment extends Fragment {
             InvoiceFilters filtros = viewModel.getFiltrosActuales().getValue();
             if (filtros != null) {
                 if (esInicio) {
-                    filtros.setFechaInicio(nuevaFecha);
+                    filtros.setStartDate(nuevaFecha);
                 } else {
-                    filtros.setFechaFin(nuevaFecha);
+                    filtros.setEndDate(nuevaFecha);
                 }
                 viewModel.actualizarEstadoFiltros(filtros);
             }

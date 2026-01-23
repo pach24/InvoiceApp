@@ -180,17 +180,17 @@ public class InvoiceViewModel extends ViewModel {
 
         // Si ya hay filtros válidos (doble chequeo defensivo), tampoco reinicializar
         if (filtrosActuales.getValue() != null &&
-                !filtrosActuales.getValue().getEstadosSeleccionados().isEmpty()) {
+                !filtrosActuales.getValue().getFilteredStates().isEmpty()) {
             filtrosInicializados = true; // Marcar como inicializado por si acaso
             return;
         }
 
         InvoiceFilters filtros = new InvoiceFilters();
-        filtros.setFechaInicio(null);
-        filtros.setFechaFin(null);
-        filtros.setImporteMin(0.0);
-        filtros.setImporteMax((double) getMaxImporte());
-        filtros.setEstadosSeleccionados(new ArrayList<>());
+        filtros.setStartDate(null);
+        filtros.setEndDate(null);
+        filtros.setMinAmount(0.0);
+        filtros.setMaxAmount((double) getMaxImporte());
+        filtros.setFilteredStates(new ArrayList<>());
 
         filtrosActuales.postValue(filtros);
         filtrosInicializados = true; //
@@ -225,11 +225,11 @@ public class InvoiceViewModel extends ViewModel {
      */
     public void resetearFiltros() {
         InvoiceFilters nuevosFiltros = new InvoiceFilters();
-        nuevosFiltros.setFechaInicio(null);
-        nuevosFiltros.setFechaFin(null);
-        nuevosFiltros.setImporteMin(0.0);
-        nuevosFiltros.setImporteMax((double) getMaxImporte());
-        nuevosFiltros.setEstadosSeleccionados(new ArrayList<>());
+        nuevosFiltros.setStartDate(null);
+        nuevosFiltros.setEndDate(null);
+        nuevosFiltros.setMinAmount(0.0);
+        nuevosFiltros.setMaxAmount((double) getMaxImporte());
+        nuevosFiltros.setFilteredStates(new ArrayList<>());
 
         filtrosActuales.setValue(nuevosFiltros);
         filtrosInicializados = false; // <--- IMPORTANTE: Resetear la bandera
@@ -249,11 +249,11 @@ public class InvoiceViewModel extends ViewModel {
         if (filtros == null) return;
 
         filtrarFacturas(
-                filtros.getEstadosSeleccionados(),
-                filtros.getFechaInicio(),
-                filtros.getFechaFin(),
-                filtros.getImporteMin(),
-                filtros.getImporteMax()
+                filtros.getFilteredStates(),
+                filtros.getStartDate(),
+                filtros.getEndDate(),
+                filtros.getMinAmount(),
+                filtros.getMaxAmount()
         );
     }
 

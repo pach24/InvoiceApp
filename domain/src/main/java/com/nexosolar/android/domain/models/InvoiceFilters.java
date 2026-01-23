@@ -12,61 +12,61 @@ import java.util.List;
 public class InvoiceFilters {
 
     // ===== Variables de instancia =====
-    private List<String> estadosSeleccionados;
-    private LocalDate fechaInicio;
-    private LocalDate fechaFin;
-    private Double importeMin;
-    private Double importeMax;
+    private List<String> filteredStates;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private Double minAmount;
+    private Double maxAmount;
 
     // ===== Constructores =====
     public InvoiceFilters() {
-        this.estadosSeleccionados = new ArrayList<>();
-        this.fechaInicio = null;
-        this.fechaFin = LocalDate.now();
-        this.importeMin = 0.0;
-        this.importeMax = 0.0;
+        this.filteredStates = new ArrayList<>();
+        this.startDate = null;
+        this.endDate = LocalDate.now();
+        this.minAmount = 0.0;
+        this.maxAmount = 0.0;
     }
 
     // Getters y Setters
-    public List<String> getEstadosSeleccionados() {
-        return estadosSeleccionados;
+    public List<String> getFilteredStates() {
+        return filteredStates;
     }
 
-    public LocalDate getFechaInicio() {
-        return fechaInicio;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public LocalDate getFechaFin() {
-        return fechaFin;
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
-    public Double getImporteMin() {
-        return importeMin;
+    public Double getMinAmount() {
+        return minAmount;
     }
 
-    public Double getImporteMax() {
-        return importeMax;
+    public Double getMaxAmount() {
+        return maxAmount;
     }
 
     // Setters
-    public void setEstadosSeleccionados(List<String> estados) {
-        this.estadosSeleccionados = estados;
+    public void setFilteredStates(List<String> estados) {
+        this.filteredStates = estados;
     }
 
-    public void setFechaInicio(LocalDate fecha) {
-        this.fechaInicio = fecha;
+    public void setStartDate(LocalDate fecha) {
+        this.startDate = fecha;
     }
 
-    public void setFechaFin(LocalDate fecha) {
-        this.fechaFin = fecha;
+    public void setEndDate(LocalDate fecha) {
+        this.endDate = fecha;
     }
 
-    public void setImporteMin(Double importe) {
-        this.importeMin = importe;
+    public void setMinAmount(Double importe) {
+        this.minAmount = importe;
     }
 
-    public void setImporteMax(Double importe) {
-        this.importeMax = importe;
+    public void setMaxAmount(Double importe) {
+        this.maxAmount = importe;
     }
 
 
@@ -76,8 +76,8 @@ public class InvoiceFilters {
      * @return true si los filtros son válidos, false en caso contrario.
      */
     public boolean isValid() {
-        if (fechaInicio != null && fechaFin != null) {
-            return !fechaInicio.isAfter(fechaFin);
+        if (startDate != null && endDate != null) {
+            return !startDate.isAfter(endDate);
         }
         return true;
     }

@@ -34,7 +34,7 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
     }
 
     @Override
-    public void getFacturas(RepositoryCallback<List<Invoice>> callback) {
+    public void getInvoices(RepositoryCallback<List<Invoice>> callback) {
         executor.execute(() -> {
             List<InvoiceEntity> localData = localDataSource.getAllList();
             boolean hasData = localData != null && !localData.isEmpty();
@@ -49,7 +49,7 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
     }
 
     @Override
-    public void refreshFacturas(RepositoryCallback<Boolean> callback) {
+    public void refreshInvoices(RepositoryCallback<Boolean> callback) {
         remoteDataSource.getFacturas(new RepositoryCallback<List<InvoiceEntity>>() {
             @Override
             public void onSuccess(List<InvoiceEntity> entities) {

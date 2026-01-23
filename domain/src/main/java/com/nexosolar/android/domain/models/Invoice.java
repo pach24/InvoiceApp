@@ -76,6 +76,6 @@ public class Invoice implements Serializable {
      * @return Enum {@link InvoiceState} correspondiente o DESCONOCIDO.
      */
     public InvoiceState getEstadoEnum() {
-        return InvoiceState.fromTextoServidor(this.invoiceStatus);
+        return InvoiceState.fromServerValue(this.invoiceStatus);
     }
 }
