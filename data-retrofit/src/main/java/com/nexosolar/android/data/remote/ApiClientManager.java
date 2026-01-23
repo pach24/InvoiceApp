@@ -12,6 +12,8 @@ import co.infinum.retromock.Retromock;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import com.nexosolar.android.data.remote.BuildConfig;
+
 public class ApiClientManager {
 
     private static volatile ApiClientManager instance;
@@ -56,7 +58,7 @@ public class ApiClientManager {
                             .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
                             .create();
                     retrofitClient = new Retrofit.Builder()
-                            .baseUrl(BuildConfig.API_BASE_URL)
+                            .baseUrl(BuildConfig.API_BASE_URL_2)
                             .addConverterFactory(GsonConverterFactory.create(gson))
                             .build();
                 }
@@ -78,7 +80,7 @@ public class ApiClientManager {
 
                     // Usamos la misma configuración de Retrofit base
                     Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(BuildConfig.API_BASE_URL)
+                            .baseUrl(BuildConfig.API_BASE_URL_2)
                             .addConverterFactory(GsonConverterFactory.create(gson))
                             .build();
 
