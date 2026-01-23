@@ -135,6 +135,15 @@ The project follows a strict **Clean Architecture** approach combined with **MVV
   - **Retrofit:** For production-grade HTTP requests.
   - **Retromock:** For simulating backend responses during development or demos.
 
+  ### 🗺️ Architecture Diagram - Invoice Module
+
+<p align="center">
+ <img width="4576" height="5108" alt="Image" src="https://github.com/user-attachments/assets/89acd606-50be-455b-9fec-e02eaa874295" />
+</p>
+
+> ⚠️ **Scope Note:** This diagram represents the complete Clean Architecture implementation for the **Invoice Module**, which is the core feature requiring business logic, offline persistence, and comprehensive testing. The Smart Solar module uses a simplified implementation with static data visualization, following the principle of avoiding over-engineering for straightforward requirements.
+
+
 ---
 
 ## 🧩 Modularization Strategy
