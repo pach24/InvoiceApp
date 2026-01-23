@@ -145,23 +145,36 @@ public class InvoiceViewModel extends ViewModel {
             public void onError(Throwable error) {
                 Log.e(TAG, "Error cargando facturas: " + error.getMessage());
 
-                // Identificamos el tipo de error
-                ErrorType tipoDetectado = esErrorDeRed(error)
-                        ? ErrorType.NETWORK
-                        : ErrorType.SERVER_GENERIC;
+                // Identificar el tipo específico de error
+                ErrorType tipoDetectado;
 
-                // Si ya tenemos datos (caché), no mostramos pantalla de error, solo ocultamos loading
+                if (error instanceof java.net.UnknownHostException) {
+                    // Usuario sin conexión a internet
+                    tipoDetectado = ErrorType.NETWORK;
+                } else if (error instanceof java.net.SocketTimeoutException) {
+                    // Servidor no responde (timeout)
+                    tipoDetectado = ErrorType.SERVER_GENERIC;
+                } else if (error instanceof java.io.IOException) {
+                    // Otros errores de red
+                    tipoDetectado = ErrorType.NETWORK;
+                } else {
+                    // Error HTTP (4xx, 5xx)
+                    tipoDetectado = ErrorType.SERVER_GENERIC;
+                }
+
+                // Si hay caché, usarlo y no mostrar error
                 if (facturasOriginales != null && !facturasOriginales.isEmpty()) {
                     facturas.postValue(facturasOriginales);
                     errorTypeState.postValue(ErrorType.NONE);
                 } else {
-                    // Si no hay datos y hay error, mostramos el error correspondiente
+                    // Sin caché: mostrar error
                     facturas.postValue(new ArrayList<>());
                     errorTypeState.postValue(tipoDetectado);
                 }
 
                 isLoading.postValue(false);
             }
+
         });
     }
 

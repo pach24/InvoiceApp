@@ -1,5 +1,7 @@
 package com.nexosolar.android.data.source;
 
+import android.util.Log;
+
 import com.nexosolar.android.data.InvoiceMapper;
 import com.nexosolar.android.data.local.InvoiceDao;
 import com.nexosolar.android.data.local.InvoiceEntity;
@@ -65,9 +67,11 @@ public class InvoiceRemoteDataSourceImpl implements InvoiceRemoteDataSource {
 
             @Override
             public void onFailure(Call<InvoiceResponse> call, Throwable t) {
-
+                Log.e("API_DEBUG", "Fallo total: " + t.getMessage()); // <--- MIRA ESTO EN LOGCAT
+                t.printStackTrace();
+                callback.onError(t);
             }
-            // ...
+
         });
     }
 

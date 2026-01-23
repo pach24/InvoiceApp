@@ -22,9 +22,22 @@ android {
                 "API_BASE_URL",
                 "\"https://francisco-pacheco.com/api/\""
             ) //Usé mi propia api ya que la proporcinada no funcionaba
+
+            buildConfigField(
+                "String",
+                "API_BASE_URL_2",
+                "\"https://viewnextandroid.mocklab.io/\""
+            )
         }
+
+
         debug {
             buildConfigField("String", "API_BASE_URL", "\"https://francisco-pacheco.com/api/\"")
+            buildConfigField(
+                "String",
+                "API_BASE_URL_2",
+                "\"https://viewnextandroid.mocklab.io/\""
+            )
         }
     }
 
