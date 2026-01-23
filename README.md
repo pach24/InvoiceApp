@@ -10,16 +10,16 @@ A native Android application focused on displaying and filtering invoice data, c
 
 ## Table of Contents
 
-- 📄 [Overview](#overview)
-- 🖼️ [Visual Showcase](#visual-showcase)
-- 💡 [Features](#features)
-- 🏛️ [Architecture](#architecture)
-- 🧩 [Modularization Strategy](#modularization-strategy)
-- 💾 [Installation](#installation)
-- 🚀 [Usage](#usage)
-- 🛠️ [Tech Stack](#tech-stack)
-- 📚 [Lessons Learned](#lessons-learned)
-- ⚖️ [License](#license)
+- 📄 [Overview](##overview)
+- 🖼️ [Visual Showcase](##visual-showcase)
+- 💡 [Features](##features)
+- 🏛️ [Architecture](##architecture)
+- 🧩 [Modularization Strategy](##modularization-strategy)
+- 💾 [Installation](##installation)
+- 🚀 [Usage](##usage)
+- 🛠️ [Tech Stack](##tech-stack)
+- 📚 [Lessons Learned](##lessons-learned)
+- ⚖️ [License](##license)
 
 ---
 
@@ -135,7 +135,7 @@ The project follows a strict **Clean Architecture** approach combined with **MVV
   - **Retrofit:** For production-grade HTTP requests.
   - **Retromock:** For simulating backend responses during development or demos.
 
-  ### 🗺️ Architecture Diagram - Invoice Module
+### 🗺️ Architecture Diagram - Invoice Module
 
 <p align="center">
  <img width="4576" height="5108" alt="Image" src="https://github.com/user-attachments/assets/89acd606-50be-455b-9fec-e02eaa874295" />
