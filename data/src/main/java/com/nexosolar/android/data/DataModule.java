@@ -51,6 +51,24 @@ public class DataModule {
      */
     public DataModule(Context context, boolean useMock) {
         this.context = context.getApplicationContext();
+
+
+        /**
+         * useMock determina el modo de operación y la estrategia de caché:
+         *
+         * - Cambiar de modo (Real ↔ Mock) requiere limpiar la base de datos
+         *   para evitar mezclar datos reales con datos simulados.
+         * - Se pasa a InvoiceRepositoryImpl como alwaysReload:
+         *   en modo Mock siempre se fuerza la recarga desde la API simulada,
+         *   mientras que en modo Real se respeta la caché local. Esta decisión de diseño
+         *   se tomó para aprendizaje y testeo.
+         * - En producción (modo Real), la estrategia sería “online-first”:
+         *   se intenta obtener datos de la red y se recurre a la caché si no hay conexión,
+         *   garantizando que la UI siempre tenga datos consistentes.
+         *
+         * Esto asegura consistencia de datos y simplifica la lógica de repositorios.
+         */
+
         this.useMock = useMock;
     }
 
