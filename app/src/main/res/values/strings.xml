@@ -32,7 +32,7 @@
     <string name="error_conexion_description_message">La información no está disponible en este momento. Por favor, revisa tu conexión de red</string>
 
     <string name="error_conexion_servidor">¡Vaya! Sin Conexión</string>
-    <string name="error_conexion_servidor_description_message">¡Vaya! Sin Conexión</string>
+    <string name="error_conexion_servidor_description_message">No hemos podido conectar con el servidor. Inténtalo de nuevo más tarde</string>
 
     <string name="change_filters">Intenta con otros criterios de búsqueda</string>
     <string name="reintentar">Reintentar</string>
