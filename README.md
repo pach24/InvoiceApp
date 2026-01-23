@@ -10,20 +10,20 @@ A native Android application focused on displaying and filtering invoice data, c
 
 ## Table of Contents
 
-- 📄 [Overview](##overview)
-- 🖼️ [Visual Showcase](##visual-showcase)
-- 💡 [Features](##features)
-- 🏛️ [Architecture](##architecture)
-- 🧩 [Modularization Strategy](##modularization-strategy)
-- 💾 [Installation](##installation)
-- 🚀 [Usage](##usage)
-- 🛠️ [Tech Stack](##tech-stack)
-- 📚 [Lessons Learned](##lessons-learned)
-- ⚖️ [License](##license)
+- 📄 [Overview](#overview)
+- 🖼️ [Visual Showcase](#visual-showcase)
+- 💡 [Features](#features)
+- 🏛️ [Architecture](#architecture)
+- 🧩 [Modularization Strategy](#modularization-strategy)
+- 💾 [Installation](#installation)
+- 🚀 [Usage](#usage)
+- 🛠️ [Tech Stack](#tech-stack)
+- 📚 [Lessons Learned](#lessons-learned)
+- ⚖️ [License](#license)
 
 ---
 
-## 📄 Overview
+## Overview
 
 Developed during a **Professional Traineeship at Viewnext**, this project demonstrates **enterprise-grade Android development** practices, bridging the gap between academic theory and **industry standards**.
 
@@ -39,11 +39,11 @@ Key technical highlights include:
 
 ---
 
-## 🖼️ Visual Showcase
+## Visual Showcase
 
 <img width="1000" height="967" alt="Image" src="https://github.com/user-attachments/assets/12e0d3f9-a96b-4efa-9e22-1126daffb42b" />
 
-## 🎥 Live Demo
+### Live Demo
 
 
 <table>
@@ -98,7 +98,7 @@ Key technical highlights include:
 
 ---
 
-## 💡 Features
+## Features
 
 - **Offline-First Architecture:** Uses **Room Database** as the single source of truth.
 - **Smart Loading:** Skeleton shimmer animation during data fetching.
@@ -114,7 +114,7 @@ Key technical highlights include:
 
 ---
 
-## 🏛️ Architecture
+## Architecture
 
 The project follows a strict **Clean Architecture** approach combined with **MVVM (Model-View-ViewModel)**. This ensures a unidirectional data flow, adherence to **SOLID principles**, and high testability by decoupling the business logic from the Android framework.
 
@@ -146,7 +146,7 @@ The project follows a strict **Clean Architecture** approach combined with **MVV
 
 ---
 
-## 🧩 Modularization Strategy
+##  Modularization Strategy
 
 The application is strictly modularized to enforce separation of concerns, scalability, and faster build times:
 
@@ -159,7 +159,7 @@ The application is strictly modularized to enforce separation of concerns, scala
 
 ---
 
-## 💾 Installation
+## Installation
 
 ### Prerequisites
 
@@ -193,7 +193,7 @@ cd <your-repo>
 
 ---
 
-## 🧪 Testing Strategy
+## Testing Strategy
 
 The project includes a robust suite of Unit Tests ensuring the reliability of business logic and view states:
 
@@ -206,7 +206,7 @@ The project includes a robust suite of Unit Tests ensuring the reliability of bu
 
 ---
 
-## 💾 Download / Release
+## Download / Release
 
 You can download the latest APK of **NexoSolar** from the releases section:
 
@@ -217,7 +217,7 @@ You can download the latest APK of **NexoSolar** from the releases section:
 
 ---
 
-## 🚀 Usage
+## Usage
 
 ### Basic Flow
 
@@ -228,8 +228,8 @@ You can download the latest APK of **NexoSolar** from the releases section:
 3. **Enter Smart Solar Dashboard**:
    - Tap the enter button to navigate to `SmartSolarActivity`.
    - Here you can access the new monitoring features:
-     - **🏠 Installation:** View technical details and status of your solar setup.
-     - **⚡ Energy:** Monitor real-time self-consumption and energy generation.
+     - **Installation:** View technical details and status of your solar setup.
+     - **Energy:** Monitor real-time self-consumption and energy generation.
 4. **View Invoices**:
    - Navigate to the **Invoices** section (launches `InvoiceListActivity`).
    - The app loads bills through `InvoiceViewModel` → `GetInvoicesUseCase` → `InvoiceRepository` (using Room for offline cache).
@@ -249,7 +249,7 @@ You can download the latest APK of **NexoSolar** from the releases section:
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=flat&logo=java&logoColor=white)
 ![Android](https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white)
@@ -262,14 +262,14 @@ You can download the latest APK of **NexoSolar** from the releases section:
 
 ---
 
-## 📚 Lessons Learned
+## Lessons Learned
 
 - **Single Source of Truth:** Implementing **Room** as the cache layer taught me that the UI should never observe the network directly. By observing the database, the app remains responsive and fully functional offline.
 - **Modularization Discipline:** keeping the `domain` module as a pure Java library (no Android dependencies) forced me to write cleaner, decoupled code that is strictly focused on business rules.
 - **Abstraction Power:** Designing the toggle between **Retrofit and Retromock** demonstrated the value of coding against interfaces. It allows the app to be testable and demos to run without relying on a stable internet connection or backend.
 - **Unit Testing:** Writing tests for the `InvoiceViewModel` helped verify that the complex filtering logic (dates, amounts, status) works correctly without needing to run the app on a device constantly.
 
-## ⚖️ License
+## License
 
 This project is currently for educational and portfolio purposes.  
 
