@@ -8,24 +8,21 @@ import com.nexosolar.android.domain.repository.InvoiceRepository;
 import com.nexosolar.android.domain.usecase.invoice.FilterInvoicesUseCase;
 import com.nexosolar.android.domain.usecase.invoice.GetInvoicesUseCase;
 
+// Estructura correcta de tu Factory (file:24)
 public class InvoiceViewModelFactory implements ViewModelProvider.Factory {
+    private final GetInvoicesUseCase getInvoicesUseCase;
+    private final FilterInvoicesUseCase filterInvoicesUseCase;
 
-    private final InvoiceRepository repository;
-
-    public InvoiceViewModelFactory(InvoiceRepository repository) {
-        this.repository = repository;
+    public InvoiceViewModelFactory(GetInvoicesUseCase getInvoices, FilterInvoicesUseCase filterInvoices) {
+        this.getInvoicesUseCase = getInvoices;
+        this.filterInvoicesUseCase = filterInvoices;
     }
 
     @NonNull
     @Override
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        if (modelClass.isAssignableFrom(InvoiceViewModel.class)) {
-            return (T) new InvoiceViewModel(
-                    new GetInvoicesUseCase(repository),
-                    new FilterInvoicesUseCase()
-            );
-        }
-        throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
+        return (T) new InvoiceViewModel(getInvoicesUseCase, filterInvoicesUseCase);
     }
 }
+

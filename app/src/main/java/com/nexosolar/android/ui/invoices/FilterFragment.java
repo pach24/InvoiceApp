@@ -59,8 +59,6 @@ public class FilterFragment extends Fragment {
         binding = FragmentFilterBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(InvoiceViewModel.class);
 
-        //viewModel.resetearFiltros();
-        viewModel.inicializarFiltros();
 
         setupObservers();
         setupListeners();
@@ -270,6 +268,7 @@ public class FilterFragment extends Fragment {
      * - Valida coherencia temporal antes de aplicar.
      */
     private void aplicarFiltros() {
+
         InvoiceFilters nuevosFiltros = construirFiltrosDesdeUI();
 
         // Determinar fechas efectivas para el filtrado interno
@@ -300,6 +299,7 @@ public class FilterFragment extends Fragment {
         viewModel.actualizarFiltros(nuevosFiltros);
         cerrarFragmento();
     }
+
 
     /**
      * Actualiza el estado de un checkbox específico en los filtros del ViewModel.
