@@ -278,7 +278,8 @@
             app:layout_constraintBottom_toTopOf="@id/tvEmptyTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"/>
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintVertical_bias="0"/>
 
         <TextView
             android:id="@+id/tvEmptyTitle"
@@ -287,8 +288,8 @@
             android:text="@string/sin_resultados"
             android:textSize="@dimen/text_size_title"
             android:textStyle="bold"
-            android:textColor="#757575"
-            android:layout_marginTop="@dimen/spacing_medium"
+            android:textColor="@color/darker_gray"
+            android:layout_marginTop="@dimen/spacing_small"
             app:layout_constraintTop_toBottomOf="@id/ivEmpty"
             app:layout_constraintBottom_toTopOf="@id/tvEmptySubtitle"
             app:layout_constraintStart_toStartOf="parent"
@@ -300,14 +301,16 @@
             android:layout_height="wrap_content"
             android:text="@string/change_filters"
             android:textSize="@dimen/text_size_subtitle"
-            android:textColor="#9E9E9E"
-            android:layout_marginTop="@dimen/spacing_small"
+            android:textColor="@color/dark_gray"
+            android:layout_marginTop="@dimen/spacing_tiny"
             app:layout_constraintTop_toBottomOf="@id/tvEmptyTitle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 
     <!-- FRAGMENT CONTAINER -->
