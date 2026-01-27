@@ -17,21 +17,11 @@ import com.nexosolar.android.databinding.ActivityMainBinding;
 import com.nexosolar.android.ui.invoices.InvoiceListActivity;
 import com.nexosolar.android.ui.smartsolar.SmartSolarActivity;
 
-/**
- * MainActivity
- *
- * Pantalla principal de la aplicación que actúa como dashboard.
- * Permite navegar a las secciones de Facturas y Smart Solar.
- * También ofrece un toggle para cambiar entre API real (Retrofit) y datos simulados (RetroMock).
- */
 public class MainActivity extends AppCompatActivity {
-
-    // ===== Variables de instancia =====
 
     private ActivityMainBinding binding;
     private boolean useMock = true;
-
-    // ===== Ciclo de vida =====
+    private boolean useAltUrl = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +34,9 @@ public class MainActivity extends AppCompatActivity {
         setupWindowInsets();
         setupUserGreeting();
         setupCardListeners();
-        setupMockToggle();
+        setupApiControls();
     }
 
-    // ===== Configuración de UI =====
-
-    /**
-     * Configura los insets de la ventana para soporte de pantalla completa (Edge-to-Edge).
-     */
     private void setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -60,10 +45,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Configura el saludo personalizado y la dirección del usuario en la UI.
-     * Los datos actuales están hardcodeados por ausencia de lógica de autenticación.
-     */
     private void setupUserGreeting() {
         String nombreUsuario = "USUARIO";
         String saludoCompleto = getString(R.string.greeting_user, nombreUsuario);
@@ -76,44 +57,76 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    /**
-     * Configura los listeners de las tarjetas de navegación (Facturas y Smart Solar).
-     */
     private void setupCardListeners() {
         binding.cardFacturas.setOnClickListener(v -> navigateToInvoices());
         binding.cardSmartSolar.setOnClickListener(v -> navigateToSmartSolar());
     }
 
     /**
-     * Configura el toggle que permite alternar entre API real (Retrofit) y mock (RetroMock).
+     * Configura los switches de API con lógica de habilitación/deshabilitación
      */
-    private void setupMockToggle() {
+    private void setupApiControls() {
+        // Estado inicial
         binding.btToggleApi.setChecked(useMock);
+        binding.switchAltUrl.setChecked(useAltUrl);
+
+        updateUrlSwitchState();
+
+        // Listener del switch principal: Mock vs Real
         binding.btToggleApi.setOnCheckedChangeListener((buttonView, isChecked) -> {
             useMock = isChecked;
 
-            // ACTUALIZAMOS EL GRAFO DE DEPENDENCIAS GLOBAL
-            ((NexoSolarApplication) getApplication()).switchDataModule(useMock);
+            // Si activamos Mock, desactivar URL alt
+            if (useMock) {
+                useAltUrl = false;
+                binding.switchAltUrl.setOnCheckedChangeListener(null);
+                binding.switchAltUrl.setChecked(false);
+                binding.switchAltUrl.setOnCheckedChangeListener(
+                        (btn, checked) -> {
+                            useAltUrl = checked;
+                            updateDataModule();
+                        }
+                );
+            }
 
-            String mode = useMock ? "Using RetroMock" : "Using RetroFit";
-            Toast.makeText(MainActivity.this, mode, Toast.LENGTH_SHORT).show();
+            updateUrlSwitchState();
+            updateDataModule();
         });
+
+        // Listener del switch secundario: URL 1 vs URL 2
+        binding.switchAltUrl.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            useAltUrl = isChecked;
+            updateDataModule();
+        });
+
+        updateDataModule();
     }
 
-    // ===== Navegación =====
-
     /**
-     * Navega a la pantalla de lista de facturas, pasando el modo de API seleccionado.
+     * Actualiza el estado visual y de habilitación del switch de URL
+     * - enabled=true y alpha=1.0 cuando useMock=false
+     * - enabled=false y alpha=0.5 cuando useMock=true
      */
+    private void updateUrlSwitchState() {
+        boolean shouldEnable = !useMock;
+        binding.switchAltUrl.setEnabled(shouldEnable);
+        binding.switchAltUrl.setAlpha(shouldEnable ? 1.0f : 0.5f);
+    }
+
+    private void updateDataModule() {
+        ((NexoSolarApplication) getApplication()).switchDataModule(useMock, useAltUrl);
+
+        String modeMsg = useMock ? "Modo: Mock (RetroMock)" : "Modo: Real (Retrofit)";
+        String urlMsg = (!useMock && useAltUrl) ? " - URL2 (No funciona)" : (!useMock ? " - URL1 (Funciona)" : "");
+        Toast.makeText(this, modeMsg + urlMsg, Toast.LENGTH_SHORT).show();
+    }
+
     private void navigateToInvoices() {
         Intent intent = new Intent(MainActivity.this, InvoiceListActivity.class);
         intent.putExtra("USE_RETROMOCK", useMock);
         startActivity(intent);
     }
 
-    /**
-     * Navega a la pantalla de Smart Solar.
-     */
     private void navigateToSmartSolar() {
         Intent intent = new Intent(MainActivity.this, SmartSolarActivity.class);
         startActivity(intent);

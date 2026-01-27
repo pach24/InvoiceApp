@@ -5,25 +5,20 @@ import com.nexosolar.android.data.DataModule;
 
 public class NexoSolarApplication extends Application {
 
-    // Instancia única del módulo de datos
     private DataModule dataModule;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        // Inicializamos DataModule por defecto
-        boolean useMockDefault = true;
-        dataModule = new DataModule(this, useMockDefault);
+        // Por defecto: Mock activado, URL Alternativa desactivada
+        dataModule = new DataModule(this, true, false);
     }
 
-    /**
-     * Permite reiniciar el módulo de datos si cambiamos de modo (Mock <-> Real)
-     */
-    public void switchDataModule(boolean useMock) {
-        dataModule = new DataModule(this, useMock);
+    // Método actualizado para recibir ambos estados
+    public void switchDataModule(boolean useMock, boolean useAlternativeUrl) {
+        dataModule = new DataModule(this, useMock, useAlternativeUrl);
     }
 
-    // Exponemos el DataModule (o sus repositorios)
     public DataModule getDataModule() {
         return dataModule;
     }

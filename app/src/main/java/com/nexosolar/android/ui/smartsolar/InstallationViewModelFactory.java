@@ -21,28 +21,23 @@ public class InstallationViewModelFactory implements ViewModelProvider.Factory {
 
     // ===== Variables de instancia =====
 
-    private final Context context;
-    private final boolean useMock;
+    private final InstallationRepository repository;
 
-    // ===== Constructores =====
-
-    public InstallationViewModelFactory(Context context, boolean useMock) {
-        this.context = context.getApplicationContext();
-        this.useMock = useMock;
+    // Ahora recibimos directamente el repositorio, igual que en Invoices
+    public InstallationViewModelFactory(InstallationRepository repository) {
+        this.repository = repository;
     }
-
-    // ===== Métodos públicos =====
 
     @NonNull
     @Override
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(InstallationViewModel.class)) {
-            DataModule dataModule = new DataModule(context, useMock);
-            InstallationRepository repository = dataModule.provideInstallationRepository();
+            // Ya no creamos DataModule aquí. Usamos el repositorio inyectado.
             GetInstallationDetailsUseCase useCase = new GetInstallationDetailsUseCase(repository);
             return (T) new InstallationViewModel(useCase);
         }
         throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
     }
 }
+

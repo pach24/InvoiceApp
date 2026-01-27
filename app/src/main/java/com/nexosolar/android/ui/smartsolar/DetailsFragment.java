@@ -15,6 +15,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.nexosolar.android.R;
 import com.nexosolar.android.databinding.FragmentDetailsBinding;
+import com.nexosolar.android.NexoSolarApplication;
+import com.nexosolar.android.domain.repository.InstallationRepository;
+
 
 /**
  * Fragment que muestra información detallada de la instalación solar.
@@ -65,10 +68,20 @@ public class DetailsFragment extends Fragment {
      * TODO: Posible mejora: Reemplazar useMock=true por inyección de dependencias cuando esté disponible.
      */
     private void setupViewModel() {
-        boolean useMock = true;
-        InstallationViewModelFactory factory = new InstallationViewModelFactory(requireContext(), useMock);
+        // 1. Obtener la App (contexto global) de forma segura
+        NexoSolarApplication app = (NexoSolarApplication) requireActivity().getApplication();
+
+        // 2. Pedir el repositorio al DataModule global
+        // Esto respeta AUTOMÁTICAMENTE la configuración (Mock, URL, etc.) que elegiste en MainActivity
+        InstallationRepository repository = app.getDataModule().provideInstallationRepository();
+
+        // 3. Crear el Factory inyectando solo el repositorio
+        InstallationViewModelFactory factory = new InstallationViewModelFactory(repository);
+
+        // 4. Obtener el ViewModel
         viewModel = new ViewModelProvider(this, factory).get(InstallationViewModel.class);
     }
+
 
     /**
      * Observa el estado de carga para mostrar/ocultar el efecto Shimmer.
