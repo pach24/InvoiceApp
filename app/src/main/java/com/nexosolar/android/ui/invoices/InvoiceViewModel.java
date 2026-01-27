@@ -1,6 +1,11 @@
+
+
 package com.nexosolar.android.ui.invoices;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+
 import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -34,10 +39,7 @@ public class InvoiceViewModel extends ViewModel {
 
     private static final String TAG = "InvoiceViewModel";
 
-
-
     // ===== Enumeración de tipos de error =====
-
     public enum ErrorType {
         NONE,
         NETWORK,
@@ -45,11 +47,9 @@ public class InvoiceViewModel extends ViewModel {
     }
 
     // ===== Variables de instancia =====
-
     private boolean filtrosInicializados = false;
     private final GetInvoicesUseCase getInvoicesUseCase;
     private final FilterInvoicesUseCase filterInvoicesUseCase;
-
     private List<Invoice> facturasOriginales = new ArrayList<>();
 
     private final MutableLiveData<List<Invoice>> facturas = new MutableLiveData<>();
@@ -59,8 +59,14 @@ public class InvoiceViewModel extends ViewModel {
     private final MutableLiveData<InvoiceFilters> filtrosActuales = new MutableLiveData<>(new InvoiceFilters());
     private final MutableLiveData<String> errorValidacion = new MutableLiveData<>();
 
-    // ===== Constructor =====
+    // Referencia del Handler para poder cancelarlo
+    private Handler loadingHandler;
+    private static final long LOADING_DELAY_MS = 40;  // CORREGIDO: Era 5000 (5 segundos)
 
+    // Flag para diferenciar primera carga vs recargas
+    private boolean isFirstLoad = true;
+
+    // ===== Constructor =====
     public InvoiceViewModel(GetInvoicesUseCase getInvoicesUseCase, FilterInvoicesUseCase filterInvoicesUseCase) {
         this.getInvoicesUseCase = getInvoicesUseCase;
         this.filterInvoicesUseCase = filterInvoicesUseCase;
@@ -68,7 +74,6 @@ public class InvoiceViewModel extends ViewModel {
     }
 
     // ===== Getters de LiveData =====
-
     public LiveData<List<Invoice>> getFacturas() {
         return facturas;
     }
@@ -96,48 +101,60 @@ public class InvoiceViewModel extends ViewModel {
     // ===== Métodos públicos de carga =====
 
     /**
-     * Carga las facturas desde el repositorio.
-     * Gestiona estados de carga, éxito y error de manera diferenciada.
-     */
-    /**
      * Carga las facturas de manera optimizada.
      * 1. Evita el parpadeo del shimmer si ya hay datos o si la respuesta es muy rápida.
      * 2. Utiliza postValue para garantizar la seguridad entre hilos (Thread Safety).
      * 3. Mantiene la arquitectura Clean al no depender de LiveData en el UseCase.
      */
     public void cargarFacturas() {
+        Log.d(TAG, "cargarFacturas() - isFirstLoad: " + isFirstLoad + ", hayCaché: " + !facturasOriginales.isEmpty());
+
+        // 1) Resetear flags de error/vacío ANTES de que la Activity recalcule estado
+        showEmptyError.setValue(false);
         errorTypeState.setValue(ErrorType.NONE);
 
-        if (facturasOriginales != null && !facturasOriginales.isEmpty()) {
-            // Si ya tenemos datos en memoria, no mostramos loading
-            isLoading.setValue(false);
-        } else {
-            // Si no hay datos, esperamos un breve instante (40ms) antes de mostrar el shimmer.
-            // Si los datos llegan antes de ese tiempo (desde Room), el shimmer nunca se verá, en cambio, si viene de red, es probable que tarde algo más y por lo tanto se mostrará
-            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
-                if (facturasOriginales == null || facturasOriginales.isEmpty()) {
-                    isLoading.postValue(true);
-                }
-            }, 40);
+        // 2) Cancelar cualquier Handler pendiente
+        if (loadingHandler != null) {
+            loadingHandler.removeCallbacksAndMessages(null);
+            loadingHandler = null;
         }
 
-        // LLAMADA AL USE CASE
+        boolean hayCache = facturasOriginales != null && !facturasOriginales.isEmpty();
+
+        // 3) Gestionar isLoading según caso
+        if (!hayCache) {
+            // No hay datos: siempre shimmer inmediato (tanto primera carga como recarga desde error)
+            isLoading.setValue(true);
+        } else {
+            // Hay datos en memoria: no mostrar shimmer, mantenemos la lista
+            isLoading.setValue(false);
+        }
+
+        // 4) Llamada al repositorio
         getInvoicesUseCase.invoke(new RepositoryCallback<List<Invoice>>() {
             @Override
             public void onSuccess(List<Invoice> result) {
-                // Importante: Usamos postValue porque el callback viene de un hilo secundario del Repositorio
+                // Cancelar handler por seguridad (aunque no lo usamos ya para delay)
+                if (loadingHandler != null) {
+                    loadingHandler.removeCallbacksAndMessages(null);
+                    loadingHandler = null;
+                }
+
+                isFirstLoad = false;
+
                 if (result != null && !result.isEmpty()) {
                     facturasOriginales = result;
                     facturas.postValue(result);
                     errorTypeState.postValue(ErrorType.NONE);
+                    showEmptyError.postValue(false);
                 } else {
-                    // Si la respuesta es vacía pero ya teníamos datos previos, mantenemos los previos
+                    // Respuesta vacía
                     if (facturasOriginales == null || facturasOriginales.isEmpty()) {
                         facturas.postValue(new ArrayList<>());
                     }
+                    showEmptyError.postValue(false);
                 }
 
-                // Finalizamos el estado de carga
                 isLoading.postValue(false);
             }
 
@@ -145,38 +162,63 @@ public class InvoiceViewModel extends ViewModel {
             public void onError(Throwable error) {
                 Log.e(TAG, "Error cargando facturas: " + error.getMessage());
 
-                // Identificar el tipo específico de error
-                ErrorType tipoDetectado;
+                if (loadingHandler != null) {
+                    loadingHandler.removeCallbacksAndMessages(null);
+                    loadingHandler = null;
+                }
 
+                isFirstLoad = false;
+
+                ErrorType tipoDetectado;
                 if (error instanceof java.net.UnknownHostException) {
-                    // Usuario sin conexión a internet
                     tipoDetectado = ErrorType.NETWORK;
                 } else if (error instanceof java.net.SocketTimeoutException) {
-                    // Servidor no responde (timeout)
                     tipoDetectado = ErrorType.SERVER_GENERIC;
                 } else if (error instanceof java.io.IOException) {
-                    // Otros errores de red
                     tipoDetectado = ErrorType.NETWORK;
                 } else {
-                    // Error HTTP (4xx, 5xx)
                     tipoDetectado = ErrorType.SERVER_GENERIC;
                 }
 
-                // Si hay caché, usarlo y no mostrar error
-                if (facturasOriginales != null && !facturasOriginales.isEmpty()) {
+                boolean hayCacheLocal = facturasOriginales != null && !facturasOriginales.isEmpty();
+
+                if (hayCacheLocal) {
+                    // Hay caché: mantenemos datos y no mostramos pantalla de error
                     facturas.postValue(facturasOriginales);
                     errorTypeState.postValue(ErrorType.NONE);
+                    showEmptyError.postValue(false);
+                    isLoading.postValue(false);  // ← AQUÍ el postValue normal
                 } else {
-                    // Sin caché: mostrar error
-                    facturas.postValue(new ArrayList<>());
-                    errorTypeState.postValue(tipoDetectado);
+                    // Sin caché: MOSTRAR SHIMMER X ms ANTES DE MOSTRAR ERROR
+                    // NO ponemos isLoading a false aquí, lo mantiene en true el delay lo hace
+                    mostrarErrorConDelay(tipoDetectado, 1500);
                 }
-
-                isLoading.postValue(false);
             }
+
+            // Agrega este método al final de la clase
+            private void mostrarErrorConDelay(ErrorType errorType, long delayMs) {
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    isLoading.postValue(false);  // ← Ahora sí, después del delay
+                    errorTypeState.postValue(errorType);
+                    showEmptyError.postValue(true);
+                }, delayMs);
+            }
+
 
         });
     }
+
+    // En InvoiceViewModel.java
+
+    private void mostrarErrorConDelay(ErrorType errorType, long delayMs) {
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            isLoading.postValue(false);
+            showEmptyError.postValue(true);
+            errorTypeState.postValue(errorType);
+        }, delayMs);
+    }
+
+
 
 
     // ===== Gestión de filtros =====
@@ -194,7 +236,7 @@ public class InvoiceViewModel extends ViewModel {
         // Si ya hay filtros válidos (doble chequeo defensivo), tampoco reinicializar
         if (filtrosActuales.getValue() != null &&
                 !filtrosActuales.getValue().getFilteredStates().isEmpty()) {
-            filtrosInicializados = true; // Marcar como inicializado por si acaso
+            filtrosInicializados = true;
             return;
         }
 
@@ -204,11 +246,9 @@ public class InvoiceViewModel extends ViewModel {
         filtros.setMinAmount(0.0);
         filtros.setMaxAmount((double) getMaxImporte());
         filtros.setFilteredStates(new ArrayList<>());
-
         filtrosActuales.postValue(filtros);
-        filtrosInicializados = true; //
+        filtrosInicializados = true;
     }
-
 
     /**
      * Actualiza los filtros y los aplica a los datos originales.
@@ -243,15 +283,12 @@ public class InvoiceViewModel extends ViewModel {
         nuevosFiltros.setMinAmount(0.0);
         nuevosFiltros.setMaxAmount((double) getMaxImporte());
         nuevosFiltros.setFilteredStates(new ArrayList<>());
-
         filtrosActuales.setValue(nuevosFiltros);
-        filtrosInicializados = false; // <--- IMPORTANTE: Resetear la bandera
-
+        filtrosInicializados = false;
         if (facturasOriginales != null) {
             facturas.setValue(new ArrayList<>(facturasOriginales));
         }
     }
-
 
     /**
      * Aplica los filtros actuales sobre los datos originales.
@@ -260,7 +297,6 @@ public class InvoiceViewModel extends ViewModel {
     private void aplicarFiltros() {
         InvoiceFilters filtros = filtrosActuales.getValue();
         if (filtros == null) return;
-
         filtrarFacturas(
                 filtros.getFilteredStates(),
                 filtros.getStartDate(),
@@ -280,16 +316,13 @@ public class InvoiceViewModel extends ViewModel {
                                  Double importeMin,
                                  Double importeMax) {
         isLoading.setValue(true);
-
         new Thread(() -> {
             List<Invoice> listaBase = (facturasOriginales != null)
                     ? facturasOriginales
                     : new ArrayList<>();
-
             List<Invoice> facturasFiltradas = filterInvoicesUseCase.execute(
                     listaBase, estadosSeleccionados, fechaInicio, fechaFin, importeMin, importeMax
             );
-
             facturas.postValue(facturasFiltradas);
             isLoading.postValue(false);
         }).start();
@@ -312,7 +345,6 @@ public class InvoiceViewModel extends ViewModel {
      */
     public float getMaxImporte() {
         if (facturasOriginales == null || facturasOriginales.isEmpty()) return 0f;
-
         float maxImporte = 0f;
         for (Invoice factura : facturasOriginales) {
             if (factura.getInvoiceAmount() > maxImporte) {
@@ -327,7 +359,6 @@ public class InvoiceViewModel extends ViewModel {
      */
     public LocalDate getOldestDate() {
         if (facturasOriginales == null || facturasOriginales.isEmpty()) return null;
-
         LocalDate oldestDate = null;
         for (Invoice factura : facturasOriginales) {
             LocalDate currentDate = factura.getInvoiceDate();
@@ -345,7 +376,6 @@ public class InvoiceViewModel extends ViewModel {
      */
     public LocalDate getNewestDate() {
         if (facturasOriginales == null || facturasOriginales.isEmpty()) return null;
-
         LocalDate newest = null;
         for (Invoice factura : facturasOriginales) {
             if (factura.getInvoiceDate() != null) {
@@ -370,5 +400,17 @@ public class InvoiceViewModel extends ViewModel {
     public void setFacturasOriginalesTest(List<Invoice> facturas) {
         this.facturasOriginales = facturas;
         this.facturas.setValue(facturas);
+    }
+
+    // ===== Lifecycle Management =====
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        // Limpiar Handler al destruir el ViewModel
+        if (loadingHandler != null) {
+            loadingHandler.removeCallbacksAndMessages(null);
+            loadingHandler = null;
+        }
     }
 }

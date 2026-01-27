@@ -1,6 +1,7 @@
 package com.nexosolar.android.ui.invoices;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -83,22 +84,28 @@ public class InvoiceListActivity extends AppCompatActivity {
      * Configura los observadores de LiveData del ViewModel.
      * Observa estados de carga, datos, errores y estado vacío.
      */
-    private void setupObservers() {
-        invoiceViewModel.getIsLoading().observe(this, isLoading -> actualizarEstadoUI());
 
+
+
+
+    private void setupObservers() {
+        // OBSERVADORES DE ESTADO
+        invoiceViewModel.getIsLoading().observe(this, isLoading -> actualizarEstadoUI());
+        invoiceViewModel.getErrorTypeState().observe(this, errorType -> actualizarEstadoUI());
+        invoiceViewModel.getShowEmptyError().observe(this, showError -> actualizarEstadoUI());
+
+        // OBSERVADOR DE DATOS: vuelve a la versión simple (sin filtros adicionales)
         invoiceViewModel.getFacturas().observe(this, facturas -> {
             invalidateOptionsMenu();
             if (facturas != null) {
                 invoiceAdapter.setFacturas(facturas);
-                actualizarEstadoUI();
+                // IMPORTANTE: aquí NO llamamos a actualizarEstadoUI()
             } else {
                 Toast.makeText(this, "Error al cargar datos", Toast.LENGTH_SHORT).show();
             }
         });
-
-        invoiceViewModel.getErrorTypeState().observe(this, errorType -> actualizarEstadoUI());
-        invoiceViewModel.getShowEmptyError().observe(this, showError -> actualizarEstadoUI());
     }
+
 
     /**
      * Configura listeners de botones de acción (Volver, Reintentar).
@@ -125,15 +132,26 @@ public class InvoiceListActivity extends AppCompatActivity {
      * Actualiza la UI según el estado actual (carga, error, datos, vacío).
      * Prioridad: Loading > Error > Datos > Empty State
      */
+    /**
+     * Actualiza la UI según el estado actual (carga, error, datos, vacío).
+     * Prioridad: Loading > Error > Datos > Empty State
+     *
+     * NOTA: Solo se llama desde observadores de ESTADO, no de datos
+     */
     private void actualizarEstadoUI() {
         Boolean isLoading = invoiceViewModel.getIsLoading().getValue();
         List<Invoice> facturas = invoiceViewModel.getFacturas().getValue();
         InvoiceViewModel.ErrorType errorType = invoiceViewModel.getErrorTypeState().getValue();
+        Boolean showEmptyError = invoiceViewModel.getShowEmptyError().getValue();
 
         if (isLoading == null) isLoading = false;
         if (errorType == null) errorType = InvoiceViewModel.ErrorType.NONE;
+        if (showEmptyError == null) showEmptyError = false;
 
-        // Estado de carga (shimmer)
+        Log.d("ActualizarUI", "isLoading=" + isLoading + ", errorType=" + errorType +
+                ", showEmptyError=" + showEmptyError + ", facturas=" + (facturas != null ? facturas.size() : 0));
+
+        // 1. PRIORIDAD: Estado de carga (shimmer)
         if (isLoading) {
             mostrarShimmer();
             return;
@@ -141,19 +159,20 @@ public class InvoiceListActivity extends AppCompatActivity {
 
         ocultarShimmer();
 
-        // Estado de error (red o servidor)
-        if (errorType != InvoiceViewModel.ErrorType.NONE) {
+        // 2. PRIORIDAD: Estado de error
+        if (showEmptyError && errorType != InvoiceViewModel.ErrorType.NONE) {
             mostrarError(errorType);
             return;
         }
 
-        // Estado con datos o vacío
+        // 3. PRIORIDAD: Estado con datos o vacío
         if (facturas != null && !facturas.isEmpty()) {
             mostrarLista();
         } else {
             mostrarEmptyState();
         }
     }
+
 
     private void mostrarShimmer() {
         if (binding.shimmerViewContainer.getVisibility() != View.VISIBLE) {
