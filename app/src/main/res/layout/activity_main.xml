@@ -45,31 +45,73 @@
             app:tint="@color/my_theme_green_light" />
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- RETROMOCK SWITCH -->
+    <!-- SWITCH SERVIDOR (IZQUIERDA) -->
+
+    <TextView
+        android:id="@+id/tvUrlLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="@string/servidor"
+        android:textColor="@color/white"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/containerAvatar"
+        app:layout_constraintEnd_toStartOf="@id/switchAltUrl"
+        app:layout_constraintTop_toTopOf="@id/containerAvatar"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchAltUrl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:enabled="false"
+        android:alpha="0.5"
+        app:thumbTint="@color/switch_thumb_color"
+        app:trackTint="@color/selector_thumb_color"
+        app:useMaterialThemeColors="false"
+        android:text=" "
+        app:showText="false"
+        android:textOn=" "
+        android:textOff=" "
+        app:layout_constraintEnd_toStartOf="@id/tvRetromockLabel"
+        app:layout_constraintTop_toTopOf="@id/containerAvatar"
+        app:layout_constraintBottom_toBottomOf="@id/containerAvatar"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <!-- SWITCH RETROMOCK (DERECHA) -->
+    <TextView
+        android:id="@+id/tvRetromockLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/retromock"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="11sp"
+        android:layout_marginEnd="6dp"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toStartOf="@id/btToggleApi"
+        app:layout_constraintTop_toTopOf="@id/containerAvatar"
+        app:layout_constraintBottom_toBottomOf="@id/containerAvatar" />
+
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/btToggleApi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/main_retromock_switch_margin_end"
+        android:checked="true"
         app:thumbTint="@color/switch_thumb_color"
         app:trackTint="@color/selector_thumb_color"
         app:useMaterialThemeColors="false"
+        android:text=" "
+        app:showText="false"
+        android:textOn=" "
+        android:textOff=" "
         app:layout_constraintEnd_toStartOf="@id/containerAvatar"
         app:layout_constraintTop_toTopOf="@id/containerAvatar"
-        app:layout_constraintBottom_toBottomOf="@id/containerAvatar"/>
-
-    <!-- "RetroMock" -->
-    <TextView
-        android:id="@+id/tvRetroMock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/retromock"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:layout_marginEnd="@dimen/main_retromock_label_margin_end"
-        app:layout_constraintEnd_toStartOf="@id/btToggleApi"
-        app:layout_constraintTop_toTopOf="@id/btToggleApi"
-        app:layout_constraintBottom_toBottomOf="@id/btToggleApi"/>
+        app:layout_constraintBottom_toBottomOf="@id/containerAvatar"
+        app:layout_constraintVertical_bias="0.5"
+        android:layout_marginEnd="@dimen/main_avatar_margin_end" />
 
     <!-- 4. SALUDO -->
     <TextView
@@ -142,7 +184,7 @@
                 android:contentDescription="@null"
                 android:src="@drawable/ic_lightbulb_outline"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/tvFacturasTitle"
@@ -156,7 +198,7 @@
                 android:lines="2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/tvFacturasSubtitle"/>
+                app:layout_constraintBottom_toTopOf="@id/tvFacturasSubtitle" />
 
             <TextView
                 android:id="@+id/tvFacturasSubtitle"
@@ -168,13 +210,12 @@
                 android:layout_marginTop="@dimen/main_action_subtitle_margin_top"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
-
-    <!-- 6. TARJETA SMART SOLAR -->
+    <!-- 7. TARJETA SMART SOLAR -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardSmartSolar"
         android:layout_width="@dimen/main_action_card_width"
@@ -203,7 +244,7 @@
                 android:contentDescription="@null"
                 android:src="@drawable/twotone_doc_24"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/tvSmartSolarTitle"
@@ -217,7 +258,7 @@
                 android:lines="2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/tvSmartSolarSubtitle"/>
+                app:layout_constraintBottom_toTopOf="@id/tvSmartSolarSubtitle" />
 
             <TextView
                 android:id="@+id/tvSmartSolarSubtitle"
@@ -229,10 +270,9 @@
                 android:layout_marginTop="@dimen/main_action_subtitle_margin_top"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

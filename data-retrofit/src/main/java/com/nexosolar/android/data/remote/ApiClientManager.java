@@ -11,24 +11,27 @@ import co.infinum.retromock.BodyFactory;
 import co.infinum.retromock.Retromock;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
 import com.nexosolar.android.data.remote.BuildConfig;
 
 public class ApiClientManager {
 
     private static volatile ApiClientManager instance;
 
-    // Clientes base
-    private volatile Retrofit retrofitClient;
+    // --- CLIENTES RETROFIT (Transporte) ---
+    // Guardamos referencia a los clientes por si necesitamos acceder a ellos directamente
+    private volatile Retrofit retrofitClientUrl1; // Para URL Principal
+    private volatile Retrofit retrofitClientUrl2; // Para URL Alternativa
     private volatile Retromock retromockClient;
 
-    // INSTANCIAS DE SERVICIOS CACHEADAS
+    // --- SERVICIOS API (Endpoints) ---
+    // Cacheados por separado para cambio rápido sin reconstrucción
     private volatile ApiService mockApiService;
-    private volatile ApiService realApiService;
-
+    private volatile ApiService realApiServiceUrl1;
+    private volatile ApiService realApiServiceUrl2;
 
     private Context applicationContext;
 
+    // Constructor privado (Singleton)
     private ApiClientManager() { }
 
     public static ApiClientManager getInstance() {
@@ -48,44 +51,64 @@ public class ApiClientManager {
         }
     }
 
-    // --- Métodos Privados para obtener Clientes ---
+    // =================================================================================
+    // MÉTODOS PRIVADOS DE CONSTRUCCIÓN (HELPER)
+    // =================================================================================
 
-    private Retrofit getRetrofitClient() {
-        if (retrofitClient == null) {
+    /**
+     * Helper para construir una instancia de Retrofit dada una URL.
+     * Evita duplicar código entre el cliente 1 y el cliente 2.
+     */
+    private Retrofit buildRetrofit(String baseUrl) {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                .create();
+
+        return new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+    }
+
+    /**
+     * Obtiene o crea el cliente Retrofit para la URL Principal
+     */
+    private Retrofit getRetrofitClientUrl1() {
+        if (retrofitClientUrl1 == null) {
             synchronized (this) {
-                if (retrofitClient == null) {
-                    Gson gson = new GsonBuilder()
-                            .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-                            .create();
-                    retrofitClient = new Retrofit.Builder()      // API_BASE_URL es la que funciona
-                            .baseUrl(BuildConfig.API_BASE_URL)   // Cambiar por  .API_BASE_URL_2 PARA comprobar pantalla de error de servidor
-                            .addConverterFactory(GsonConverterFactory.create(gson))
-                            .build();
+                if (retrofitClientUrl1 == null) {
+                    retrofitClientUrl1 = buildRetrofit(BuildConfig.API_BASE_URL);
                 }
             }
         }
-        return retrofitClient;
+        return retrofitClientUrl1;
+    }
+
+    /**
+     * Obtiene o crea el cliente Retrofit para la URL Alternativa
+     */
+    private Retrofit getRetrofitClientUrl2() {
+        if (retrofitClientUrl2 == null) {
+            synchronized (this) {
+                if (retrofitClientUrl2 == null) {
+                    retrofitClientUrl2 = buildRetrofit(BuildConfig.API_BASE_URL_2);
+                }
+            }
+        }
+        return retrofitClientUrl2;
     }
 
     private Retromock getRetromockClient(Context context) {
         if (retromockClient == null) {
             synchronized (this) {
                 if (retromockClient == null) {
-                    // Asegurar contexto
                     if (applicationContext == null) init(context);
 
-                    Gson gson = new GsonBuilder()
-                            .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-                            .create();
-
-                    // Usamos la misma configuración de Retrofit base
-                    Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(BuildConfig.API_BASE_URL)
-                            .addConverterFactory(GsonConverterFactory.create(gson))
-                            .build();
+                    // Retromock necesita un Retrofit base (usamos la config de la URL 1 como base)
+                    Retrofit retrofitBase = getRetrofitClientUrl1();
 
                     retromockClient = new Retromock.Builder()
-                            .retrofit(retrofit)
+                            .retrofit(retrofitBase)
                             .defaultBodyFactory(new BodyFactory() {
                                 @Override
                                 public InputStream create(String input) throws IOException {
@@ -99,13 +122,20 @@ public class ApiClientManager {
         return retromockClient;
     }
 
-    // --- NUEVO MÉTODO PÚBLICO: Obtener Servicio ---
+    // =================================================================================
+    // MÉTODO PÚBLICO PRINCIPAL
+    // =================================================================================
 
     /**
-     * Devuelve la instancia Singleton del Servicio API.
-     * Al reutilizar la instancia, se mantiene el estado (como el contador circular de Retromock).
+     * Devuelve la instancia correcta del servicio API basándose en la configuración.
+     *
+     * @param useMock true para usar datos simulados
+     * @param useAlternativeUrl true para usar URL2, false para URL1 (Solo si useMock es false)
+     * @param context contexto necesario para Retromock
      */
-    public ApiService getApiService(boolean useMock, Context context) {
+    public ApiService getApiService(boolean useMock, boolean useAlternativeUrl, Context context) {
+
+        // CASO 1: MODO MOCK
         if (useMock) {
             if (mockApiService == null) {
                 synchronized (this) {
@@ -115,22 +145,43 @@ public class ApiClientManager {
                 }
             }
             return mockApiService;
-        } else {
-            if (realApiService == null) {
+        }
+
+        // CASO 2: MODO REAL (URL ALTERNATIVA)
+        else if (useAlternativeUrl) {
+            if (realApiServiceUrl2 == null) {
                 synchronized (this) {
-                    if (realApiService == null) {
-                        realApiService = getRetrofitClient().create(ApiService.class);
+                    if (realApiServiceUrl2 == null) {
+                        realApiServiceUrl2 = getRetrofitClientUrl2().create(ApiService.class);
                     }
                 }
             }
-            return realApiService;
+            return realApiServiceUrl2;
+        }
+
+        // CASO 3: MODO REAL (URL PRINCIPAL - DEFAULT)
+        else {
+            if (realApiServiceUrl1 == null) {
+                synchronized (this) {
+                    if (realApiServiceUrl1 == null) {
+                        realApiServiceUrl1 = getRetrofitClientUrl1().create(ApiService.class);
+                    }
+                }
+            }
+            return realApiServiceUrl1;
         }
     }
 
+    /**
+     * Resetea todas las conexiones. Útil si se quiere limpiar memoria.
+     */
     public synchronized void reset() {
-        retrofitClient = null;
+        retrofitClientUrl1 = null;
+        retrofitClientUrl2 = null;
         retromockClient = null;
+
         mockApiService = null;
-        realApiService = null;
+        realApiServiceUrl1 = null;
+        realApiServiceUrl2 = null;
     }
 }

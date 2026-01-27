@@ -124,6 +124,7 @@
     <!-- ============================================================ -->
     <string name="cambiar_a_retromock">Cambiar a Retromock</string>
     <string name="retromock">RetroMock</string>
+    <string name="servidor">URL 1/ URL 2\n</string>
 
 
 </resources>
