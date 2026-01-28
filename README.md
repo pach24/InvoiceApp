@@ -1,10 +1,23 @@
-# NexoSolar
-
-
+<h1>
+  <img src="https://github.com/user-attachments/assets/ae74958e-7ebf-45d1-9a23-e3143dacd432" alt="NexoSolar" width="30" style="vertical-align:middle;"/> 
+  NexoSolar
+</h1>
 
 A native Android application focused on displaying and filtering invoice data, created to showcase clean architecture, MVVM-based presentation logic, and good development practices rather than complex business functionality.
 
 > **Last Updated:** January 2026 
+
+**Clean Architecture • MVVM • Offline-First**
+
+
+
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
+![Room](https://img.shields.io/badge/Room-42A5F5?style=for-the-badge&logo=sqlite&logoColor=white)
+![Retrofit](https://img.shields.io/badge/Retrofit-2E7D32?style=for-the-badge&logo=square&logoColor=white)
+![JUnit](https://img.shields.io/badge/Junit5-25A162?style=for-the-badge&logo=junit5&logoColor=white)
+![Mockito](https://img.shields.io/badge/Mockito-FFC107?style=for-the-badge&logo=mockito&logoColor=black)
+
 
 ---
 
@@ -15,25 +28,30 @@ A native Android application focused on displaying and filtering invoice data, c
 - 💡 [Features](#features)
 - 🏛️ [Architecture](#architecture)
 - 🧩 [Modularization Strategy](#modularization-strategy)
+- 📲 [Download / Release](#download--release)
 - 💾 [Installation](#installation)
 - 🚀 [Usage](#usage)
-- 🛠️ [Tech Stack](#tech-stack)
+- 🧪 [Testing Strategy](#testing-strategy)
 - 📚 [Lessons Learned](#lessons-learned)
 - ⚖️ [License](#license)
 
 ---
-
 ## Overview
 
 Developed during a **Professional Traineeship at Viewnext**, this project demonstrates **enterprise-grade Android development** practices, bridging the gap between academic theory and **industry standards**.
 
-The application is engineered with a focus on **Scalability** and **Maintainability**, strictly adhering to **SOLID principles** and **Clean Architecture (MVVM)**. It moves beyond simple functionality to showcase a decoupled, modular codebase ready for complex business requirements.
+The application showcases **production-ready architecture** through strict adherence to **SOLID principles** and **Clean Architecture (MVVM)**, resulting in:
+
+✅ **High testability** – 100% coverage on business logic layer  
+✅ **Low coupling** – Modular design with clear boundaries between layers  
+✅ **Easy extensibility** – New features integrate without modifying existing code  
+✅ **Maintainability** – Single Responsibility and Dependency Inversion throughout
 
 Key technical highlights include:
-- A robust **Offline-First** strategy using **Room** as the **Single Source of Truth (SSOT)**.
-- **Reactive UI** updates utilizing **LiveData** and separation of concerns.
-- A flexible networking layer supporting both **Real API (Retrofit)** and **Mocking strategies** for isolated development.
-- Commitment to **Code Quality** with comprehensive **Unit Testing** (JUnit/Mockito).
+- A robust **Offline-First** strategy using **Room** as the **Single Source of Truth (SSOT)**
+- **Reactive UI** updates utilizing **LiveData** and separation of concerns
+- A flexible networking layer supporting both **Real API (Retrofit)** and **Mocking strategies** for isolated development
+- Commitment to **Code Quality** with comprehensive **Unit Testing** (JUnit/Mockito)
 
 ​
 
@@ -96,7 +114,10 @@ Key technical highlights include:
 
 </details>
 
+
+
 ---
+
 
 ## Features
 
@@ -157,6 +178,18 @@ The application is strictly modularized to enforce separation of concerns, scala
 - **`core`**: **Shared Utilities**. Contains common extensions, helper classes, and constants used across the entire application.
 
 
+
+---
+
+## Download / Release
+
+You can download the latest APK of **NexoSolar** from the releases section:
+
+- **Version:** v1.2.0 – Latest Update
+- **Download:** [NexoSolar v1.2.0](https://github.com/pach24/nexosolar-android/releases/tag/1.2.0))
+
+> ⚠️ Make sure to allow installation from **unknown sources** on your Android device before installing.
+
 ---
 
 ## Installation
@@ -191,29 +224,7 @@ cd <your-repo>
 - Select a device or emulator.  
 - Click **Run** ▶️ in Android Studio.  
 
----
 
-## Testing Strategy
-
-The project includes a robust suite of Unit Tests ensuring the reliability of business logic and view states:
-
-- **Domain Layer Tests:** Verify that `GetInvoicesUseCase` correctly interacts with the Repository.
-- **ViewModel Tests:** Ensure `InvoiceViewModel` correctly filters data based on user input (Dates, Amounts, Status) and handles the initial data load.
-- **Tools Used:** 
-  - **JUnit 4:** Test framework.
-  - **Mockito:** For mocking dependencies and verifying interactions.
-  - **InstantTaskExecutorRule:** For testing LiveData synchronously.
-
----
-
-## Download / Release
-
-You can download the latest APK of **NexoSolar** from the releases section:
-
-- **Version:** v1.0.0 – Initial Demo Release  
-- **Download:** [app-release.apk](https://github.com/pach24/InvoiceApp/releases/download/v1.0.0/app-release.apk)
-
-> ⚠️ Make sure to allow installation from **unknown sources** on your Android device before installing.
 
 ---
 
@@ -247,17 +258,41 @@ You can download the latest APK of **NexoSolar** from the releases section:
 4. **Reset:** Tap the "Reset" button in the filter panel to clear all filters and restore the full list.
 
 
+
+
 ---
 
-## Tech Stack
+## Testing Strategy
 
-![Java](https://img.shields.io/badge/Java-ED8B00?style=flat&logo=java&logoColor=white)
-![Android](https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white)
-![Room](https://img.shields.io/badge/Room_Database-42A5F5?logo=sqlite&logoColor=white)
-![MVVM](https://img.shields.io/badge/Architecture-MVVM-2962FF)
-![JUnit](https://img.shields.io/badge/Testing-JUnit_4-25A162?logo=junit5&logoColor=white)
-![Mockito](https://img.shields.io/badge/Testing-Mockito-yellow?logo=mockito&logoColor=black)
-![Retrofit](https://img.shields.io/badge/Retrofit-2E7D32)
+Project with **complete unit test suite** (100% business logic coverage) using **JUnit 5 + Mockito**:
+
+**Implemented Tests:**
+| Class | Coverage | Purpose |
+|-------|----------|---------|
+| `DateValidatorTest` | Ranges, bounds, nulls/edges | Date filtering validation |
+| `ErrorClassifierTest` | HTTP codes, throwables (SocketTimeout, UnknownHost) | Resilient error handling |
+| `FilterInvoicesUseCaseTest` | Status/date/amount multiples, empty lists | Complex filtering logic |
+| `GetInvoicesUseCaseTest` | Success/error/refresh callbacks | Repository + cache interaction |
+| `GetInstallationDetailsUseCaseTest` | Repository delegation | SmartSolar module |
+
+
+
+---
+
+## Future Enhancements
+
+This project follows an iterative improvement approach. Planned enhancements include:
+
+### Architecture Evolution
+- **Kotlin Migration:** Transition codebase to Kotlin for null-safety, coroutines, and modern Android development
+- **Jetpack Compose:** Modernize UI layer with declarative UI framework
+- **Hilt/Dagger:** Replace manual dependency injection with proper DI framework
+
+
+### Code Quality
+- **Integration Tests:** Add Espresso UI tests for critical user flows
+- **CI/CD Pipeline:** Automated testing and deployment with GitHub Actions
+- **Code Coverage:** Expand test coverage to UI and Data layers
 
 
 ---
