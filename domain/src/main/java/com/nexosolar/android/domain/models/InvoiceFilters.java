@@ -70,15 +70,4 @@ public class InvoiceFilters {
     }
 
 
-    // ===== Métodos públicos =====
-    /**
-     * Valida que los filtros sean lógicamente correctos.
-     * @return true si los filtros son válidos, false en caso contrario.
-     */
-    public boolean isValid() {
-        if (startDate != null && endDate != null) {
-            return !startDate.isAfter(endDate);
-        }
-        return true;
-    }
 }
