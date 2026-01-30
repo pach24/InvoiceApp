@@ -46,6 +46,6 @@ public interface ApiService {
      */
     @Mock
     @MockResponse(body = "installation_details.json")
-    @GET("installation/details") // Endpoint ficticio
+    @GET("installation_details.json")
     Call<InstallationDTO> getInstallationDetails();
 }
