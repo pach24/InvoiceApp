@@ -21,6 +21,8 @@ import com.nexosolar.android.domain.usecase.invoice.FilterInvoicesUseCase;
 import com.nexosolar.android.domain.usecase.invoice.GetInvoicesUseCase;
 import com.nexosolar.android.ui.invoices.managers.InvoiceStateManager.ViewState;
 import java.util.List;
+import androidx.activity.OnBackPressedCallback;
+
 
 public class InvoiceListActivity extends AppCompatActivity {
 
@@ -40,6 +42,7 @@ public class InvoiceListActivity extends AppCompatActivity {
         setupRecyclerView();
         setupObservers();
         setupListeners();
+        setupBackPressHandler();
     }
 
 
@@ -276,5 +279,24 @@ public class InvoiceListActivity extends AppCompatActivity {
         binding.toolbar.setVisibility(View.VISIBLE);
         binding.fragmentContainer.setVisibility(View.GONE);
         actualizarEstadoUI();
+    }
+
+    private void setupBackPressHandler() {
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                FilterFragment filterFragment = (FilterFragment) getSupportFragmentManager()
+                        .findFragmentByTag("FILTRO_FRAGMENT");
+
+                if (filterFragment != null && filterFragment.isVisible()) {
+                    restoreMainView();
+                    getSupportFragmentManager().popBackStack();
+                } else {
+                    // Si no hay fragment visible, hacer el comportamiento normal de back
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                }
+            }
+        });
     }
 }
